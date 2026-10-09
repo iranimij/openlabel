@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Mview/etc/mview.xsd">
+    <view id="openlabel_product" class="Iranimij\OpenLabel\Model\Indexer\Product" group="indexer">
+        <subscriptions>
+            <table name="catalog_product_entity" entity_column="entity_id"/>
+            <table name="catalog_product_entity_int" entity_column="entity_id"/>
+            <table name="catalog_product_entity_decimal" entity_column="entity_id"/>
+            <table name="catalog_product_entity_varchar" entity_column="entity_id"/>
+            <table name="catalog_product_entity_datetime" entity_column="entity_id"/>
+            <table name="catalog_product_entity_text" entity_column="entity_id"/>
+            <table name="catalog_category_product" entity_column="product_id"/>
+            <table name="catalog_product_website" entity_column="product_id"/>
+            <table name="catalog_product_relation" entity_column="child_id"/>
+            <table name="cataloginventory_stock_item" entity_column="product_id"/>
+            <table name="review_entity_summary" entity_column="entity_pk_value"/>
+        </subscriptions>
+    </view>
+</config>

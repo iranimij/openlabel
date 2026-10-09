@@ -34,6 +34,14 @@ class StockTest extends ConditionTestCase
         self::assertFalse($this->stock('salable_qty', '>', '5', $stock)->validate($this->product(['sku' => 'A'])));
     }
 
+    public function testCompositeProductsNeverMatchQuantityConditions(): void
+    {
+        $stock = $this->stockData(salable: true, qty: 0.0);
+
+        self::assertFalse($this->stock('salable_qty', '<=', '5', $stock)->validate($this->product(['sku' => 'C', 'type_id' => 'configurable'])));
+        self::assertTrue($this->stock('is_salable', '==', '1', $stock)->validate($this->product(['sku' => 'C', 'type_id' => 'configurable'])));
+    }
+
     public function testSqlJoinsTheStockTableOfTheRulesWebsite(): void
     {
         $stock = $this->stockData(salable: true, qty: 3.0);
@@ -42,7 +50,7 @@ class StockTest extends ConditionTestCase
         $joins = $condition->getTablesToJoin();
         self::assertSame('inventory_stock_7', $joins['ol_stock']['name']);
         self::assertSame('ol_stock.sku = e.sku', $joins['ol_stock']['condition']);
-        self::assertSame('ol_stock.quantity', (string) $condition->getMappedSqlField());
+        self::assertSame("IF(e.type_id IN ('simple','virtual','downloadable'), ol_stock.quantity, NULL)", (string) $condition->getMappedSqlField());
         self::assertSame('ol_stock.is_salable', (string) $this->stock('is_salable', '==', '1', $stock)->getMappedSqlField());
         self::assertFalse($condition->requiresCustomerGroup());
     }

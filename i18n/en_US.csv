@@ -53,3 +53,6 @@
 "Salable quantity","Salable quantity"
 "Average rating (stars)","Average rating (stars)"
 "Number of reviews","Number of reviews"
+"OpenLabel Products","OpenLabel Products"
+"Which OpenLabel label applies to which product, per store view and customer group","Which OpenLabel label applies to which product, per store view and customer group"
+"The OpenLabel full reindex is already running.","The OpenLabel full reindex is already running."

@@ -25,9 +25,8 @@ use Magento\Rule\Model\Condition\Sql\Builder as SqlBuilder;
  * The condition tree of one label, evaluated in SQL against a product collection for one store,
  * website and (for price conditions) customer group. Not persisted: labels store the serialized tree.
  *
- * @method int|null getStoreId()
- * @method int|null getWebsiteId()
- * @method int|null getCustomerGroupId()
+ * @method string|null getConditionsSerialized()
+ * @method $this setConditionsSerialized(string $conditions)
  */
 class Rule extends AbstractModel
 {

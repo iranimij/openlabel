@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer.xsd">
+    <indexer id="openlabel_product" view_id="openlabel_product" class="Iranimij\OpenLabel\Model\Indexer\Product">
+        <title translate="true">OpenLabel Products</title>
+        <description translate="true">Which OpenLabel label applies to which product, per store view and customer group</description>
+        <dependencies>
+            <indexer id="catalog_product_price"/>
+            <indexer id="cataloginventory_stock"/>
+        </dependencies>
+    </indexer>
+</config>
