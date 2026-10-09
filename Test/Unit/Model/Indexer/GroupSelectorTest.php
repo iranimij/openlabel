@@ -16,9 +16,14 @@ use PHPUnit\Framework\TestCase;
 
 class GroupSelectorTest extends TestCase
 {
-    public function testLabelsWithoutPriceConditionsWriteOneRowForAllGroups(): void
+    public function testLabelsWithoutPriceConditionsOrGroupLimitsWriteOneRowForAllGroups(): void
     {
-        self::assertSame([GroupSelector::ALL_GROUPS], $this->selector()->forLabel($this->label([1, 2]), false));
+        self::assertSame([GroupSelector::ALL_GROUPS], $this->selector()->forLabel($this->label([]), false));
+    }
+
+    public function testGroupLimitedLabelsWriteOneRowPerAllowedGroupEvenWithoutPriceConditions(): void
+    {
+        self::assertSame([1, 2], $this->selector()->forLabel($this->label([1, 2]), false));
     }
 
     public function testPriceConditionsUseTheLabelsGroups(): void

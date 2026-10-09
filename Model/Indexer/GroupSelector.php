@@ -12,8 +12,9 @@ use Iranimij\OpenLabel\Api\Data\LabelInterface;
 use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 
 /**
- * Which customer_group_id values a label writes: -1 (all groups) unless a condition reads the price index,
- * in which case one row per group the label is limited to, or per existing group (06 · F5).
+ * Which customer_group_id values a label writes: -1 (all groups) unless the label is limited to groups or a
+ * condition reads the price index, in which case one row per allowed group, or per existing group (06 · F5).
+ * The resolver filters customer_group_id IN (-1, visitor group).
  */
 class GroupSelector
 {
@@ -36,12 +37,12 @@ class GroupSelector
      */
     public function forLabel(LabelInterface $label, bool $requiresCustomerGroup): array
     {
-        if (!$requiresCustomerGroup) {
-            return [self::ALL_GROUPS];
-        }
         $groups = $label->getCustomerGroupIds();
         if ($groups !== []) {
             return array_values(array_unique(array_map('intval', $groups)));
+        }
+        if (!$requiresCustomerGroup) {
+            return [self::ALL_GROUPS];
         }
         if ($this->allGroups === null) {
             $this->allGroups = array_map('intval', $this->groupCollectionFactory->create()->getAllIds());
