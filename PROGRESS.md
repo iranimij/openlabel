@@ -14,8 +14,8 @@ M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Fou
 | S2 | Rule model + built-in conditions (OnSale, IsNew, Stock, PriceRange, Rating, ReviewCount) | done (PR #5, stacked on S1, auto-merge) |
 | S3 | Indexer: mview, full/list/row, `reindexLabel` diff, parent rows, group rows, replica swap, price/stock/review plugins, crons, cache tags | done (PR #6, stacked on S2, auto-merge) |
 | S4 | Variables (15 processors, pool, locale renderer) + HTML allow-list | done (PR #7, stacked on S3, auto-merge) |
-| S5 | Resolver (one SELECT) + ViewModel + query-count tests | next |
-| S6 | CLI `openlabel:reindex`, `openlabel:preview` | todo |
+| S5 | Resolver (one SELECT) + ViewModel + query-count tests | done (PR #8, stacked on S4, auto-merge) |
+| S6 | CLI `openlabel:reindex`, `openlabel:preview` | next |
 | S7 | Close-out: CHANGELOG, docs/engine.md, coverage gate, build log | todo |
 
 ## M0 slices
@@ -36,7 +36,7 @@ M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Fou
 
 ## Exact next step
 
-M1 S5 on branch `feat/m1-s5-resolver` (stacked on S4): RED unit tests for priority / max_labels / hide_lower_priority / time-window logic on fixed row sets, integration tests with a DB query counter (36-product collection → one query, product page → one query, three customer groups, disabled label, expired window); then `Api/LabelResolverInterface`, `Model/Resolver/LabelResolver`, `Model/Resolver/ResolvedLabel`, `ViewModel/Labels`.
+M1 S6 on branch `feat/m1-s6-cli` (stacked on S5): RED unit tests for the two commands' output and integration tests through `CommandTester`; then `Console/Reindex` (`openlabel:reindex [label_id]`), `Console/Preview` (`openlabel:preview <label_id> [--store]`) and the `di.xml` command list. Then measure `openlabel:reindex` on the fixture store (2,040 products) for the report.
 
 ## M1 decisions (also in the Notion build log at close-out)
 
@@ -53,6 +53,7 @@ M1 S5 on branch `feat/m1-s5-resolver` (stacked on S4): RED unit tests for priori
 - Cache cleaning inside indexer actions is deferred and executed by the core `CacheCleaner` plugin after the action; `LabelReindexer` (label save, CLI, cron) cleans immediately.
 - The integration test framework replaces the lock manager with a dummy, so lock refusal is unit-tested; the integration database carries the sample catalog, so tests filter their own SKUs.
 - Variables: processors return typed `Value`s (text, html, number, currency, date); the `Renderer` formats for the locale, escapes values, keeps `{BR}`, applies the allow-list and leaves unknown variables literal. A zero number renders as "0" and is reported as empty (hiding is the 1.1 flag). `{SPECIAL_ENDS_IN}` treats `special_to_date` as valid through that day (UTC). `{STOCK_QTY}` is the salable quantity (orders reduce it).
+- Resolver: a stack (area + position) is limited by the `max_labels` of its highest-priority label; `hide_lower_priority` suppresses higher priority numbers across all areas of that product; the design inside a `ResolvedLabel` carries the store-resolved text in its default slot. The `Labels` view model memoizes per request and returns nothing (no query) when the module is disabled for the store.
 - Local PHPStan runs with `modules/phpstan-local.neon` (level 6, generated factories scanned); CI uses `bitexpert/phpstan-magento`. After `setup:di:compile` on the fixture, delete `generated/metadata` or the integration sandbox install fails on the disabled 2FA module.
 
 ## Test inventory
@@ -60,7 +61,7 @@ M1 S5 on branch `feat/m1-s5-resolver` (stacked on S4): RED unit tests for priori
 | Repo | Unit | Integration | Other |
 |---|---|---|---|
 | module-base | 19 tests / 48 assertions | 6 tests / 12 assertions | PHPCS clean, PHPStan 6 clean, LOC guard (408 / 1000 lines) |
-| openlabel (after M1 S4) | 84 / 207 | 47 / 197 | PHPCS zero errors, PHPStan 6 clean |
+| openlabel (after M1 S5) | 89 / 215 | 55 / 226 | PHPCS zero errors, PHPStan 6 clean |
 | openlabel-hyva | 4 / 13 | 1 | PHPCS clean, PHPStan 6 clean |
 | openlabel-dev-env | — | — | Playwright 20 / 20 (desktop + mobile Chromium) |
 

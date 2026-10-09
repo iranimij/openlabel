@@ -14,6 +14,8 @@
     <preference for="Iranimij\OpenLabel\Api\Data\DesignSearchResultsInterface" type="Iranimij\OpenLabel\Model\DesignSearchResults"/>
     <preference for="Iranimij\OpenLabel\Api\LabelRepositoryInterface" type="Iranimij\OpenLabel\Model\LabelRepository"/>
     <preference for="Iranimij\OpenLabel\Api\DesignRepositoryInterface" type="Iranimij\OpenLabel\Model\DesignRepository"/>
+    <preference for="Iranimij\OpenLabel\Api\Data\ResolvedLabelInterface" type="Iranimij\OpenLabel\Model\Resolver\ResolvedLabel"/>
+    <preference for="Iranimij\OpenLabel\Api\LabelResolverInterface" type="Iranimij\OpenLabel\Model\Resolver\LabelResolver"/>
     <type name="Iranimij\OpenLabel\Model\Condition\ConditionPool">
         <arguments>
             <argument name="types" xsi:type="array">
