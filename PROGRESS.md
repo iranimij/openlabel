@@ -16,7 +16,7 @@ M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Fou
 | S4 | Variables (15 processors, pool, locale renderer) + HTML allow-list | done (PR #7, stacked on S3, auto-merge) |
 | S5 | Resolver (one SELECT) + ViewModel + query-count tests | done (PR #8, stacked on S4, auto-merge) |
 | S6 | CLI `openlabel:reindex`, `openlabel:preview` | done (PR #9, stacked on S5, auto-merge) |
-| S7 | Close-out: CHANGELOG, docs/engine.md, coverage gate, build log | next |
+| S7 | Close-out: CHANGELOG, docs/engine.md, coverage gate, perf test, build log | done (PR #10, stacked on S6, auto-merge) |
 
 ## M0 slices
 
@@ -36,7 +36,7 @@ M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Fou
 
 ## Exact next step
 
-M1 S7 on branch `feat/m1-s7-closeout` (stacked on S6): `docs/engine.md`, `docs/index.md`, README compatibility note, the 2,000-product performance test (`main` + nightly only, `OPENLABEL_PERF=true`), the unit coverage gate in `ci.yml` (≥ 85 % on Model/Variable, Model/Condition, Model/Resolver, Model/Rule), Playwright regression, PROGRESS.md and the Notion build log; then wait for the stacked PRs #4–#9 to merge into `main` with a green full matrix and deliver the milestone report.
+M1 code is complete on seven stacked PRs (#4 → #10). Waiting on: (1) Iman's approval of PR #4 (schema contract), after which #5–#10 auto-merge in order; (2) the Docker Hub anonymous pull-rate limit that fails the ExtDN container actions on reruns (`toomanyrequests`); rerun the failed jobs (`gh run rerun <id> --failed`) once it clears, or restructure the jobs to run inside the ExtDN images as job containers with Docker Hub credentials. When `main` is green on the full matrix, M1 is done; M2 (admin) starts in a new session with the kickoff prompt.
 
 ## M1 decisions (also in the Notion build log at close-out)
 
@@ -61,18 +61,20 @@ M1 S7 on branch `feat/m1-s7-closeout` (stacked on S6): `docs/engine.md`, `docs/i
 | Repo | Unit | Integration | Other |
 |---|---|---|---|
 | module-base | 19 tests / 48 assertions | 6 tests / 12 assertions | PHPCS clean, PHPStan 6 clean, LOC guard (408 / 1000 lines) |
-| openlabel (after M1 S6) | 94 / 234 | 58 / 238 | PHPCS zero errors, PHPStan 6 clean |
+| openlabel (after M1 S7) | 117 / 340 | 59 / 238 (+ perf budget on main/nightly) | PHPCS zero errors, PHPStan 6 clean, coverage gate ≥ 85 % (Variable 96.7, Condition 97.7, Resolver 100, Rule 98.3) |
 | openlabel-hyva | 4 / 13 | 1 | PHPCS clean, PHPStan 6 clean |
 | openlabel-dev-env | — | — | Playwright 20 / 20 (desktop + mobile Chromium) |
 
 ## Open questions for Iman
 
+- Docker Hub pull-rate limit on GitHub runners (ExtDN container actions): wait and rerun, or add Docker Hub credentials as secrets so the jobs can run as authenticated job containers?
 - Packagist: register `iranimij/module-base` after the `v1.0.0` tag (CI pre-install scripts fall back to a VCS repository until then) and mark the two old packages abandoned (composer.json already carries the field).
 - Hyvä portal keys (optional): the fixture and CI use the OSL packages from your copy; with keys the fixture can switch to the portal repository.
 
 ## Known failing or skipped tests
 
-None. (Playwright `configurable-selection-changed` test skips only if the sample-data configurable product `radiant-tee` is missing.)
+- `Test/Integration/Performance/FullReindexTest` is skipped unless `OPENLABEL_PERF=true` (CI sets it on `main` and nightly, not on pull requests; agreed 2026-10-09).
+- CI reruns on PRs #5–#10 fail on Docker Hub `toomanyrequests` while pulling the ExtDN action images (infrastructure, not code); PR #4 is green. (Playwright `configurable-selection-changed` test skips only if the sample-data configurable product `radiant-tee` is missing.)
 
 ## Fixture gotchas (see openlabel-dev-env README)
 

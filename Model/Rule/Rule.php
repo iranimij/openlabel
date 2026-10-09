@@ -11,6 +11,8 @@ namespace Iranimij\OpenLabel\Model\Rule;
 use Iranimij\OpenLabel\Model\Rule\Condition\Combine;
 use Iranimij\OpenLabel\Model\Rule\Condition\CombineFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
@@ -40,6 +42,8 @@ class Rule extends AbstractModel
      * @param SqlBuilder $sqlBuilder
      * @param Json $serializer
      * @param array<string, mixed> $data
+     * @param ExtensionAttributesFactory|null $extensionFactory
+     * @param AttributeValueFactory|null $customAttributeFactory
      */
     public function __construct(
         Context $context,
@@ -50,9 +54,22 @@ class Rule extends AbstractModel
         private readonly ActionCollectionFactory $actionCollectionFactory,
         private readonly SqlBuilder $sqlBuilder,
         Json $serializer,
-        array $data = []
+        array $data = [],
+        ?ExtensionAttributesFactory $extensionFactory = null,
+        ?AttributeValueFactory $customAttributeFactory = null
     ) {
-        parent::__construct($context, $registry, $formFactory, $localeDate, null, null, $data, null, null, $serializer);
+        parent::__construct(
+            $context,
+            $registry,
+            $formFactory,
+            $localeDate,
+            null,
+            null,
+            $data,
+            $extensionFactory,
+            $customAttributeFactory,
+            $serializer
+        );
     }
 
     /**

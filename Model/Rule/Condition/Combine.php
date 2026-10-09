@@ -18,6 +18,9 @@ use Magento\Rule\Model\Condition\Context;
  * The ALL/ANY node of a label's condition tree: native product attributes plus the OpenLabel built-ins.
  *
  * @method $this setType(string $type)
+ * @method string|null getType()
+ * @method $this setPrefix(string $prefix)
+ * @method string|null getPrefix()
  */
 class Combine extends CoreCombine
 {

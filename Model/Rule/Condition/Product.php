@@ -14,6 +14,7 @@ use Magento\CatalogWidget\Model\Rule\Condition\Product as WidgetProductCondition
  * Native product attribute condition.
  *
  * @method $this setType(string $type)
+ * @method string|null getType()
  * @method array<string, string> getAttributeOption()
  * Extends the catalog widget condition because it already resolves
  * store-scoped attributes, the price index, categories and SKU lists into SQL (06 · F4).
