@@ -67,4 +67,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="openlabel_reindex" xsi:type="object">Iranimij\OpenLabel\Console\Reindex</item>
+                <item name="openlabel_preview" xsi:type="object">Iranimij\OpenLabel\Console\Preview</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

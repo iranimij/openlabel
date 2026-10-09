@@ -15,8 +15,8 @@ M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Fou
 | S3 | Indexer: mview, full/list/row, `reindexLabel` diff, parent rows, group rows, replica swap, price/stock/review plugins, crons, cache tags | done (PR #6, stacked on S2, auto-merge) |
 | S4 | Variables (15 processors, pool, locale renderer) + HTML allow-list | done (PR #7, stacked on S3, auto-merge) |
 | S5 | Resolver (one SELECT) + ViewModel + query-count tests | done (PR #8, stacked on S4, auto-merge) |
-| S6 | CLI `openlabel:reindex`, `openlabel:preview` | next |
-| S7 | Close-out: CHANGELOG, docs/engine.md, coverage gate, build log | todo |
+| S6 | CLI `openlabel:reindex`, `openlabel:preview` | done (PR #9, stacked on S5, auto-merge) |
+| S7 | Close-out: CHANGELOG, docs/engine.md, coverage gate, build log | next |
 
 ## M0 slices
 
@@ -36,7 +36,7 @@ M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Fou
 
 ## Exact next step
 
-M1 S6 on branch `feat/m1-s6-cli` (stacked on S5): RED unit tests for the two commands' output and integration tests through `CommandTester`; then `Console/Reindex` (`openlabel:reindex [label_id]`), `Console/Preview` (`openlabel:preview <label_id> [--store]`) and the `di.xml` command list. Then measure `openlabel:reindex` on the fixture store (2,040 products) for the report.
+M1 S7 on branch `feat/m1-s7-closeout` (stacked on S6): `docs/engine.md`, `docs/index.md`, README compatibility note, the 2,000-product performance test (`main` + nightly only, `OPENLABEL_PERF=true`), the unit coverage gate in `ci.yml` (≥ 85 % on Model/Variable, Model/Condition, Model/Resolver, Model/Rule), Playwright regression, PROGRESS.md and the Notion build log; then wait for the stacked PRs #4–#9 to merge into `main` with a green full matrix and deliver the milestone report.
 
 ## M1 decisions (also in the Notion build log at close-out)
 
@@ -61,7 +61,7 @@ M1 S6 on branch `feat/m1-s6-cli` (stacked on S5): RED unit tests for the two com
 | Repo | Unit | Integration | Other |
 |---|---|---|---|
 | module-base | 19 tests / 48 assertions | 6 tests / 12 assertions | PHPCS clean, PHPStan 6 clean, LOC guard (408 / 1000 lines) |
-| openlabel (after M1 S5) | 89 / 215 | 55 / 226 | PHPCS zero errors, PHPStan 6 clean |
+| openlabel (after M1 S6) | 94 / 234 | 58 / 238 | PHPCS zero errors, PHPStan 6 clean |
 | openlabel-hyva | 4 / 13 | 1 | PHPCS clean, PHPStan 6 clean |
 | openlabel-dev-env | — | — | Playwright 20 / 20 (desktop + mobile Chromium) |
 

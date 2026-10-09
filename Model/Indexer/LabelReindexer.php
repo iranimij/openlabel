@@ -75,6 +75,18 @@ class LabelReindexer
     }
 
     /**
+     * @return int all rows in the index
+     */
+    public function countRows(): int
+    {
+        $connection = $this->resource->getConnection();
+
+        return (int) $connection->fetchOne(
+            $connection->select()->from($this->resource->getTableName(self::INDEX_TABLE), [new \Zend_Db_Expr('COUNT(*)')])
+        );
+    }
+
+    /**
      * @param int $labelId
      * @return int[]
      */
