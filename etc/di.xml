@@ -26,4 +26,22 @@
             </argument>
         </arguments>
     </type>
+    <type name="Iranimij\OpenLabel\Api\LabelRepositoryInterface">
+        <plugin name="openlabel_reindex_label_on_save" type="Iranimij\OpenLabel\Plugin\LabelRepositoryPlugin"/>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Price\Action\Rows">
+        <plugin name="openlabel_schedule_after_price_rows" type="Iranimij\OpenLabel\Plugin\Indexer\PriceRows"/>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Price\Action\Full">
+        <plugin name="openlabel_invalidate_after_price_full" type="Iranimij\OpenLabel\Plugin\Indexer\PriceFull"/>
+    </type>
+    <type name="Magento\CatalogInventory\Model\Indexer\Stock\Action\Rows">
+        <plugin name="openlabel_schedule_after_stock_rows" type="Iranimij\OpenLabel\Plugin\Indexer\StockRows"/>
+    </type>
+    <type name="Magento\CatalogInventory\Model\Indexer\Stock\Action\Full">
+        <plugin name="openlabel_invalidate_after_stock_full" type="Iranimij\OpenLabel\Plugin\Indexer\StockFull"/>
+    </type>
+    <type name="Magento\Review\Model\ResourceModel\Review">
+        <plugin name="openlabel_schedule_after_review_aggregate" type="Iranimij\OpenLabel\Plugin\Indexer\ReviewAggregate"/>
+    </type>
 </config>

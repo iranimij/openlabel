@@ -12,8 +12,8 @@ M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Fou
 |---|---|---|
 | S1 | Schema (5 tables + replica), `Api/Data` + repositories with validators, ACL resources, uninstall | done (PR #4, awaiting Iman's review) |
 | S2 | Rule model + built-in conditions (OnSale, IsNew, Stock, PriceRange, Rating, ReviewCount) | done (PR #5, stacked on S1, auto-merge) |
-| S3 | Indexer: mview, full/list/row, `reindexLabel` diff, parent rows, group rows, replica swap, price/catalogrule plugins, crons, cache tags | next |
-| S4 | Variables (15 processors, pool, locale renderer) + HTML allow-list | todo |
+| S3 | Indexer: mview, full/list/row, `reindexLabel` diff, parent rows, group rows, replica swap, price/stock/review plugins, crons, cache tags | done (PR #6, stacked on S2, auto-merge) |
+| S4 | Variables (15 processors, pool, locale renderer) + HTML allow-list | next |
 | S5 | Resolver (one SELECT) + ViewModel + query-count tests | todo |
 | S6 | CLI `openlabel:reindex`, `openlabel:preview` | todo |
 | S7 | Close-out: CHANGELOG, docs/engine.md, coverage gate, build log | todo |
@@ -36,7 +36,7 @@ M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Fou
 
 ## Exact next step
 
-M1 S3 on branch `feat/m1-s3-indexer` (stacked on S2): RED integration tests for the indexer (full/list/row, configurable/grouped/bundle parent rows, per-group rows, store-scoped rows, `reindexLabel` diff, lock) and unit tests for the parent-row builder and diff; then `etc/indexer.xml`, `etc/mview.xml`, `Model/Indexer/*`, plugins on the price and catalogrule indexers, the two crons and `Model/Cache/IdentityProvider`.
+M1 S4 on branch `feat/m1-s4-variables` (stacked on S3): RED unit tests for the 15 variable processors, the `Renderer` (substitution, locale formatting, escaping) and the HTML allow-list; one integration test for `{SOLD_LAST_30D}` on a `sales_order_item` fixture and the renderer on a real configurable; then `Api/VariableProcessorInterface`, `Model/Variable/*`, `Model/Html/AllowList`.
 
 ## M1 decisions (also in the Notion build log at close-out)
 
@@ -48,6 +48,10 @@ M1 S3 on branch `feat/m1-s3-indexer` (stacked on S2): RED integration tests for 
 - Price-based conditions read the price index, which omits out-of-stock products unless "Display Out of Stock Products" is on.
 - Is-new date conditions use the default-scope (store 0) `news_from_date`/`news_to_date`; website overrides of those dates are reachable through the native attribute condition.
 - MSI is optional: `Model/Condition/Stock/MsiStockData` resolves the MSI interfaces through the object manager and is only used when `Magento_InventorySalesApi` + `Magento_InventoryIndexer` are enabled (`StockDataResolver`).
+- Index rows: `parent_product_id` is NULL for direct matches; a parent row (configurable, grouped, bundle, written only with `apply_to_parent`) carries the id of the lowest matching child. Parents come from `catalog_product_relation` through the entity link field.
+- Price changes reach the index through plugins on the price indexer actions (`Rows`, `Full`); catalog price rules already go through the price index, so no separate catalogrule plugin. Stock changes through the stock indexer actions, reviews through `Review::aggregate`. MSI multi-source changes that bypass the legacy stock reach the index on the next product save or full reindex (1.0 limitation, documented).
+- Cache cleaning inside indexer actions is deferred and executed by the core `CacheCleaner` plugin after the action; `LabelReindexer` (label save, CLI, cron) cleans immediately.
+- The integration test framework replaces the lock manager with a dummy, so lock refusal is unit-tested; the integration database carries the sample catalog, so tests filter their own SKUs.
 - Local PHPStan runs with `modules/phpstan-local.neon` (level 6, generated factories scanned); CI uses `bitexpert/phpstan-magento`. After `setup:di:compile` on the fixture, delete `generated/metadata` or the integration sandbox install fails on the disabled 2FA module.
 
 ## Test inventory
@@ -55,7 +59,7 @@ M1 S3 on branch `feat/m1-s3-indexer` (stacked on S2): RED integration tests for 
 | Repo | Unit | Integration | Other |
 |---|---|---|---|
 | module-base | 19 tests / 48 assertions | 6 tests / 12 assertions | PHPCS clean, PHPStan 6 clean, LOC guard (408 / 1000 lines) |
-| openlabel (after M1 S2) | 55 / 116 | 30 / 157 | PHPCS clean, PHPStan 6 clean |
+| openlabel (after M1 S3) | 67 / 143 | 43 / 193 | PHPCS clean, PHPStan 6 clean |
 | openlabel-hyva | 4 / 13 | 1 | PHPCS clean, PHPStan 6 clean |
 | openlabel-dev-env | — | — | Playwright 20 / 20 (desktop + mobile Chromium) |
 

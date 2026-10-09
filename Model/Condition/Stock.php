@@ -22,6 +22,9 @@ class Stock extends AbstractBuiltIn
 
     private const ALIAS = 'ol_stock';
 
+    /** Product types that carry a quantity of their own; composites get quantity labels through apply_to_parent. */
+    private const QUANTITY_TYPES = ['simple', 'virtual', 'downloadable'];
+
     /**
      * @param Context $context
      * @param StockDataResolver $stockDataResolver
@@ -71,14 +74,19 @@ class Stock extends AbstractBuiltIn
     }
 
     /**
-     * @inheritDoc
+     * Quantity comparisons apply to products with a quantity of their own; composites yield NULL and never match.
+     *
+     * @return \Zend_Db_Expr|string
      */
     public function getMappedSqlField()
     {
         $stock = $this->stockDataResolver->get();
-        $column = (string) $this->getAttribute() === self::SALABLE_QTY ? $stock->getQtyColumn() : $stock->getSalableColumn();
+        if ((string) $this->getAttribute() !== self::SALABLE_QTY) {
+            return self::ALIAS . '.' . $stock->getSalableColumn();
+        }
+        $types = "'" . implode("','", self::QUANTITY_TYPES) . "'";
 
-        return self::ALIAS . '.' . $column;
+        return new \Zend_Db_Expr(sprintf('IF(e.type_id IN (%s), %s.%s, NULL)', $types, self::ALIAS, $stock->getQtyColumn()));
     }
 
     /**
@@ -88,6 +96,11 @@ class Stock extends AbstractBuiltIn
     {
         $stock = $this->stockDataResolver->get();
         if ((string) $this->getAttribute() === self::SALABLE_QTY) {
+            $type = (string) $product->getTypeId();
+            if ($type !== '' && !in_array($type, self::QUANTITY_TYPES, true)) {
+                return null;
+            }
+
             return $stock->getSalableQty($product, $this->websiteId());
         }
 
