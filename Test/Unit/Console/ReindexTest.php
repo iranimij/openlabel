@@ -26,7 +26,7 @@ class ReindexTest extends TestCase
     {
         $indexer = $this->createMock(IndexerInterface::class);
         $indexer->expects(self::once())->method('reindexAll');
-        $registry = $this->createStub(IndexerRegistry::class);
+        $registry = $this->createMock(IndexerRegistry::class);
         $registry->method('get')->with('openlabel_product')->willReturn($indexer);
         $reindexer = $this->createStub(LabelReindexer::class);
         $reindexer->method('countRows')->willReturn(2480);
@@ -42,7 +42,7 @@ class ReindexTest extends TestCase
     {
         $label = $this->createStub(LabelInterface::class);
         $label->method('getName')->willReturn('Sale');
-        $repository = $this->createStub(LabelRepositoryInterface::class);
+        $repository = $this->createMock(LabelRepositoryInterface::class);
         $repository->method('getById')->with(3)->willReturn($label);
         $reindexer = $this->createMock(LabelReindexer::class);
         $reindexer->expects(self::once())->method('reindexLabel')->with(3)->willReturn(new Diff([1, 2, 3], [2, 3, 4, 5]));

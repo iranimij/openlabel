@@ -59,7 +59,7 @@ class SchedulerTest extends TestCase
 
     private function scheduler(IndexerInterface $indexer): Scheduler
     {
-        $registry = $this->createStub(IndexerRegistry::class);
+        $registry = $this->createMock(IndexerRegistry::class);
         $registry->method('get')->with(Scheduler::INDEXER_ID)->willReturn($indexer);
 
         return new Scheduler($registry, $this->createStub(ResourceConnection::class));

@@ -14,7 +14,7 @@ use Iranimij\OpenLabel\Model\Variable\ProductPrices;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
@@ -56,15 +56,14 @@ class ProductPricesTest extends TestCase
     {
         $attribute = $this->createStub(Attribute::class);
         $attribute->method('getFrontendInput')->willReturn('select');
-        $resource = $this->createStub(ProductResource::class);
-        $resource->method('getAttribute')->willReturn($attribute);
+        $eavConfig = $this->createStub(EavConfig::class);
+        $eavConfig->method('getAttribute')->willReturn($attribute);
         $product = $this->createStub(Product::class);
         $product->method('hasData')->willReturn(true);
         $product->method('getData')->willReturn('12');
-        $product->method('getResource')->willReturn($resource);
         $product->method('getAttributeText')->willReturn('Red');
 
-        self::assertSame('Red', (new Attr())->getValue($product, new Context(1, 1, 0), 'color')->raw);
-        self::assertTrue((new Attr())->getValue($this->createStub(ProductInterface::class), new Context(1, 1, 0), 'color')->isEmpty());
+        self::assertSame('Red', (new Attr($eavConfig))->getValue($product, new Context(1, 1, 0), 'color')->raw);
+        self::assertTrue((new Attr($eavConfig))->getValue($this->createStub(ProductInterface::class), new Context(1, 1, 0), 'color')->isEmpty());
     }
 }

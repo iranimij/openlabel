@@ -13,6 +13,7 @@ use Iranimij\OpenLabel\Model\Variable\Context;
 use Iranimij\OpenLabel\Model\Variable\Value;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Config as EavConfig;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
@@ -20,6 +21,13 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
  */
 class Attr implements VariableProcessorInterface
 {
+    /**
+     * @param EavConfig $eavConfig
+     */
+    public function __construct(private readonly EavConfig $eavConfig)
+    {
+    }
+
     /**
      * @inheritDoc
      */
@@ -55,11 +63,11 @@ class Attr implements VariableProcessorInterface
      */
     private function isOptionAttribute(Product $product, string $code): bool
     {
-        $resource = $product->getResource();
-        if (!$resource instanceof \Magento\Catalog\Model\ResourceModel\Product) {
+        try {
+            $attribute = $this->eavConfig->getAttribute(Product::ENTITY, $code);
+        } catch (\Exception) {
             return false;
         }
-        $attribute = $resource->getAttribute($code);
 
         return $attribute instanceof AbstractAttribute
             && in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true);
