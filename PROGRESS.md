@@ -36,7 +36,7 @@ M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Fou
 
 ## Exact next step
 
-M1 code is complete on seven stacked PRs (#4 → #10). Waiting on: (1) Iman's approval of PR #4 (schema contract), after which #5–#10 auto-merge in order; (2) the Docker Hub anonymous pull-rate limit that fails the ExtDN container actions on reruns (`toomanyrequests`); rerun the failed jobs (`gh run rerun <id> --failed`) once it clears, or restructure the jobs to run inside the ExtDN images as job containers with Docker Hub credentials. When `main` is green on the full matrix, M1 is done; M2 (admin) starts in a new session with the kickoff prompt.
+M1 code is complete and **PR #10 (`feat/m1-s7-closeout`, run 37997573763) is green on every job** including the new coverage gate. It contains all M1 commits (S1–S7) in order. Recommended merge path: Iman approves PR #4 (schema contract); once it merges, retarget #10 to `main` (`gh pr edit 10 --base main`) and close #5–#9 as superseded (their heads predate the CI fixes and were hit by the Docker Hub pull-rate limit). When `main` is green on the full matrix, M1 is done; M2 (admin) starts in a new session with the kickoff prompt.
 
 ## M1 decisions (also in the Notion build log at close-out)
 
@@ -74,7 +74,7 @@ M1 code is complete on seven stacked PRs (#4 → #10). Waiting on: (1) Iman's ap
 ## Known failing or skipped tests
 
 - `Test/Integration/Performance/FullReindexTest` is skipped unless `OPENLABEL_PERF=true` (CI sets it on `main` and nightly, not on pull requests; agreed 2026-10-09).
-- CI reruns on PRs #5–#10 fail on Docker Hub `toomanyrequests` while pulling the ExtDN action images (infrastructure, not code); PR #4 is green. (Playwright `configurable-selection-changed` test skips only if the sample-data configurable product `radiant-tee` is missing.)
+- CI reruns on PRs #5–#9 fail on Docker Hub `toomanyrequests` while pulling the ExtDN action images (infrastructure, not code); PR #4 and PR #10 (all code) are green. (Playwright `configurable-selection-changed` test skips only if the sample-data configurable product `radiant-tee` is missing.)
 
 ## Fixture gotchas (see openlabel-dev-env README)
 
