@@ -9,6 +9,8 @@
 
 declare(strict_types=1);
 
+// phpcs:ignoreFile -- CI helper script, runs outside the Magento application.
+
 $clover = $argv[1] ?? '';
 $threshold = (float) ($argv[2] ?? 85);
 $directories = array_slice($argv, 3);

@@ -11,6 +11,7 @@ namespace Iranimij\OpenLabel\Model\Variable;
 /**
  * A typed variable value. The Renderer formats it for the locale; empty values let the label hide itself.
  */
+// phpcs:disable Magento2.Functions.StaticFunction -- named constructors of a value object, never intercepted.
 class Value
 {
     public const TEXT = 'text';

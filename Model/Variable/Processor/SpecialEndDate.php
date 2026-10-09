@@ -18,6 +18,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 /**
  * {SPECIAL_END_DATE}: the last day of the special price, formatted for the locale; empty once it has passed.
  */
+// phpcs:disable Magento2.Functions.StaticFunction -- pure date helper shared with SpecialEndsIn.
 class SpecialEndDate implements VariableProcessorInterface
 {
     /**
