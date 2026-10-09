@@ -154,8 +154,7 @@ class IsNew extends AbstractBuiltIn
      */
     private function datetimeJoin(string $alias, string $attributeCode, string $linkField): array
     {
-        $attribute = $this->eavConfig->getAttribute(Product::ENTITY, $attributeCode);
-        $attributeId = $attribute ? (int) $attribute->getId() : 0;
+        $attributeId = (int) $this->eavConfig->getAttribute(Product::ENTITY, $attributeCode)->getId();
 
         return [
             'name' => 'catalog_product_entity_datetime',

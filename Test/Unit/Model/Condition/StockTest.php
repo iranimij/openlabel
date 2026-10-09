@@ -51,9 +51,9 @@ class StockTest extends ConditionTestCase
     {
         $manager = $this->createStub(Manager::class);
         $manager->method('isEnabled')->willReturn(true);
-        $objectManager = $this->createStub(ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $msi = $this->createStub(MsiStockData::class);
-        $objectManager->method('get')->with(MsiStockData::class)->willReturn($msi);
+        $objectManager->expects(self::once())->method('get')->with(MsiStockData::class)->willReturn($msi);
 
         $resolver = new StockDataResolver($manager, $objectManager, $this->createStub(LegacyStockData::class));
 
