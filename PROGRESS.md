@@ -13,8 +13,8 @@ M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Fou
 | S1 | Schema (5 tables + replica), `Api/Data` + repositories with validators, ACL resources, uninstall | done (PR #4, awaiting Iman's review) |
 | S2 | Rule model + built-in conditions (OnSale, IsNew, Stock, PriceRange, Rating, ReviewCount) | done (PR #5, stacked on S1, auto-merge) |
 | S3 | Indexer: mview, full/list/row, `reindexLabel` diff, parent rows, group rows, replica swap, price/stock/review plugins, crons, cache tags | done (PR #6, stacked on S2, auto-merge) |
-| S4 | Variables (15 processors, pool, locale renderer) + HTML allow-list | next |
-| S5 | Resolver (one SELECT) + ViewModel + query-count tests | todo |
+| S4 | Variables (15 processors, pool, locale renderer) + HTML allow-list | done (PR #7, stacked on S3, auto-merge) |
+| S5 | Resolver (one SELECT) + ViewModel + query-count tests | next |
 | S6 | CLI `openlabel:reindex`, `openlabel:preview` | todo |
 | S7 | Close-out: CHANGELOG, docs/engine.md, coverage gate, build log | todo |
 
@@ -36,7 +36,7 @@ M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Fou
 
 ## Exact next step
 
-M1 S4 on branch `feat/m1-s4-variables` (stacked on S3): RED unit tests for the 15 variable processors, the `Renderer` (substitution, locale formatting, escaping) and the HTML allow-list; one integration test for `{SOLD_LAST_30D}` on a `sales_order_item` fixture and the renderer on a real configurable; then `Api/VariableProcessorInterface`, `Model/Variable/*`, `Model/Html/AllowList`.
+M1 S5 on branch `feat/m1-s5-resolver` (stacked on S4): RED unit tests for priority / max_labels / hide_lower_priority / time-window logic on fixed row sets, integration tests with a DB query counter (36-product collection → one query, product page → one query, three customer groups, disabled label, expired window); then `Api/LabelResolverInterface`, `Model/Resolver/LabelResolver`, `Model/Resolver/ResolvedLabel`, `ViewModel/Labels`.
 
 ## M1 decisions (also in the Notion build log at close-out)
 
@@ -52,6 +52,7 @@ M1 S4 on branch `feat/m1-s4-variables` (stacked on S3): RED unit tests for the 1
 - Price changes reach the index through plugins on the price indexer actions (`Rows`, `Full`); catalog price rules already go through the price index, so no separate catalogrule plugin. Stock changes through the stock indexer actions, reviews through `Review::aggregate`. MSI multi-source changes that bypass the legacy stock reach the index on the next product save or full reindex (1.0 limitation, documented).
 - Cache cleaning inside indexer actions is deferred and executed by the core `CacheCleaner` plugin after the action; `LabelReindexer` (label save, CLI, cron) cleans immediately.
 - The integration test framework replaces the lock manager with a dummy, so lock refusal is unit-tested; the integration database carries the sample catalog, so tests filter their own SKUs.
+- Variables: processors return typed `Value`s (text, html, number, currency, date); the `Renderer` formats for the locale, escapes values, keeps `{BR}`, applies the allow-list and leaves unknown variables literal. A zero number renders as "0" and is reported as empty (hiding is the 1.1 flag). `{SPECIAL_ENDS_IN}` treats `special_to_date` as valid through that day (UTC). `{STOCK_QTY}` is the salable quantity (orders reduce it).
 - Local PHPStan runs with `modules/phpstan-local.neon` (level 6, generated factories scanned); CI uses `bitexpert/phpstan-magento`. After `setup:di:compile` on the fixture, delete `generated/metadata` or the integration sandbox install fails on the disabled 2FA module.
 
 ## Test inventory
@@ -59,7 +60,7 @@ M1 S4 on branch `feat/m1-s4-variables` (stacked on S3): RED unit tests for the 1
 | Repo | Unit | Integration | Other |
 |---|---|---|---|
 | module-base | 19 tests / 48 assertions | 6 tests / 12 assertions | PHPCS clean, PHPStan 6 clean, LOC guard (408 / 1000 lines) |
-| openlabel (after M1 S3) | 67 / 143 | 43 / 193 | PHPCS clean, PHPStan 6 clean |
+| openlabel (after M1 S4) | 84 / 207 | 47 / 197 | PHPCS zero errors, PHPStan 6 clean |
 | openlabel-hyva | 4 / 13 | 1 | PHPCS clean, PHPStan 6 clean |
 | openlabel-dev-env | — | — | Playwright 20 / 20 (desktop + mobile Chromium) |
 

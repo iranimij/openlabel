@@ -44,4 +44,25 @@
     <type name="Magento\Review\Model\ResourceModel\Review">
         <plugin name="openlabel_schedule_after_review_aggregate" type="Iranimij\OpenLabel\Plugin\Indexer\ReviewAggregate"/>
     </type>
+    <type name="Iranimij\OpenLabel\Model\Variable\Pool">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="SavePercent" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\SavePercent</item>
+                <item name="SaveAmount" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\SaveAmount</item>
+                <item name="Price" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\Price</item>
+                <item name="SpecialPrice" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\SpecialPrice</item>
+                <item name="FinalPrice" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\FinalPrice</item>
+                <item name="StockQty" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\StockQty</item>
+                <item name="NewFor" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\NewFor</item>
+                <item name="Sku" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\Sku</item>
+                <item name="Attr" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\Attr</item>
+                <item name="Br" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\Br</item>
+                <item name="SpecialEndsIn" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\SpecialEndsIn</item>
+                <item name="SpecialEndDate" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\SpecialEndDate</item>
+                <item name="Rating" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\Rating</item>
+                <item name="ReviewCount" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\ReviewCount</item>
+                <item name="SoldLast30d" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\SoldLast30d</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
