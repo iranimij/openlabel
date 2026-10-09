@@ -16,6 +16,7 @@ use Iranimij\OpenLabel\Test\Fixture\Design as DesignFixture;
 use Iranimij\OpenLabel\Test\Fixture\Label as LabelFixture;
 use Iranimij\OpenLabel\Test\Integration\Helper\QueryCounter;
 use Iranimij\OpenLabel\ViewModel\Labels;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\ResourceConnection;
@@ -29,13 +30,16 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * One SELECT per listing or product page, correct labels per customer group, store view and time window.
- * Uses the sample-data catalog of the integration database as the "listing"; labels without conditions match it all.
+ * Creates its own 36-product "listing" once per class; labels without conditions match every product.
  */
 #[DbIsolation(false)]
 #[DataFixture(StoreFixture::class, ['code' => 'ol_de'], 'store_de')]
 #[DataFixture(DesignFixture::class, ['store_texts' => [0 => ['text' => 'Sale'], 1 => ['text' => 'Angebot']]], 'design')]
 class LabelResolverTest extends TestCase
 {
+    private const SKU_PREFIX = 'ol-listing-';
+    private const LISTING_SIZE = 36;
+
     private LabelResolverInterface $resolver;
     private LabelRepositoryInterface $labels;
     private QueryCounter $counter;
@@ -52,11 +56,19 @@ class LabelResolverTest extends TestCase
         $this->counter = $om->get(QueryCounter::class);
         $resource = $om->get(ResourceConnection::class);
         $connection = $resource->getConnection();
-        $this->productIds = array_map('intval', $connection->fetchCol(
-            $connection->select()->from($resource->getTableName('catalog_product_entity'), 'entity_id')
-                ->where('type_id = ?', 'simple')->order('entity_id')->limit(36)
-        ));
-        self::assertCount(36, $this->productIds, 'the integration catalog provides a 36-product listing');
+        $skus = array_map(static fn (int $i): string => sprintf('%s%02d', self::SKU_PREFIX, $i), range(1, self::LISTING_SIZE));
+        $select = $connection->select()->from($resource->getTableName('catalog_product_entity'), ['sku', 'entity_id'])
+            ->where('sku IN (?)', $skus);
+        $existing = $connection->fetchPairs($select);
+        $productFixture = $om->get(ProductFixture::class);
+        foreach ($skus as $sku) {
+            if (!isset($existing[$sku])) {
+                $product = $productFixture->apply(['sku' => $sku, 'price' => 10]);
+                $existing[$sku] = $product?->getId();
+            }
+        }
+        $this->productIds = array_map('intval', array_values($existing));
+        self::assertCount(self::LISTING_SIZE, $this->productIds);
     }
 
     protected function tearDown(): void

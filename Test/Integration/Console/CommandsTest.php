@@ -64,9 +64,9 @@ class CommandsTest extends TestCase
         $exit = $tester->execute(['label_id' => (string) $this->label->getLabelId(), '--store' => '1']);
 
         self::assertSame(Command::SUCCESS, $exit);
-        // The integration catalog has hundreds of sample products on sale, so the printed "first 20" are theirs.
+        // A catalog with sample data has hundreds of products on sale; a bare one has only the fixture product.
         self::assertMatchesRegularExpression('/matches [\d,]+ products in store view "default" \(1\)\./', $tester->getDisplay());
-        self::assertStringContainsString('First 20 SKUs:', $tester->getDisplay());
+        self::assertMatchesRegularExpression('/First \d+ SKUs:/', $tester->getDisplay());
         self::assertStringNotContainsString('ol-cli-full', $tester->getDisplay());
         $skus = Bootstrap::getObjectManager()->get(IndexReader::class)->skus((int) $this->label->getLabelId(), 1, 100000);
         self::assertContains('ol-cli-sale', $skus);
