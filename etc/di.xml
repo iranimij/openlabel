@@ -14,4 +14,16 @@
     <preference for="Iranimij\OpenLabel\Api\Data\DesignSearchResultsInterface" type="Iranimij\OpenLabel\Model\DesignSearchResults"/>
     <preference for="Iranimij\OpenLabel\Api\LabelRepositoryInterface" type="Iranimij\OpenLabel\Model\LabelRepository"/>
     <preference for="Iranimij\OpenLabel\Api\DesignRepositoryInterface" type="Iranimij\OpenLabel\Model\DesignRepository"/>
+    <type name="Iranimij\OpenLabel\Model\Condition\ConditionPool">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="on_sale" xsi:type="string">Iranimij\OpenLabel\Model\Condition\OnSale</item>
+                <item name="is_new" xsi:type="string">Iranimij\OpenLabel\Model\Condition\IsNew</item>
+                <item name="stock" xsi:type="string">Iranimij\OpenLabel\Model\Condition\Stock</item>
+                <item name="price_range" xsi:type="string">Iranimij\OpenLabel\Model\Condition\PriceRange</item>
+                <item name="rating" xsi:type="string">Iranimij\OpenLabel\Model\Condition\Rating</item>
+                <item name="review_count" xsi:type="string">Iranimij\OpenLabel\Model\Condition\ReviewCount</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -23,6 +23,7 @@
         "magento/module-backend": "^102.0.7",
         "magento/module-catalog": "^104.0.7",
         "magento/module-catalog-inventory": "^100.4.7",
+        "magento/module-catalog-widget": "^100.4.6",
         "magento/module-config": "^101.2.7",
         "magento/module-customer": "^103.0.7",
         "magento/module-review": "^100.4.7",
