@@ -51,7 +51,7 @@ spl_autoload_register(static function (string $class): void {
     if (!is_dir($directory)) {
         mkdir($directory, 0777, true);
     }
-    $file = $directory . '/' . md5($class) . '.php';
+    $file = $directory . '/' . hash('sha256', $class) . '.php';
     file_put_contents($file, "<?php\n" . $code . "\n");
     require $file;
 });
