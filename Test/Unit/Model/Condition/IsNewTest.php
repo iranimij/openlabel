@@ -9,6 +9,9 @@ declare(strict_types=1);
 namespace Iranimij\OpenLabel\Test\Unit\Model\Condition;
 
 use Iranimij\OpenLabel\Model\Condition\IsNew;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 
 class IsNewTest extends ConditionTestCase
@@ -46,7 +49,7 @@ class IsNewTest extends ConditionTestCase
 
         $joins = $condition->getTablesToJoin();
         self::assertSame(['ol_news_from', 'ol_news_to'], array_keys($joins));
-        self::assertStringContainsString('store_id = 0', $joins['ol_news_from']['condition']);
+        self::assertSame('ol_news_from.entity_id = e.entity_id AND ol_news_from.attribute_id = 42 AND ol_news_from.store_id = 0', $joins['ol_news_from']['condition']);
         self::assertFalse($condition->requiresCustomerGroup());
         self::assertTrue($condition->isDateRelative(), 'news_dates changes with time: the daily cron must reindex it');
 
@@ -60,8 +63,18 @@ class IsNewTest extends ConditionTestCase
         $dateTime->method('gmtDate')->willReturn(self::NOW);
         $dateTime->method('gmtTimestamp')->willReturn(strtotime(self::NOW));
         $dateTime->method('timestamp')->willReturnCallback(static fn ($v) => is_numeric($v) ? (int) $v : strtotime((string) $v));
+        $eavAttribute = $this->createStub(Attribute::class);
+        $eavAttribute->method('getId')->willReturn('42');
+        $eavConfig = $this->createStub(EavConfig::class);
+        $eavConfig->method('getAttribute')->willReturn($eavAttribute);
+        $productResource = $this->createStub(ProductResource::class);
+        $productResource->method('getLinkField')->willReturn('entity_id');
         /** @var IsNew $condition */
-        $condition = $this->condition(IsNew::class, $attribute, $operator, $value, ['dateTime' => $dateTime]);
+        $condition = $this->condition(IsNew::class, $attribute, $operator, $value, [
+            'dateTime' => $dateTime,
+            'eavConfig' => $eavConfig,
+            'productResource' => $productResource,
+        ]);
 
         return $condition;
     }
