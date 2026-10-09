@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Iranimij\OpenLabel\Api\Data\LabelInterface" type="Iranimij\OpenLabel\Model\Label"/>
+    <preference for="Iranimij\OpenLabel\Api\Data\DesignInterface" type="Iranimij\OpenLabel\Model\Design"/>
+    <preference for="Iranimij\OpenLabel\Api\Data\PlacementInterface" type="Iranimij\OpenLabel\Model\Placement"/>
+    <preference for="Iranimij\OpenLabel\Api\Data\LabelSearchResultsInterface" type="Iranimij\OpenLabel\Model\LabelSearchResults"/>
+    <preference for="Iranimij\OpenLabel\Api\Data\DesignSearchResultsInterface" type="Iranimij\OpenLabel\Model\DesignSearchResults"/>
+    <preference for="Iranimij\OpenLabel\Api\LabelRepositoryInterface" type="Iranimij\OpenLabel\Model\LabelRepository"/>
+    <preference for="Iranimij\OpenLabel\Api\DesignRepositoryInterface" type="Iranimij\OpenLabel\Model\DesignRepository"/>
+</config>

@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="openlabel_design" resource="default" engine="innodb" comment="OpenLabel Design (how a label looks)">
+        <column xsi:type="int" name="design_id" unsigned="true" nullable="false" identity="true" comment="Design ID"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Name"/>
+        <column xsi:type="varchar" name="type" nullable="false" length="16" default="text" comment="text|image|shape"/>
+        <column xsi:type="varchar" name="shape" nullable="true" length="16" comment="rectangle|circle|ribbon|corner|pill"/>
+        <column xsi:type="varchar" name="image_path" nullable="true" length="255" comment="Image path under pub/media/openlabel/designs"/>
+        <column xsi:type="smallint" name="image_width" unsigned="true" nullable="true" comment="Image width (px)"/>
+        <column xsi:type="smallint" name="image_height" unsigned="true" nullable="true" comment="Image height (px)"/>
+        <column xsi:type="varchar" name="bg_color" nullable="true" length="16" comment="Background colour (hex)"/>
+        <column xsi:type="varchar" name="text_color" nullable="true" length="16" comment="Text colour (hex)"/>
+        <column xsi:type="varchar" name="border_color" nullable="true" length="16" comment="Border colour (hex)"/>
+        <column xsi:type="smallint" name="border_width" unsigned="true" nullable="false" default="0" comment="Border width (px)"/>
+        <column xsi:type="smallint" name="font_size" unsigned="true" nullable="false" default="14" comment="Font size maximum (px)"/>
+        <column xsi:type="varchar" name="size_mode" nullable="false" length="8" default="percent" comment="percent|px"/>
+        <column xsi:type="smallint" name="width" unsigned="true" nullable="false" default="18" comment="Width in size_mode units"/>
+        <column xsi:type="smallint" name="height" unsigned="true" nullable="true" comment="Height in size_mode units"/>
+        <column xsi:type="smallint" name="opacity" unsigned="true" nullable="false" default="100" comment="Opacity 0..100"/>
+        <column xsi:type="smallint" name="rotation" unsigned="false" nullable="false" default="0" comment="Rotation (degrees)"/>
+        <column xsi:type="text" name="custom_css" nullable="true" comment="Sanitized custom CSS"/>
+        <column xsi:type="boolean" name="is_system" nullable="false" default="false" comment="Built-in design"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created at"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated at"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="design_id"/>
+        </constraint>
+        <index referenceId="OPENLABEL_DESIGN_IS_SYSTEM" indexType="btree">
+            <column name="is_system"/>
+        </index>
+    </table>
+    <table name="openlabel_design_store" resource="default" engine="innodb" comment="OpenLabel Design store-scoped text">
+        <column xsi:type="int" name="design_id" unsigned="true" nullable="false" comment="Design ID"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" default="0" comment="Store view ID (0 = default)"/>
+        <column xsi:type="varchar" name="text" nullable="true" length="255" comment="Label text (HTML allow-list, variables)"/>
+        <column xsi:type="varchar" name="alt_text" nullable="true" length="255" comment="Alternative text for image designs"/>
+        <column xsi:type="varchar" name="tooltip" nullable="true" length="255" comment="Tooltip (1.1)"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="design_id"/>
+            <column name="store_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="OPENLABEL_DESIGN_STORE_DESIGN_ID_OPENLABEL_DESIGN_DESIGN_ID"
+                    table="openlabel_design_store" column="design_id" referenceTable="openlabel_design" referenceColumn="design_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="OPENLABEL_DESIGN_STORE_STORE_ID_STORE_STORE_ID"
+                    table="openlabel_design_store" column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+    </table>
+    <table name="openlabel_label" resource="default" engine="innodb" comment="OpenLabel Label (when and where)">
+        <column xsi:type="int" name="label_id" unsigned="true" nullable="false" identity="true" comment="Label ID"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Name (admin only)"/>
+        <column xsi:type="smallint" name="status" unsigned="true" nullable="false" default="1" comment="1 enabled, 0 disabled"/>
+        <column xsi:type="int" name="priority" unsigned="false" nullable="false" default="0" comment="0 = highest"/>
+        <column xsi:type="text" name="store_ids" nullable="true" comment="CSV of store view IDs, empty = all"/>
+        <column xsi:type="text" name="customer_group_ids" nullable="true" comment="CSV of customer group IDs, empty = all"/>
+        <column xsi:type="datetime" name="valid_from" on_update="false" nullable="true" comment="Valid from (UTC)"/>
+        <column xsi:type="datetime" name="valid_to" on_update="false" nullable="true" comment="Valid to (UTC)"/>
+        <column xsi:type="text" name="conditions_serialized" nullable="true" comment="Rule conditions (JSON)"/>
+        <column xsi:type="int" name="design_id" unsigned="true" nullable="false" comment="Default design"/>
+        <column xsi:type="boolean" name="apply_to_parent" nullable="false" default="false" comment="Write parent row when any child matches"/>
+        <column xsi:type="boolean" name="hide_lower_priority" nullable="false" default="false" comment="Suppress labels with a higher priority number"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created at"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated at"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="label_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="OPENLABEL_LABEL_DESIGN_ID_OPENLABEL_DESIGN_DESIGN_ID"
+                    table="openlabel_label" column="design_id" referenceTable="openlabel_design" referenceColumn="design_id" onDelete="NO ACTION"/>
+        <index referenceId="OPENLABEL_LABEL_STATUS" indexType="btree">
+            <column name="status"/>
+        </index>
+    </table>
+    <table name="openlabel_placement" resource="default" engine="innodb" comment="OpenLabel Placement (where a label shows)">
+        <column xsi:type="int" name="placement_id" unsigned="true" nullable="false" identity="true" comment="Placement ID"/>
+        <column xsi:type="int" name="label_id" unsigned="true" nullable="false" comment="Label ID"/>
+        <column xsi:type="varchar" name="area" nullable="false" length="16" default="listing" comment="listing|product"/>
+        <column xsi:type="varchar" name="position" nullable="false" length="16" default="tl" comment="tl tc tr ml mc mr bl bc br"/>
+        <column xsi:type="boolean" name="pin_physical_side" nullable="false" default="false" comment="Keep left/right physical in RTL"/>
+        <column xsi:type="int" name="design_id" unsigned="true" nullable="true" comment="Design override for this area"/>
+        <column xsi:type="smallint" name="offset_x" unsigned="false" nullable="false" default="0" comment="Horizontal offset (px)"/>
+        <column xsi:type="smallint" name="offset_y" unsigned="false" nullable="false" default="0" comment="Vertical offset (px)"/>
+        <column xsi:type="smallint" name="max_labels" unsigned="true" nullable="false" default="3" comment="Max labels in this position"/>
+        <column xsi:type="varchar" name="stacking" nullable="false" length="16" default="vertical" comment="vertical|horizontal"/>
+        <column xsi:type="smallint" name="gap" unsigned="true" nullable="false" default="4" comment="Gap between stacked labels (px)"/>
+        <column xsi:type="smallint" name="sort_order" unsigned="true" nullable="false" default="0" comment="Order in the admin form"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="placement_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="OPENLABEL_PLACEMENT_LABEL_ID_OPENLABEL_LABEL_LABEL_ID"
+                    table="openlabel_placement" column="label_id" referenceTable="openlabel_label" referenceColumn="label_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="OPENLABEL_PLACEMENT_DESIGN_ID_OPENLABEL_DESIGN_DESIGN_ID"
+                    table="openlabel_placement" column="design_id" referenceTable="openlabel_design" referenceColumn="design_id" onDelete="SET NULL"/>
+        <index referenceId="OPENLABEL_PLACEMENT_LABEL_ID" indexType="btree">
+            <column name="label_id"/>
+        </index>
+    </table>
+    <table name="openlabel_index" resource="default" engine="innodb" comment="OpenLabel index: which label applies to which product">
+        <column xsi:type="int" name="label_id" unsigned="true" nullable="false" comment="Label ID"/>
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" comment="Product ID"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" comment="Store view ID"/>
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="false" comment="Customer group ID, -1 = all groups"/>
+        <column xsi:type="int" name="parent_product_id" unsigned="true" nullable="true" comment="Parent product ID when the row comes from a child"/>
+        <column xsi:type="int" name="priority" unsigned="false" nullable="false" default="0" comment="Label priority copy"/>
+        <column xsi:type="datetime" name="valid_from" on_update="false" nullable="true" comment="Valid from (UTC)"/>
+        <column xsi:type="datetime" name="valid_to" on_update="false" nullable="true" comment="Valid to (UTC)"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="label_id"/>
+            <column name="product_id"/>
+            <column name="store_id"/>
+            <column name="customer_group_id"/>
+        </constraint>
+        <index referenceId="OPENLABEL_INDEX_STORE_ID_PRODUCT_ID" indexType="btree">
+            <column name="store_id"/>
+            <column name="product_id"/>
+        </index>
+    </table>
+    <table name="openlabel_index_replica" resource="default" engine="innodb" comment="OpenLabel index replica (full reindex swap)">
+        <column xsi:type="int" name="label_id" unsigned="true" nullable="false" comment="Label ID"/>
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" comment="Product ID"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" comment="Store view ID"/>
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="false" comment="Customer group ID, -1 = all groups"/>
+        <column xsi:type="int" name="parent_product_id" unsigned="true" nullable="true" comment="Parent product ID when the row comes from a child"/>
+        <column xsi:type="int" name="priority" unsigned="false" nullable="false" default="0" comment="Label priority copy"/>
+        <column xsi:type="datetime" name="valid_from" on_update="false" nullable="true" comment="Valid from (UTC)"/>
+        <column xsi:type="datetime" name="valid_to" on_update="false" nullable="true" comment="Valid to (UTC)"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="label_id"/>
+            <column name="product_id"/>
+            <column name="store_id"/>
+            <column name="customer_group_id"/>
+        </constraint>
+        <index referenceId="OPENLABEL_INDEX_REPLICA_STORE_ID_PRODUCT_ID" indexType="btree">
+            <column name="store_id"/>
+            <column name="product_id"/>
+        </index>
+    </table>
+</schema>

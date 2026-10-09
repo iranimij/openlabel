@@ -4,7 +4,19 @@ Fine-grained checkpoint for the OpenLabel build. Updated with every merged PR. T
 
 ## Current milestone
 
-M0 · Foundation: **done** (2026-10-09). Next: M1 · Engine (entities, conditions, indexer, resolver, CLI), target 2026-11-09.
+M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Foundation done 2026-10-09.
+
+## M1 slices
+
+| # | Slice | State |
+|---|---|---|
+| S1 | Schema (5 tables + replica), `Api/Data` + repositories with validators, ACL resources, uninstall | done (PR #4, awaiting Iman's review) |
+| S2 | Rule model + built-in conditions (OnSale, IsNew, Stock, PriceRange, Rating, ReviewCount) | next |
+| S3 | Indexer: mview, full/list/row, `reindexLabel` diff, parent rows, group rows, replica swap, price/catalogrule plugins, crons, cache tags | todo |
+| S4 | Variables (15 processors, pool, locale renderer) + HTML allow-list | todo |
+| S5 | Resolver (one SELECT) + ViewModel + query-count tests | todo |
+| S6 | CLI `openlabel:reindex`, `openlabel:preview` | todo |
+| S7 | Close-out: CHANGELOG, docs/engine.md, coverage gate, build log | todo |
 
 ## M0 slices
 
@@ -24,14 +36,22 @@ M0 · Foundation: **done** (2026-10-09). Next: M1 · Engine (entities, condition
 
 ## Exact next step
 
-M1 S1: `openlabel` db_schema.xml (+ whitelist) for `openlabel_label`, `openlabel_design`, `openlabel_design_store`, `openlabel_placement`, `openlabel_index` per the entity spec pages; `Api/Data` interfaces; repositories with integration tests. Work on a feature branch, PR to `main` (branch protection requires `ci-ok`).
+M1 S2 on branch `feat/m1-s2-conditions` (stacked on S1 until PR #4 merges): RED unit tests for `Model/Condition/*::validate()` and integration tests for each condition's SQL on a 20-product fixture; then `Model/Rule/Rule`, `Model/Rule/Condition/{Combine,Product}`, the six built-in conditions and `ConditionPool`.
 
-## Test inventory (M0)
+## M1 decisions (also in the Notion build log at close-out)
+
+- `openlabel_index.customer_group_id` is `INT NOT NULL`; `-1` = all groups (Iman, 2026-10-09). No DB default because the declarative-schema XSD only accepts `\d+|null`; the indexer always writes the value.
+- `openlabel_label.design_id` FK uses `NO ACTION` (MariaDB reports RESTRICT as NO ACTION, which made `setup:db:status` report a perpetual diff).
+- `hide_on_zero_variable` stays in 1.1; no column in M1.
+- Unit tests carry both `@dataProvider` and `#[DataProvider]`: 2.4.7 ships PHPUnit 9 (annotations only), 2.4.9 ships PHPUnit 12 (attributes only).
+- Local PHPStan runs with `modules/phpstan-local.neon` (level 6, generated factories scanned); CI uses `bitexpert/phpstan-magento`. After `setup:di:compile` on the fixture, delete `generated/metadata` or the integration sandbox install fails on the disabled 2FA module.
+
+## Test inventory
 
 | Repo | Unit | Integration | Other |
 |---|---|---|---|
 | module-base | 19 tests / 48 assertions | 6 tests / 12 assertions | PHPCS clean, PHPStan 6 clean, LOC guard (408 / 1000 lines) |
-| openlabel | 3 / 21 | 3 (with hyva: 4 / 10) | PHPCS clean, PHPStan 6 clean |
+| openlabel (after M1 S1) | 33 / 54 | 21 / 138 | PHPCS clean, PHPStan 6 clean |
 | openlabel-hyva | 4 / 13 | 1 | PHPCS clean, PHPStan 6 clean |
 | openlabel-dev-env | — | — | Playwright 20 / 20 (desktop + mobile Chromium) |
 

@@ -10,6 +10,13 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
+                <resource id="Magento_Catalog::catalog">
+                    <resource id="Iranimij_OpenLabel::openlabel" title="OpenLabel" translate="title" sortOrder="50">
+                        <resource id="Iranimij_OpenLabel::labels" title="Labels" translate="title" sortOrder="10"/>
+                        <resource id="Iranimij_OpenLabel::designs" title="Designs" translate="title" sortOrder="20"/>
+                        <resource id="Iranimij_OpenLabel::custom_css" title="Edit custom CSS of designs" translate="title" sortOrder="30"/>
+                    </resource>
+                </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
