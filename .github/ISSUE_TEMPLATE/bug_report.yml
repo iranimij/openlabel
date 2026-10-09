@@ -1,0 +1,48 @@
+name: Bug report
+description: A label is missing, wrong, misplaced, or something errors
+labels: [bug]
+body:
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: Magento/Mage-OS, PHP, OpenLabel, Hyvä
+      placeholder: "Magento 2.4.8-p5, PHP 8.3, OpenLabel 1.0.0, Hyvä 1.4.2"
+    validations:
+      required: true
+  - type: dropdown
+    id: csp
+    attributes:
+      label: CSP mode on the storefront
+      options: [report-only, enforce, unknown]
+    validations:
+      required: true
+  - type: dropdown
+    id: varnish
+    attributes:
+      label: Full page cache
+      options: [built-in, Varnish, none, unknown]
+    validations:
+      required: true
+  - type: dropdown
+    id: msi
+    attributes:
+      label: Inventory
+      options: [MSI enabled, MSI disabled (legacy stock), unknown]
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Label settings (conditions, placement, scope) and the product you expected it on
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: debug
+    attributes:
+      label: Output of `bin/magento openlabel:preview <label_id>` (if available)

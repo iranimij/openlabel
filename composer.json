@@ -1,0 +1,51 @@
+{
+    "name": "iranimij/openlabel",
+    "description": "OpenLabel: product labels for Magento 2 and Hyvä. Rule-based labels with a dedicated indexer, zero layout shift, full page cache safe. Free and MIT.",
+    "type": "magento2-module",
+    "license": "MIT",
+    "keywords": ["magento2", "mage-os", "hyva", "product-labels", "badges", "stickers", "openlabel"],
+    "homepage": "https://github.com/iranimij/openlabel",
+    "support": {
+        "issues": "https://github.com/iranimij/openlabel/issues",
+        "source": "https://github.com/iranimij/openlabel",
+        "docs": "https://github.com/iranimij/openlabel/tree/main/docs"
+    },
+    "authors": [
+        {
+            "name": "Iman Aboheydary",
+            "homepage": "https://github.com/iranimij"
+        }
+    ],
+    "require": {
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+        "iranimij/module-base": "^1.0",
+        "magento/framework": "^103.0.7",
+        "magento/module-backend": "^102.0.7",
+        "magento/module-catalog": "^104.0.7",
+        "magento/module-catalog-inventory": "^100.4.7",
+        "magento/module-config": "^101.2.7",
+        "magento/module-customer": "^103.0.7",
+        "magento/module-review": "^100.4.7",
+        "magento/module-rule": "^100.4.7",
+        "magento/module-sales": "^103.0.7",
+        "magento/module-store": "^101.1.7"
+    },
+    "suggest": {
+        "magento/module-inventory-sales-api": "Salable quantity conditions and {STOCK_QTY} use MSI when present",
+        "iranimij/openlabel-hyva": "Storefront rendering for Hyvä themes"
+    },
+    "autoload": {
+        "files": ["registration.php"],
+        "psr-4": {
+            "Iranimij\\OpenLabel\\": ""
+        }
+    },
+    "extra": {
+        "iranimij": {
+            "changelog": "https://github.com/iranimij/openlabel/blob/main/CHANGELOG.md"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
