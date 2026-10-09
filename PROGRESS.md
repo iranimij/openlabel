@@ -11,8 +11,8 @@ M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Fou
 | # | Slice | State |
 |---|---|---|
 | S1 | Schema (5 tables + replica), `Api/Data` + repositories with validators, ACL resources, uninstall | done (PR #4, awaiting Iman's review) |
-| S2 | Rule model + built-in conditions (OnSale, IsNew, Stock, PriceRange, Rating, ReviewCount) | next |
-| S3 | Indexer: mview, full/list/row, `reindexLabel` diff, parent rows, group rows, replica swap, price/catalogrule plugins, crons, cache tags | todo |
+| S2 | Rule model + built-in conditions (OnSale, IsNew, Stock, PriceRange, Rating, ReviewCount) | done (PR #5, stacked on S1, auto-merge) |
+| S3 | Indexer: mview, full/list/row, `reindexLabel` diff, parent rows, group rows, replica swap, price/catalogrule plugins, crons, cache tags | next |
 | S4 | Variables (15 processors, pool, locale renderer) + HTML allow-list | todo |
 | S5 | Resolver (one SELECT) + ViewModel + query-count tests | todo |
 | S6 | CLI `openlabel:reindex`, `openlabel:preview` | todo |
@@ -36,7 +36,7 @@ M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Fou
 
 ## Exact next step
 
-M1 S2 on branch `feat/m1-s2-conditions` (stacked on S1 until PR #4 merges): RED unit tests for `Model/Condition/*::validate()` and integration tests for each condition's SQL on a 20-product fixture; then `Model/Rule/Rule`, `Model/Rule/Condition/{Combine,Product}`, the six built-in conditions and `ConditionPool`.
+M1 S3 on branch `feat/m1-s3-indexer` (stacked on S2): RED integration tests for the indexer (full/list/row, configurable/grouped/bundle parent rows, per-group rows, store-scoped rows, `reindexLabel` diff, lock) and unit tests for the parent-row builder and diff; then `etc/indexer.xml`, `etc/mview.xml`, `Model/Indexer/*`, plugins on the price and catalogrule indexers, the two crons and `Model/Cache/IdentityProvider`.
 
 ## M1 decisions (also in the Notion build log at close-out)
 
@@ -44,6 +44,10 @@ M1 S2 on branch `feat/m1-s2-conditions` (stacked on S1 until PR #4 merges): RED 
 - `openlabel_label.design_id` FK uses `NO ACTION` (MariaDB reports RESTRICT as NO ACTION, which made `setup:db:status` report a perpetual diff).
 - `hide_on_zero_variable` stays in 1.1; no column in M1.
 - Unit tests carry both `@dataProvider` and `#[DataProvider]`: 2.4.7 ships PHPUnit 9 (annotations only), 2.4.9 ships PHPUnit 12 (attributes only).
+- Built-in conditions contribute SQL as `Zend_Db_Expr` through the core `Magento\Rule\Model\Condition\Sql\Builder`; the native attribute condition extends `Magento\CatalogWidget\Model\Rule\Condition\Product` (new core dependency `magento/module-catalog-widget`), which already handles store-scoped attributes. Rule context (store, website, customer group) is set on `Model\Rule\Rule` and read by the conditions.
+- Price-based conditions read the price index, which omits out-of-stock products unless "Display Out of Stock Products" is on.
+- Is-new date conditions use the default-scope (store 0) `news_from_date`/`news_to_date`; website overrides of those dates are reachable through the native attribute condition.
+- MSI is optional: `Model/Condition/Stock/MsiStockData` resolves the MSI interfaces through the object manager and is only used when `Magento_InventorySalesApi` + `Magento_InventoryIndexer` are enabled (`StockDataResolver`).
 - Local PHPStan runs with `modules/phpstan-local.neon` (level 6, generated factories scanned); CI uses `bitexpert/phpstan-magento`. After `setup:di:compile` on the fixture, delete `generated/metadata` or the integration sandbox install fails on the disabled 2FA module.
 
 ## Test inventory
@@ -51,7 +55,7 @@ M1 S2 on branch `feat/m1-s2-conditions` (stacked on S1 until PR #4 merges): RED 
 | Repo | Unit | Integration | Other |
 |---|---|---|---|
 | module-base | 19 tests / 48 assertions | 6 tests / 12 assertions | PHPCS clean, PHPStan 6 clean, LOC guard (408 / 1000 lines) |
-| openlabel (after M1 S1) | 33 / 54 | 21 / 138 | PHPCS clean, PHPStan 6 clean |
+| openlabel (after M1 S2) | 55 / 116 | 30 / 157 | PHPCS clean, PHPStan 6 clean |
 | openlabel-hyva | 4 / 13 | 1 | PHPCS clean, PHPStan 6 clean |
 | openlabel-dev-env | — | — | Playwright 20 / 20 (desktop + mobile Chromium) |
 
