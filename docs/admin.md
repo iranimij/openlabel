@@ -40,7 +40,7 @@ Choose **Text**, **Image** or **Shape**; the form shows only what that type need
 - **Image:** PNG, JPG, GIF, WebP or SVG up to 1 MB (a warning above 50 KB). The real content type is checked; SVGs are cleaned (no scripts, event handlers, external references or entities). Width and height are stored so images never shift the layout. Alternative text is required.
 - **Size:** percent of the product image width (default) or pixels.
 - **Text per store view:** each store view uses the default text unless you untick "Use the default text".
-- **Custom CSS:** only for users with the "Edit custom CSS of designs" permission; imports, expressions, script URLs and escapes are removed before it is saved.
+- **Custom CSS:** only for users with the "Edit custom CSS of designs" permission; `@media`, `@supports` and `@container` blocks are kept; other at-rules (such as `@import`), expressions, script URLs and escapes are removed before it is saved.
 
 The 15 built-in designs are locked: open one and press **Duplicate to edit**. They pass WCAG AA contrast. Designs used by labels and built-in designs cannot be deleted.
 

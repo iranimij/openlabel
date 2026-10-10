@@ -81,10 +81,10 @@ class InlineEdit extends Action implements HttpPostActionInterface
                 $label->setPriority(max(0, (int) $values['priority']));
             }
             if (array_key_exists('valid_from', $values)) {
-                $label->setValidFrom($this->dateConverter->toUtc((string) $values['valid_from']));
+                $label->setValidFrom($this->scheduleDate($label->getValidFrom(), (string) $values['valid_from'], false));
             }
             if (array_key_exists('valid_to', $values)) {
-                $label->setValidTo($this->dateConverter->toUtc((string) $values['valid_to'], true));
+                $label->setValidTo($this->scheduleDate($label->getValidTo(), (string) $values['valid_to'], true));
             }
             $this->labelRepository->save($label);
         } catch (ValidationException $e) {
@@ -99,5 +99,27 @@ class InlineEdit extends Action implements HttpPostActionInterface
         }
 
         return null;
+    }
+
+    /**
+     * The grid's date editor posts the day only, for every row edit. Keep the stored time while the day is unchanged.
+     *
+     * @param string|null $current UTC
+     * @param string $submitted
+     * @param bool $endOfDay
+     * @return string|null UTC
+     * @throws LocalizedException
+     */
+    private function scheduleDate(?string $current, string $submitted, bool $endOfDay): ?string
+    {
+        $utc = $this->dateConverter->toUtc($submitted, $endOfDay);
+        if ($current !== null && $utc !== null
+            && substr((string) $this->dateConverter->toLocal($current), 0, 10)
+                === substr((string) $this->dateConverter->toLocal($utc), 0, 10)
+        ) {
+            return $current;
+        }
+
+        return $utc;
     }
 }

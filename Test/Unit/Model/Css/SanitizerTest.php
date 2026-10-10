@@ -52,6 +52,23 @@ class SanitizerTest extends TestCase
         ];
     }
 
+    public function testConditionalGroupRulesAreKept(): void
+    {
+        $css = "@media (max-width: 640px) { .ol-d-3 { font-size: 11px; } }\n"
+            . "@supports (display: grid) { .ol-d-3 { display: grid; } }\n"
+            . "@container (max-width: 220px) { .ol-d-3 { padding: 2px; } }";
+
+        self::assertSame($css, (new Sanitizer())->sanitize($css));
+    }
+
+    public function testCharsetAndNamespaceAreRemoved(): void
+    {
+        $clean = (string) (new Sanitizer())->sanitize('@charset "utf-8";@namespace svg url(x);.a{color:red}');
+
+        self::assertStringNotContainsString('@', $clean);
+        self::assertStringContainsString('.a{color:red}', $clean);
+    }
+
     public function testEmptyInputGivesNull(): void
     {
         self::assertNull((new Sanitizer())->sanitize("  \n "));

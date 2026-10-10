@@ -10,7 +10,7 @@ namespace Iranimij\OpenLabel\Model\Css;
 
 /**
  * Cleans merchant custom CSS before it is stored and appended to the generated stylesheet (02 · Architecture §8).
- * Removes markup, comments, at-rules and every declaration that can execute code or load foreign resources:
+ * Removes markup, comments, at-rules other than @media, @supports and @container, and every declaration that can execute code or load foreign resources:
  * expression(), behavior, -moz-binding, javascript:/vbscript:/data: URLs and CSS escapes (which could spell them).
  */
 class Sanitizer
@@ -37,7 +37,7 @@ class Sanitizer
         $css = (string) preg_replace('#<[^>]*>#', '', $css);
         $css = str_replace('<', '', $css);
         $css = (string) preg_replace('#/\*.*?(\*/|$)#s', '', $css);
-        $css = (string) preg_replace('/@[a-z-]+[^;{]*(;|(?=\{))/i', '', $css);
+        $css = (string) preg_replace('/@(?!(?:media|supports|container)\b)[a-z-]+[^;{]*(;|(?=\{))/i', '', $css);
 
         $declaration = '/' . self::TOKEN . '*?(?:' . implode('|', self::DANGER) . ')' . self::TOKEN . '*;?/i';
         do {

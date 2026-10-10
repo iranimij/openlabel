@@ -64,6 +64,31 @@ class InlineEditTest extends AbstractBackendController
         self::assertSame('2026-11-30 22:59:59', $label->getValidTo(), 'a date-only end runs to the end of the day');
     }
 
+    #[ConfigFixture('general/locale/timezone', 'Europe/Berlin')]
+    #[DataFixture(DesignFixture::class, [], 'design')]
+    #[DataFixture(
+        LabelFixture::class,
+        ['design_id' => '$design.design_id$', 'valid_from' => '2026-10-01 14:30:00', 'valid_to' => '2027-01-01 18:15:00'],
+        'label'
+    )]
+    public function testUnchangedDayKeepsTheTimeOfTheSchedule(): void
+    {
+        $id = (int) DataFixtureStorageManager::getStorage()->get('label')->getLabelId();
+
+        // The grid's date editor posts the day only, in the admin locale, for every editable column of the row.
+        $result = $this->edit([$id => [
+            'label_id' => (string) $id,
+            'status' => '0',
+            'valid_from' => '10/01/2026',
+            'valid_to' => '01/01/2027',
+        ]]);
+
+        self::assertFalse($result['error'], implode(' ', $result['messages']));
+        $label = $this->_objectManager->create(LabelRepositoryInterface::class)->getById($id);
+        self::assertSame('2026-10-01 14:30:00', $label->getValidFrom());
+        self::assertSame('2027-01-01 18:15:00', $label->getValidTo());
+    }
+
     #[DataFixture(DesignFixture::class, [], 'design')]
     #[DataFixture(LabelFixture::class, ['design_id' => '$design.design_id$', 'name' => 'Keep me'], 'label')]
     public function testInvalidValueReportsTheValidationMessageAndKeepsTheLabel(): void
