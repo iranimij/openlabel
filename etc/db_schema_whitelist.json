@@ -1,0 +1,132 @@
+{
+    "openlabel_design": {
+        "column": {
+            "design_id": true,
+            "name": true,
+            "type": true,
+            "shape": true,
+            "image_path": true,
+            "image_width": true,
+            "image_height": true,
+            "bg_color": true,
+            "text_color": true,
+            "border_color": true,
+            "border_width": true,
+            "font_size": true,
+            "size_mode": true,
+            "width": true,
+            "height": true,
+            "opacity": true,
+            "rotation": true,
+            "custom_css": true,
+            "is_system": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "OPENLABEL_DESIGN_IS_SYSTEM": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "openlabel_design_store": {
+        "column": {
+            "design_id": true,
+            "store_id": true,
+            "text": true,
+            "alt_text": true,
+            "tooltip": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "OPENLABEL_DESIGN_STORE_DESIGN_ID_OPENLABEL_DESIGN_DESIGN_ID": true,
+            "OPENLABEL_DESIGN_STORE_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "openlabel_label": {
+        "column": {
+            "label_id": true,
+            "name": true,
+            "status": true,
+            "priority": true,
+            "store_ids": true,
+            "customer_group_ids": true,
+            "valid_from": true,
+            "valid_to": true,
+            "conditions_serialized": true,
+            "design_id": true,
+            "apply_to_parent": true,
+            "hide_lower_priority": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "OPENLABEL_LABEL_STATUS": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "OPENLABEL_LABEL_DESIGN_ID_OPENLABEL_DESIGN_DESIGN_ID": true
+        }
+    },
+    "openlabel_placement": {
+        "column": {
+            "placement_id": true,
+            "label_id": true,
+            "area": true,
+            "position": true,
+            "pin_physical_side": true,
+            "design_id": true,
+            "offset_x": true,
+            "offset_y": true,
+            "max_labels": true,
+            "stacking": true,
+            "gap": true,
+            "sort_order": true
+        },
+        "index": {
+            "OPENLABEL_PLACEMENT_LABEL_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "OPENLABEL_PLACEMENT_LABEL_ID_OPENLABEL_LABEL_LABEL_ID": true,
+            "OPENLABEL_PLACEMENT_DESIGN_ID_OPENLABEL_DESIGN_DESIGN_ID": true
+        }
+    },
+    "openlabel_index": {
+        "column": {
+            "label_id": true,
+            "product_id": true,
+            "store_id": true,
+            "customer_group_id": true,
+            "parent_product_id": true,
+            "priority": true,
+            "valid_from": true,
+            "valid_to": true
+        },
+        "index": {
+            "OPENLABEL_INDEX_STORE_ID_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "openlabel_index_replica": {
+        "column": {
+            "label_id": true,
+            "product_id": true,
+            "store_id": true,
+            "customer_group_id": true,
+            "parent_product_id": true,
+            "priority": true,
+            "valid_from": true,
+            "valid_to": true
+        },
+        "index": {
+            "OPENLABEL_INDEX_STORE_ID_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

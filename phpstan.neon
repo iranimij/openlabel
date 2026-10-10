@@ -8,3 +8,5 @@ parameters:
         - vendor
         # The integration test framework (Magento\TestFramework) is only autoloadable inside its own bootstrap.
         - Test/Integration
+        # Fixture classes implement Magento\TestFramework interfaces, autoloadable only inside the integration bootstrap.
+        - Test/Fixture
