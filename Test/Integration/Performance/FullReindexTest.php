@@ -43,7 +43,7 @@ class FullReindexTest extends TestCase
     private const SKU_PREFIX = 'ol-perf-';
 
     /** @var LabelInterface[] */
-    private array $labels = [];
+    private ?array $labels = [];
 
     protected function setUp(): void
     {
@@ -55,7 +55,7 @@ class FullReindexTest extends TestCase
     protected function tearDown(): void
     {
         $repository = Bootstrap::getObjectManager()->get(LabelRepositoryInterface::class);
-        foreach ($this->labels as $label) {
+        foreach ($this->labels ?? [] as $label) {
             $repository->deleteById((int) $label->getLabelId());
         }
         $this->deleteProducts();

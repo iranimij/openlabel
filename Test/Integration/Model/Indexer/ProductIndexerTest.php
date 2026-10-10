@@ -285,11 +285,11 @@ class ProductIndexerTest extends TestCase
     }
 
     /** @var LabelInterface[] */
-    private array $created = [];
+    private ?array $created = [];
 
     protected function tearDown(): void
     {
-        foreach ($this->created as $label) {
+        foreach ($this->created ?? [] as $label) {
             try {
                 $this->labels->deleteById((int) $label->getLabelId());
             } catch (\Exception) {

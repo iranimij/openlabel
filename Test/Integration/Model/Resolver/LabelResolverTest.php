@@ -46,9 +46,9 @@ class LabelResolverTest extends TestCase
     private ?LabelRepositoryInterface $labels = null;
     private ?QueryCounter $counter = null;
     /** @var int[] */
-    private array $productIds = [];
+    private ?array $productIds = [];
     /** @var LabelInterface[] */
-    private array $created = [];
+    private ?array $created = [];
 
     protected function setUp(): void
     {
@@ -75,7 +75,7 @@ class LabelResolverTest extends TestCase
 
     protected function tearDown(): void
     {
-        foreach ($this->created as $label) {
+        foreach ($this->created ?? [] as $label) {
             try {
                 $this->labels->deleteById((int) $label->getLabelId());
             } catch (\Exception) {
