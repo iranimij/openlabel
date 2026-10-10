@@ -59,8 +59,8 @@ class MassStatus extends Action implements HttpPostActionInterface
             }
             $this->messageManager->addSuccessMessage(
                 $status === LabelInterface::STATUS_ENABLED
-                    ? __('%1 label(s) enabled.', $done)
-                    : __('%1 label(s) disabled.', $done)
+                    ? (string) __('%1 label(s) enabled.', $done)
+                    : (string) __('%1 label(s) disabled.', $done)
             );
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
