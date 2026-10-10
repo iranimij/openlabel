@@ -22,4 +22,16 @@
             <argument name="kind" xsi:type="string">save</argument>
         </arguments>
     </virtualType>
+    <virtualType name="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\ConditionsFieldset" type="Magento\Backend\Block\Widget\Form\Renderer\Fieldset">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="template" xsi:type="string">Iranimij_OpenLabel::label/conditions.phtml</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\Conditions">
+        <arguments>
+            <argument name="fieldsetRenderer" xsi:type="object">Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\ConditionsFieldset</argument>
+        </arguments>
+    </type>
 </config>

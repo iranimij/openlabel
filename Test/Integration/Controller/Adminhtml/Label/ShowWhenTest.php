@@ -33,7 +33,6 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  * @magentoAppArea adminhtml
  */
 #[DbIsolation(false)]
-#[DataFixture(ScheduledSearchIndex::class)]
 class ShowWhenTest extends AbstractBackendController
 {
     /**
@@ -56,6 +55,7 @@ class ShowWhenTest extends AbstractBackendController
         parent::tearDown();
     }
 
+    #[DataFixture(ScheduledSearchIndex::class)]
     #[DataFixture(ProductFixture::class, ['sku' => 'ol-quick-new'], 'product')]
     #[DataFixture(ProductFixture::class, ['sku' => 'ol-quick-old'], 'old')]
     #[DataFixture(DesignFixture::class, [], 'design')]
@@ -88,6 +88,7 @@ class ShowWhenTest extends AbstractBackendController
         self::assertSame($this->indexedProducts((int) $raw->getLabelId()), $products);
     }
 
+    #[DataFixture(ScheduledSearchIndex::class)]
     #[DataFixture(ProductFixture::class, ['sku' => 'ol-quick-a'], 'a')]
     #[DataFixture(ProductFixture::class, ['sku' => 'ol-quick-b'], 'b')]
     #[DataFixture(DesignFixture::class, [], 'design')]

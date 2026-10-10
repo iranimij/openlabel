@@ -22,7 +22,7 @@ use Magento\Rule\Model\Condition\AbstractCondition;
 
 /**
  * "Advanced conditions": the core rule tree inside the label form. Its inputs carry data-form-part so the UI form
- * posts them with the other fields.
+ * posts them with the other fields. The fieldset renderer gets its template through di.xml (virtual type).
  */
 class Conditions extends Generic
 {
@@ -61,11 +61,10 @@ class Conditions extends Generic
     {
         $form = $this->_formFactory->create();
         $form->setData('html_id_prefix', 'rule_');
-        $this->fieldsetRenderer->setTemplate('Iranimij_OpenLabel::label/conditions.phtml')
-            ->setData('new_child_url', $this->getUrl('openlabel/label/newConditionHtml', [
-                'form' => self::FIELDSET_ID,
-                'form_namespace' => self::FORM_NAMESPACE,
-            ]));
+        $this->fieldsetRenderer->setData('new_child_url', $this->getUrl('openlabel/label/newConditionHtml', [
+            'form' => self::FIELDSET_ID,
+            'form_namespace' => self::FORM_NAMESPACE,
+        ]));
         $fieldset = $form->addFieldset('conditions_fieldset', ['legend' => __('Advanced conditions')])
             ->setRenderer($this->fieldsetRenderer);
 
