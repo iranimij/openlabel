@@ -13,7 +13,7 @@ Plan: S1 waits for Iman's review (first PR of the milestone); S2–S10 are stack
 | # | Slice | State |
 |---|---|---|
 | S1 | 15 system designs (data patch) + WCAG contrast | PR open, awaiting Iman |
-| S2 | Admin menu, routes, label and design grids (inline edit, mass actions, matched count) | todo |
+| S2 | Admin menu, routes, label and design grids (inline edit, mass actions, matched count) | PR open (stacked on S1) |
 | S3 | Design form (type cards, colours + contrast badge, per-store text, image upload + SVG sanitizer, custom CSS behind ACL) | todo |
 | S4 | Label form: basics, who-and-when, save bar, duplicate | todo |
 | S5 | Show when: quick toggles + rule tree | todo |
@@ -53,7 +53,7 @@ Plan: S1 waits for Iman's review (first PR of the milestone); S2–S10 are stack
 
 ## Exact next step
 
-M2 S2: admin menu, routes and the two grids, branched from `feat/m2-s1-system-designs`. Ledger: `openlabel-dev-env/modules/M2-ledger.md`.
+M2 S3: design form, branched from `feat/m2-s2-grids`. Ledger: `openlabel-dev-env/modules/M2-ledger.md`.
 
 ## M1 decisions (also in the Notion build log at close-out)
 

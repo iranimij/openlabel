@@ -29,7 +29,8 @@
         "magento/module-review": "^100.4.7",
         "magento/module-rule": "^100.4.6",
         "magento/module-sales": "^103.0.7",
-        "magento/module-store": "^101.1.7"
+        "magento/module-store": "^101.1.7",
+        "magento/module-ui": "^101.2.7"
     },
     "suggest": {
         "magento/module-inventory-sales-api": "Salable quantity conditions and {STOCK_QTY} use MSI when present",
