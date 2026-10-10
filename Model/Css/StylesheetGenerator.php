@@ -19,6 +19,8 @@ use Magento\Framework\Module\Dir\Reader;
 /**
  * Builds the one OpenLabel stylesheet (10 · Front-end Review FE2): the module's structural CSS, one custom-property
  * line per design, one per placement that moves away from the defaults, then the sanitized custom CSS of each design.
+ * Theme packages add their own structural rules (container roots, theme quirks) through the `sources` argument:
+ * module name => file path relative to that module's `view` directory.
  */
 class StylesheetGenerator
 {
@@ -31,6 +33,7 @@ class StylesheetGenerator
      * @param PlacementCollectionFactory $placementCollectionFactory
      * @param Reader $moduleReader
      * @param File $file
+     * @param array<string, string> $sources
      */
     public function __construct(
         private readonly DesignRules $designRules,
@@ -38,7 +41,8 @@ class StylesheetGenerator
         private readonly DesignCollectionFactory $designCollectionFactory,
         private readonly PlacementCollectionFactory $placementCollectionFactory,
         private readonly Reader $moduleReader,
-        private readonly File $file
+        private readonly File $file,
+        private readonly array $sources = []
     ) {
     }
 
@@ -99,10 +103,14 @@ class StylesheetGenerator
      */
     private function structuralCss(): string
     {
-        $path = $this->moduleReader->getModuleDir(Dir::MODULE_VIEW_DIR, 'Iranimij_OpenLabel')
-            . '/' . self::STRUCTURAL_SOURCE;
+        $css = [];
+        foreach (['Iranimij_OpenLabel' => self::STRUCTURAL_SOURCE] + $this->sources as $module => $source) {
+            $css[] = $this->file->fileGetContents(
+                $this->moduleReader->getModuleDir(Dir::MODULE_VIEW_DIR, $module) . '/' . ltrim($source, '/')
+            );
+        }
 
-        return $this->file->fileGetContents($path);
+        return implode("\n", $css);
     }
 
     /**

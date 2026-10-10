@@ -40,6 +40,14 @@
 .ol-pos-bc { inset-block-end: var(--ol-oy, 0); inset-inline-start: 50%; transform: translateX(-50%); }
 .ol-pos-be { inset-block-end: var(--ol-oy, 0); inset-inline-end: var(--ol-ox, 0); }
 
+/* "Keep left/right in RTL": physical sides for the rare placement that must not mirror (FE4). */
+.ol-pos-tl { left: var(--ol-ox, 0); top: var(--ol-oy, 0); }
+.ol-pos-tr { right: var(--ol-ox, 0); top: var(--ol-oy, 0); }
+.ol-pos-ml { left: var(--ol-ox, 0); top: 50%; transform: translateY(-50%); }
+.ol-pos-mr { right: var(--ol-ox, 0); top: 50%; transform: translateY(-50%); }
+.ol-pos-bl { bottom: var(--ol-oy, 0); left: var(--ol-ox, 0); }
+.ol-pos-br { bottom: var(--ol-oy, 0); right: var(--ol-ox, 0); }
+
 .ol-label {
     align-items: center;
     background: var(--ol-bg, #111827);

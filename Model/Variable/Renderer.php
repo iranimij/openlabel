@@ -59,6 +59,30 @@ class Renderer
     }
 
     /**
+     * Like preload(), limited to the processors the given texts use: a listing whose labels only show
+     * {SAVE_PERCENT} costs no review or sales query.
+     *
+     * @param ProductInterface[] $products
+     * @param Context $context
+     * @param string[] $texts
+     * @return void
+     */
+    public function preloadFor(array $products, Context $context, array $texts): void
+    {
+        $done = [];
+        foreach ($texts as $text) {
+            preg_match_all(self::PATTERN, $text, $matches);
+            foreach ($matches[1] as $name) {
+                $processor = $this->pool->get($name);
+                if ($processor instanceof VariablePreloadInterface && !isset($done[spl_object_id($processor)])) {
+                    $done[spl_object_id($processor)] = true;
+                    $processor->preload($products, $context);
+                }
+            }
+        }
+    }
+
+    /**
      * @param string $text label text with {VARIABLES} and allow-listed inline HTML
      * @param ProductInterface $product
      * @param Context $context

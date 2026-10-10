@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+
+/**
+ * Label stacks of one product in one area, placed inside a positioned image wrapper (`ol-anchor`).
+ * Markup contract (stable from 1.0): ol-stack, ol-stack--v|h, ol-pos-*, ol-label, ol-label--text|image|shape,
+ * ol-d-<id>, ol-shape-*. No inline styles, no scripts.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+/** @var array<int, array{classes: string, labels: array<int, array<string, mixed>>}> $stacks */
+$stacks = $block->getData('stacks') ?: [];
+?>
+<?php foreach ($stacks as $stack): ?>
+<span class="<?= $escaper->escapeHtml($stack['classes']) ?>"><?php foreach ($stack['labels'] as $label): ?><span class="<?= $escaper->escapeHtml($label['classes']) ?>"<?php if ($label['debug_id'] !== null): ?> data-ol-label="<?= (int) $label['debug_id'] ?>"<?php endif; ?>><?php if ($label['image'] !== null): ?><img src="<?= $escaper->escapeUrl($label['image']['src']) ?>" alt="<?= $escaper->escapeHtml($label['image']['alt']) ?>"<?php if ($label['image']['width'] && $label['image']['height']): ?> width="<?= (int) $label['image']['width'] ?>" height="<?= (int) $label['image']['height'] ?>"<?php endif; ?> loading="<?= $escaper->escapeHtml($label['image']['loading']) ?>" decoding="async"><?php else: ?><?= /* @noEscape escaped and allow-listed by the variable renderer */ $label['html'] ?><?php endif; ?></span><?php endforeach; ?></span>
+<?php endforeach; ?>

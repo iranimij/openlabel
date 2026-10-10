@@ -12,8 +12,8 @@ Plan approved 2026-10-11 (plan file in the session; summary here). Stacked PRs: 
 
 | # | Slice | State |
 |---|---|---|
-| S1 | Stylesheet generator (`Model/Css/{DesignRules,StylesheetGenerator,Storage,Regenerator}`, CLI `openlabel:css:regenerate`, settings button, regenerate on save) | in progress |
-| S2 | Label markup partial + `Block\Css` `<link>` + `ViewModel\LabelRenderer` + cache identities | todo |
+| S1 | Stylesheet generator (`Model/Css/{DesignRules,StylesheetGenerator,Storage,Regenerator}`, CLI `openlabel:css:regenerate`, settings button, regenerate on save) | PR #22 |
+| S2 | Label markup partial + `Block\Css` `<link>` + `ViewModel\LabelRenderer` + cache identities | in progress |
 | S3 | Hyvä listing slot (Product\Image plugin, collection preload, list-item cache tags) | todo |
 | S4 | Hyvä gallery slot (child block + Gallery plugin) | todo |
 | S5 | Customer groups × Varnish storefront specs | todo |
@@ -69,7 +69,7 @@ Plan: S1 waits for Iman's review (first PR of the milestone); S2–S10 are stack
 
 ## Exact next step
 
-M3 S1: open the PR, then S2 (label markup partial and `<link>` block). Earlier note kept for M2: M3 · Hyvä render, in a new session. Before that: Iman reviews PR #12 (S1); then retarget the S10 PR to `main` and close #13–#20 as in M1, and Iman runs the recorded ≤ 3 min custom-label test. Ledger: `openlabel-dev-env/modules/M2-ledger.md`.
+M3 S2: open the PR, then S3 in `openlabel-hyva` (listing slot: Product\\Image plugin, collection preload, list-item cache tags). Earlier note kept for M2: M3 · Hyvä render, in a new session. Before that: Iman reviews PR #12 (S1); then retarget the S10 PR to `main` and close #13–#20 as in M1, and Iman runs the recorded ≤ 3 min custom-label test. Ledger: `openlabel-dev-env/modules/M2-ledger.md`.
 
 ## M1 decisions (also in the Notion build log at close-out)
 
