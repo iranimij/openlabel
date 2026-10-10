@@ -136,6 +136,28 @@ class LabelRenderer implements ArgumentInterface
     }
 
     /**
+     * Cache tags of a product's labels without rendering them: theme block caches that skip rendering on a cache
+     * hit still tag the page (and their own cache entry) correctly.
+     *
+     * @param int $productId
+     * @return string[]
+     */
+    public function collectIdentities(int $productId): array
+    {
+        $tags = [];
+        foreach ($this->labels->getForProduct($productId) as $label) {
+            $tags[] = Label::CACHE_TAG_PREFIX . $label->getLabelId();
+            $tags[] = Design::CACHE_TAG . '_' . (int) $label->getDesign()->getDesignId();
+        }
+        $tags = array_values(array_unique($tags));
+        foreach ($tags as $tag) {
+            $this->identities[$tag] = true;
+        }
+
+        return $tags;
+    }
+
+    /**
      * @param PlacementInterface $placement
      * @return string
      */

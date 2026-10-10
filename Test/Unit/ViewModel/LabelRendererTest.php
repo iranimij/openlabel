@@ -140,6 +140,17 @@ class LabelRendererTest extends TestCase
         self::assertSame(['openlabel_1', 'openlabel_design_10', 'openlabel_4', 'openlabel_design_40'], $renderer->getIdentities());
     }
 
+    public function testIdentitiesCanBeCollectedWithoutRendering(): void
+    {
+        $this->resolved = [$this->label(1, 'tl', 'vertical', 'text', 'X'), $this->label(2, 'tl', 'vertical', 'text', 'Y')];
+        $renderer = $this->renderer();
+
+        $tags = $renderer->collectIdentities(100);
+
+        self::assertSame(['openlabel_1', 'openlabel_design_10', 'openlabel_2', 'openlabel_design_20'], $tags);
+        self::assertSame($tags, $renderer->getIdentities(), 'the page is tagged too');
+    }
+
     public function testVariablesArePreloadedOnceForAllRememberedProducts(): void
     {
         $this->resolved = [$this->label(1, 'tl', 'vertical', 'text', '-{SAVE_PERCENT}%')];
