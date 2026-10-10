@@ -13,6 +13,7 @@ use Iranimij\OpenLabel\Model\Condition\IsNew;
 use Iranimij\OpenLabel\Model\Rule\Condition\Combine;
 use Iranimij\OpenLabel\Test\Fixture\Design as DesignFixture;
 use Iranimij\OpenLabel\Test\Fixture\Label as LabelFixture;
+use Iranimij\OpenLabel\Test\Fixture\ScheduledSearchIndex;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\RequestInterface;
@@ -21,14 +22,15 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
  * Matched products section and "Reindex now".
  *
  * @magentoAppArea adminhtml
- * @magentoDbIsolation enabled
  */
+#[DbIsolation(false)]
 class MatchedProductsTest extends AbstractBackendController
 {
     /**
@@ -46,6 +48,7 @@ class MatchedProductsTest extends AbstractBackendController
      */
     protected $httpMethod = HttpRequest::METHOD_POST;
 
+    #[DataFixture(ScheduledSearchIndex::class)]
     #[DataFixture(ProductFixture::class, ['sku' => 'ol-matched-a', 'name' => 'Matched jacket'], 'a')]
     #[DataFixture(ProductFixture::class, ['sku' => 'ol-matched-b'], 'b')]
     #[DataFixture(DesignFixture::class, [], 'design')]
@@ -82,6 +85,7 @@ class MatchedProductsTest extends AbstractBackendController
         self::assertStringContainsString('Save the label to see which products match.', $this->section(0));
     }
 
+    #[DataFixture(ScheduledSearchIndex::class)]
     #[DataFixture(ProductFixture::class, ['sku' => 'ol-matched-new'], 'product')]
     #[DataFixture(DesignFixture::class, [], 'design')]
     #[DataFixture(LabelFixture::class, ['design_id' => '$design.design_id$'], 'label')]
