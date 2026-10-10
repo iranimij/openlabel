@@ -14,7 +14,6 @@ use Iranimij\OpenLabel\Model\ResourceModel\Label\CollectionFactory;
 use Iranimij\OpenLabel\Test\Fixture\Design as DesignFixture;
 use Iranimij\OpenLabel\Test\Fixture\Label as LabelFixture;
 use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Fixture\Config as ConfigFixture;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -44,7 +43,7 @@ class SaveTest extends AbstractBackendController
 
     #[ConfigFixture('general/locale/timezone', 'Europe/Berlin')]
     #[DataFixture(DesignFixture::class, [], 'design')]
-    public function testNewLabelIsSavedInUtcAndIndexed(): void
+    public function testNewLabelIsSavedInUtc(): void
     {
         $this->post($this->form('Winter sale') + ['back' => 'edit']);
 
@@ -56,7 +55,7 @@ class SaveTest extends AbstractBackendController
         self::assertCount(2, $label->getPlacements());
         self::assertSame('product', $label->getPlacements()[1]->getArea());
         self::assertRedirect(self::stringContains('openlabel/label/edit/id/' . $label->getLabelId()));
-        self::assertGreaterThan(0, $this->indexRows((int) $label->getLabelId()), 'saving reindexes the label');
+        // Reindex-on-save is proven with own products in ShowWhenTest (CI installs Magento without a catalog).
     }
 
     #[DataFixture(DesignFixture::class, [], 'design')]
@@ -134,15 +133,5 @@ class SaveTest extends AbstractBackendController
         self::assertGreaterThan(0, $id, "label $name was saved");
 
         return $this->_objectManager->create(LabelRepositoryInterface::class)->getById($id);
-    }
-
-    private function indexRows(int $labelId): int
-    {
-        $connection = $this->_objectManager->get(ResourceConnection::class)->getConnection();
-
-        return (int) $connection->fetchOne(
-            $connection->select()->from($connection->getTableName('openlabel_index'), 'COUNT(*)')
-                ->where('label_id = ?', $labelId)
-        );
     }
 }
