@@ -11,6 +11,8 @@
         <openlabel>
             <general>
                 <enabled>1</enabled>
+                <default_max_labels>3</default_max_labels>
+                <debug>0</debug>
             </general>
         </openlabel>
     </default>

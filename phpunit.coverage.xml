@@ -17,6 +17,8 @@
             <directory suffix=".php">Model/Resolver</directory>
             <directory suffix=".php">Model/Rule</directory>
             <directory suffix=".php">Model/Html</directory>
+            <directory suffix=".php">Model/Css</directory>
+            <directory suffix=".php">Model/Image</directory>
         </include>
     </source>
 </phpunit>

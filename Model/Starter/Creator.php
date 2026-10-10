@@ -12,6 +12,7 @@ use Iranimij\OpenLabel\Api\Data\LabelInterface;
 use Iranimij\OpenLabel\Api\Data\PlacementInterface;
 use Iranimij\OpenLabel\Api\Data\PlacementInterfaceFactory;
 use Iranimij\OpenLabel\Api\LabelRepositoryInterface;
+use Iranimij\OpenLabel\Model\Config;
 use Iranimij\OpenLabel\Model\Design\SystemDesignCatalog;
 use Iranimij\OpenLabel\Model\Label\FormMapper;
 use Iranimij\OpenLabel\Model\Label\QuickConditions;
@@ -38,6 +39,7 @@ class Creator
      * @param QuickConditions $quickConditions
      * @param DesignCollectionFactory $designCollectionFactory
      * @param LabelCollectionFactory $labelCollectionFactory
+     * @param Config $config
      */
     public function __construct(
         private readonly Catalog $catalog,
@@ -47,7 +49,8 @@ class Creator
         private readonly LabelRepositoryInterface $labelRepository,
         private readonly QuickConditions $quickConditions,
         private readonly DesignCollectionFactory $designCollectionFactory,
-        private readonly LabelCollectionFactory $labelCollectionFactory
+        private readonly LabelCollectionFactory $labelCollectionFactory,
+        private readonly Config $config
     ) {
     }
 
@@ -82,7 +85,7 @@ class Creator
             $placements[] = $this->placementFactory->create()
                 ->setArea($area)
                 ->setPosition($starter['position'])
-                ->setMaxLabels(FormMapper::DEFAULT_MAX_LABELS)
+                ->setMaxLabels($this->config->getDefaultMaxLabels())
                 ->setStacking(PlacementInterface::STACKING_VERTICAL)
                 ->setGap(FormMapper::DEFAULT_GAP);
         }

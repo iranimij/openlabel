@@ -99,4 +99,13 @@ class ValidatorTest extends TestCase
         $huge = $this->validator()->validate($this->file($png . str_repeat("\0", 1100 * 1024)), 'huge.png');
         self::assertStringContainsString('1 MB', (string) ($huge->getErrors()[0] ?? ''));
     }
+
+    public function testSvgWithEntitiesIsRejectedWithTheSanitizerReason(): void
+    {
+        $svg = '<?xml version="1.0"?><!DOCTYPE svg [<!ENTITY x "y">]><svg xmlns="http://www.w3.org/2000/svg"/>';
+
+        $result = $this->validator()->validate($this->file($svg), 'evil.svg');
+
+        self::assertSame(['SVG files with a DOCTYPE or entities are not accepted.'], array_map('strval', $result->getErrors()));
+    }
 }

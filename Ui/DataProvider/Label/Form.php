@@ -12,6 +12,7 @@ use Iranimij\OpenLabel\Api\Data\LabelInterface;
 use Iranimij\OpenLabel\Api\Data\PlacementInterface;
 use Iranimij\OpenLabel\Api\LabelRepositoryInterface;
 use Iranimij\OpenLabel\Controller\Adminhtml\Label\Save;
+use Iranimij\OpenLabel\Model\Config;
 use Iranimij\OpenLabel\Model\Design\PickerOptions;
 use Iranimij\OpenLabel\Model\Label\DateConverter;
 use Iranimij\OpenLabel\Model\Label\FormMapper;
@@ -46,6 +47,7 @@ class Form extends AbstractDataProvider
      * @param Help $variableHelp
      * @param CustomerGroups $customerGroups
      * @param AssetRepository $assetRepository
+     * @param Config $config
      * @param array<string, mixed> $meta
      * @param array<string, mixed> $data
      */
@@ -64,6 +66,7 @@ class Form extends AbstractDataProvider
         private readonly Help $variableHelp,
         private readonly CustomerGroups $customerGroups,
         private readonly AssetRepository $assetRepository,
+        private readonly Config $config,
         array $meta = [],
         array $data = []
     ) {
@@ -141,7 +144,7 @@ class Form extends AbstractDataProvider
             LabelInterface::PLACEMENTS => [[
                 PlacementInterface::AREA => PlacementInterface::AREA_LISTING,
                 PlacementInterface::POSITION => 'tl',
-                PlacementInterface::MAX_LABELS => (string) FormMapper::DEFAULT_MAX_LABELS,
+                PlacementInterface::MAX_LABELS => (string) $this->config->getDefaultMaxLabels(),
                 PlacementInterface::STACKING => PlacementInterface::STACKING_VERTICAL,
                 PlacementInterface::GAP => (string) FormMapper::DEFAULT_GAP,
                 PlacementInterface::OFFSET_X => '0',

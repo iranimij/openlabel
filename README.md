@@ -2,7 +2,7 @@
 
 **Free. MIT. Hyvä-native. One query per page, zero layout shift, correct under Varnish for every customer group.**
 
-> Status: under construction (milestone M0, foundation). The first release, 1.0.0, is planned for December 2026. Nothing here is usable in a shop yet.
+> Status: under construction. The engine (M1) and the admin (M2) are done; storefront rendering arrives with M3. The first release, 1.0.0, is planned for December 2026.
 
 OpenLabel adds rule-based product labels ("Sale -25%", "New", "Only 3 left") to listings and product pages. Labels are matched by a dedicated indexer, rendered server-side inside the cached page, styled by one generated stylesheet per store, and need no JavaScript and no Tailwind rebuild on a stock Hyvä theme.
 
@@ -32,6 +32,14 @@ composer require iranimij/openlabel-hyva-bundle
 bin/magento setup:upgrade
 bin/magento openlabel:reindex
 ```
+
+## Quick start (admin)
+
+1. Catalog › OpenLabel › **Labels**.
+2. Click the **Sale -{SAVE_PERCENT}%** starter. The label is live and the message tells you how many products match.
+3. Open it to change the design, the conditions or where it shows; the live preview follows every change.
+
+Details: [docs/admin.md](docs/admin.md).
 
 ## Development
 
