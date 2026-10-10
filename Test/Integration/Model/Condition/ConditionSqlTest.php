@@ -22,7 +22,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogRule\Test\Fixture\Rule as CatalogRuleFixture;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Indexer\IndexerRegistry;
+use Iranimij\OpenLabel\Test\Integration\Helper\StockSetter;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -40,8 +40,8 @@ use PHPUnit\Framework\TestCase;
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-sale20', 'price' => 100, 'special_price' => 80, 'name' => 'Sale jacket'], 'sale20')]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-sale5', 'price' => 100, 'special_price' => 95], 'sale5')]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-rule30', 'price' => 100], 'rule30')]
-#[DataFixture(ProductFixture::class, ['sku' => 'ol-out', 'price' => 20, 'stock_item' => ['qty' => 0, 'is_in_stock' => false]], 'out')]
-#[DataFixture(ProductFixture::class, ['sku' => 'ol-low', 'price' => 20, 'stock_item' => ['qty' => 3, 'is_in_stock' => true]], 'low')]
+#[DataFixture(ProductFixture::class, ['sku' => 'ol-out', 'price' => 20], 'out')]
+#[DataFixture(ProductFixture::class, ['sku' => 'ol-low', 'price' => 20], 'low')]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-old', 'price' => 20, 'news_from_date' => '2020-01-01 00:00:00', 'news_to_date' => '2020-02-01 00:00:00'], 'old')]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-new', 'price' => 20, 'news_from_date' => '2020-01-01 00:00:00', 'news_to_date' => null], 'new')]
 #[DataFixture(CatalogRuleFixture::class, ['name' => 'ol wholesale 30', 'website_ids' => [1], 'customer_group_ids' => [2], 'discount_amount' => 30, 'conditions' => [['attribute' => 'sku', 'operator' => '==', 'value' => 'ol-rule30']]], 'catalogrule')]
@@ -75,10 +75,8 @@ class ConditionSqlTest extends TestCase
         $product = $repository->get('ol-sale20', true, 1);
         $product->setName('Angebot Jacke');
         $repository->save($product);
-        $registry = $om->get(IndexerRegistry::class);
-        foreach (['catalogrule_rule', 'catalog_product_price', 'cataloginventory_stock', 'catalogrule_product'] as $indexer) {
-            $registry->get($indexer)->reindexAll();
-        }
+        $stockIds = $this->ids(['ol-out', 'ol-low']);
+        $om->get(StockSetter::class)->apply([$stockIds['ol-out'] => [0.0, false], $stockIds['ol-low'] => [3.0, true]]);
     }
 
     public function testOnSaleFindsSpecialPriceProductsForEveryGroup(): void

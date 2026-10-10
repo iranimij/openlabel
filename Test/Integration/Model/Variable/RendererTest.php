@@ -20,6 +20,7 @@ use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
 use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableFixture;
+use Iranimij\OpenLabel\Test\Integration\Helper\StockSetter;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
@@ -30,7 +31,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 #[DbIsolation(false)]
-#[DataFixture(ProductFixture::class, ['sku' => 'ol-var', 'price' => 100, 'special_price' => 80, 'stock_item' => ['qty' => 7, 'is_in_stock' => true]], 'var')]
+#[DataFixture(ProductFixture::class, ['sku' => 'ol-var', 'price' => 100, 'special_price' => 80], 'var')]
 #[DataFixture(AttributeFixture::class, as: 'attr')]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-var-a', 'price' => 50, 'special_price' => 40, '$attr.attribute_code$' => '$attr.option_1$'], 'var_a')]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-var-b', 'price' => 60, '$attr.attribute_code$' => '$attr.option_2$'], 'var_b')]
@@ -53,6 +54,9 @@ class RendererTest extends TestCase
         $om = Bootstrap::getObjectManager();
         $this->renderer = $om->get(Renderer::class);
         $this->products = $om->get(ProductRepositoryInterface::class);
+        // 10 in stock before the fixture order of 3 is placed... the order already exists: set 7 and let the
+        // reservation of 3 reduce the salable quantity to 4 (see the first test).
+        $om->get(StockSetter::class)->apply([(int) DataFixtureStorageManager::getStorage()->get('var')->getId() => [7.0, true]]);
     }
 
     public function testPriceStockAndSkuVariablesOnARealProduct(): void

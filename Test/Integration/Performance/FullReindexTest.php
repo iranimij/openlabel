@@ -65,7 +65,7 @@ class FullReindexTest extends TestCase
     {
         $this->createProducts();
         $registry = Bootstrap::getObjectManager()->get(IndexerRegistry::class);
-        foreach (['catalog_product_price', 'cataloginventory_stock'] as $id) {
+        foreach (['cataloginventory_stock', 'catalog_product_price'] as $id) {
             $registry->get($id)->reindexAll();
         }
         $this->labels[] = $this->label('Perf sale', [['type' => OnSale::class, 'attribute' => 'on_sale', 'operator' => '==', 'value' => '1']]);

@@ -28,6 +28,7 @@ use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableFixture;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\CacheContext;
+use Iranimij\OpenLabel\Test\Integration\Helper\StockSetter;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\GroupedProduct\Test\Fixture\Product as GroupedFixture;
@@ -47,7 +48,7 @@ use PHPUnit\Framework\TestCase;
 #[DataFixture(AttributeFixture::class, as: 'attr')]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-full', 'price' => 100, 'name' => 'Full price'], 'full')]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-sale20', 'price' => 100, 'special_price' => 80, 'name' => 'Sale item'], 'sale20')]
-#[DataFixture(ProductFixture::class, ['sku' => 'ol-low', 'price' => 20, 'stock_item' => ['qty' => 3, 'is_in_stock' => true]], 'low')]
+#[DataFixture(ProductFixture::class, ['sku' => 'ol-low', 'price' => 20], 'low')]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-conf-a', 'price' => 100, 'special_price' => 70, '$attr.attribute_code$' => '$attr.option_1$'], 'conf_a')]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-conf-b', 'price' => 100, '$attr.attribute_code$' => '$attr.option_2$'], 'conf_b')]
 #[DataFixture(ConfigurableFixture::class, ['sku' => 'ol-conf', '_options' => ['$attr$'], '_links' => ['$conf_a$', '$conf_b$']], 'conf')]
@@ -69,10 +70,7 @@ class ProductIndexerTest extends TestCase
         $this->indexer = $om->get(ProductIndexer::class);
         $this->labels = $om->get(LabelRepositoryInterface::class);
         $this->resource = $om->get(ResourceConnection::class);
-        $registry = $om->get(IndexerRegistry::class);
-        foreach (['catalog_product_price', 'cataloginventory_stock'] as $id) {
-            $registry->get($id)->reindexAll();
-        }
+        $om->get(StockSetter::class)->apply([$this->id('low') => [3.0, true]]);
         $om->get(CacheContext::class)->flush();
     }
 

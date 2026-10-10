@@ -19,6 +19,7 @@ use Iranimij\OpenLabel\Test\Fixture\Design as DesignFixture;
 use Iranimij\OpenLabel\Test\Fixture\Label as LabelFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\App\ResourceConnection;
+use Iranimij\OpenLabel\Test\Integration\Helper\StockSetter;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -39,7 +40,7 @@ class CommandsTest extends TestCase
 
     protected function setUp(): void
     {
-        Bootstrap::getObjectManager()->get(IndexerRegistry::class)->get('catalog_product_price')->reindexAll();
+        Bootstrap::getObjectManager()->get(StockSetter::class)->reindex();
         $this->label = Bootstrap::getObjectManager()->get(LabelFixture::class)->apply([
             'name' => 'CLI sale',
             'design_id' => (int) DataFixtureStorageManager::getStorage()->get('design')->getDesignId(),

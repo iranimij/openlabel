@@ -49,6 +49,10 @@ class Matcher
                 $collection->addIdFilter(array_map('intval', $productIds));
             }
             $rule->applyToCollection($collection);
+            if (getenv('OPENLABEL_DEBUG_SQL')) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                fwrite(STDERR, "\nOPENLABEL SQL store $storeId group $customerGroupId: " . $collection->getSelect()->__toString() . "\n");
+            }
 
             return array_map('intval', $collection->getAllIds());
         } finally {
