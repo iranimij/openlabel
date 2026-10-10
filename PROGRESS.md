@@ -17,7 +17,7 @@ Plan: S1 waits for Iman's review (first PR of the milestone); S2–S10 are stack
 | S3 | Design form (type cards, colours + contrast badge, per-store text, image upload + SVG sanitizer, custom CSS behind ACL) | PR open (stacked on S2) |
 | S4 | Label form: basics, who-and-when, save bar, duplicate | PR open (stacked on S3) |
 | S5 | Show when: quick toggles + rule tree | PR open (stacked on S4) |
-| S6 | Show where: placements + 3×3 position picker | todo |
+| S6 | Show where: placements + 3×3 position picker | PR open (stacked on S5) |
 | S7 | Live preview (sticky, desktop/mobile, contrast warning) | todo |
 | S8 | Matched products tab + reindex button | todo |
 | S9 | Empty-state starters | todo |
@@ -53,7 +53,7 @@ Plan: S1 waits for Iman's review (first PR of the milestone); S2–S10 are stack
 
 ## Exact next step
 
-M2 S6: "Show where" 3×3 position picker, design override, stacking/gap/offsets, branched from `feat/m2-s5-show-when`. Ledger: `openlabel-dev-env/modules/M2-ledger.md`.
+M2 S7: live preview panel, branched from `feat/m2-s6-show-where`. Ledger: `openlabel-dev-env/modules/M2-ledger.md`.
 
 ## M1 decisions (also in the Notion build log at close-out)
 

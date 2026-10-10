@@ -366,6 +366,8 @@
                         <item name="isTemplate" xsi:type="boolean">true</item>
                         <item name="is_collection" xsi:type="boolean">true</item>
                         <item name="componentType" xsi:type="string">container</item>
+                        <!-- Row order lives in "row_order": the default "position" is our placement field. -->
+                        <item name="positionProvider" xsi:type="string">row_order</item>
                     </item>
                 </argument>
                 <field name="area" formElement="select" sortOrder="10">
@@ -387,7 +389,7 @@
                         </select>
                     </formElements>
                 </field>
-                <field name="position" formElement="select" sortOrder="20">
+                <field name="position" formElement="select" component="Iranimij_OpenLabel/js/form/element/position-picker" sortOrder="20">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="default" xsi:type="string">tl</item>
@@ -397,11 +399,31 @@
                         <label translate="true">Position on the image</label>
                         <dataType>text</dataType>
                         <dataScope>position</dataScope>
+                        <elementTmpl>Iranimij_OpenLabel/form/element/position-picker</elementTmpl>
                     </settings>
                     <formElements>
                         <select>
                             <settings>
                                 <options class="Iranimij\OpenLabel\Model\Source\Position"/>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
+                <field name="design_id" formElement="select" sortOrder="25">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="string"></item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Use a different design here</label>
+                        <dataType>text</dataType>
+                        <dataScope>design_id</dataScope>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="Iranimij\OpenLabel\Model\Source\DesignOverride"/>
                             </settings>
                         </select>
                     </formElements>
@@ -420,6 +442,88 @@
                             <rule name="validate-digits-range" xsi:type="string">1-10</rule>
                         </validation>
                     </settings>
+                </field>
+                <field name="stacking" formElement="select" sortOrder="40">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="string">vertical</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Stacking</label>
+                        <dataType>text</dataType>
+                        <dataScope>stacking</dataScope>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="Iranimij\OpenLabel\Model\Source\Stacking"/>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
+                <field name="gap" formElement="input" sortOrder="50">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="string">4</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Gap (px)</label>
+                        <dataType>text</dataType>
+                        <dataScope>gap</dataScope>
+                        <validation>
+                            <rule name="validate-number-range" xsi:type="string">0-64</rule>
+                        </validation>
+                    </settings>
+                </field>
+                <field name="offset_x" formElement="input" sortOrder="60">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="string">0</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Offset → (px)</label>
+                        <dataType>text</dataType>
+                        <dataScope>offset_x</dataScope>
+                        <validation>
+                            <rule name="validate-number-range" xsi:type="string">-200-200</rule>
+                        </validation>
+                    </settings>
+                </field>
+                <field name="offset_y" formElement="input" sortOrder="70">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="string">0</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Offset ↓ (px)</label>
+                        <dataType>text</dataType>
+                        <dataScope>offset_y</dataScope>
+                        <validation>
+                            <rule name="validate-number-range" xsi:type="string">-200-200</rule>
+                        </validation>
+                    </settings>
+                </field>
+                <field name="pin_physical_side" formElement="checkbox" sortOrder="80">
+                    <settings>
+                        <label translate="true">Keep left/right in RTL</label>
+                        <dataType>boolean</dataType>
+                        <dataScope>pin_physical_side</dataScope>
+                    </settings>
+                    <formElements>
+                        <checkbox>
+                            <settings>
+                                <prefer>toggle</prefer>
+                                <valueMap>
+                                    <map name="false" xsi:type="string">0</map>
+                                    <map name="true" xsi:type="string">1</map>
+                                </valueMap>
+                            </settings>
+                        </checkbox>
+                    </formElements>
                 </field>
                 <actionDelete name="delete" sortOrder="100">
                     <settings>

@@ -1,0 +1,20 @@
+<!--
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+-->
+<div class="ol-position-picker" role="radiogroup" data-role="ol-position-picker"
+     data-bind="attr: {'aria-label': $t('Position on the image')}">
+    <!-- ko foreach: { data: cells(), as: 'cell' } -->
+    <button type="button" class="ol-position-picker__cell" role="radio"
+            data-bind="click: $parent.choose.bind($parent, cell),
+                       event: {keydown: $parent.onKey.bind($parent, cell)},
+                       css: {'ol-position-picker__cell--active': $parent.isChosen(cell)},
+                       attr: {'aria-checked': $parent.isChosen(cell) ? 'true' : 'false',
+                              'data-position': cell.value, title: cell.label, 'aria-label': cell.label,
+                              tabindex: $parent.isChosen(cell) ? 0 : -1}">
+        <span class="ol-position-picker__dot" aria-hidden="true"></span>
+    </button>
+    <!-- /ko -->
+</div>
