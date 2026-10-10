@@ -50,7 +50,7 @@ class MassDelete extends Action implements HttpPostActionInterface
                 $this->labelRepository->deleteById((int) $id);
                 $done++;
             }
-            $this->messageManager->addSuccessMessage(__('%1 label(s) deleted.', $done));
+            $this->messageManager->addSuccessMessage((string) __('%1 label(s) deleted.', $done));
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         }

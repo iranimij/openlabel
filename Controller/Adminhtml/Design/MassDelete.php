@@ -65,11 +65,11 @@ class MassDelete extends Action implements HttpPostActionInterface
         }
         if ($skippedSystem) {
             $this->messageManager->addErrorMessage(
-                __('Built-in designs cannot be deleted. Duplicate one to make your own version.')
+                (string) __('Built-in designs cannot be deleted. Duplicate one to make your own version.')
             );
         }
         if ($done > 0) {
-            $this->messageManager->addSuccessMessage(__('%1 design(s) deleted.', $done));
+            $this->messageManager->addSuccessMessage((string) __('%1 design(s) deleted.', $done));
         }
 
         /** @var Redirect $redirect */
