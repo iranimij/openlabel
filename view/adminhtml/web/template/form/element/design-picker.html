@@ -1,0 +1,24 @@
+<!--
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+-->
+<div class="ol-design-picker" data-role="ol-design-picker">
+    <input type="hidden" data-bind="value: value, attr: {name: inputName, id: uid}">
+    <div class="ol-design-picker__grid" role="radiogroup" data-bind="attr: {'aria-labelledby': uid + '-label'}">
+        <!-- ko foreach: { data: designs, as: 'tile' } -->
+        <button type="button" class="ol-design-tile" role="radio"
+                data-bind="click: $parent.choose.bind($parent, tile),
+                           css: {'ol-design-tile--active': $parent.isChosen(tile)},
+                           attr: {'aria-checked': $parent.isChosen(tile) ? 'true' : 'false', 'data-design-id': tile.value, title: tile.label}">
+            <span class="ol-design-tile__thumb" data-bind="html: tile.thumb"></span>
+            <span class="ol-design-tile__name" data-bind="text: tile.label"></span>
+        </button>
+        <!-- /ko -->
+    </div>
+    <div class="ol-design-picker__actions">
+        <a target="_blank" rel="noopener" data-bind="attr: {href: createUrl}, i18n: 'Create a new design'"></a>
+        <button type="button" class="action-secondary" data-bind="click: refresh, i18n: 'Refresh designs'"></button>
+    </div>
+</div>

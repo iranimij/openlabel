@@ -50,6 +50,8 @@ class DateConverterTest extends TestCase
             'night of the autumn DST switch' => ['2026-10-25 01:30', false, '2026-10-24 23:30:00'],
             'admin date picker format (en_US)' => ['11/30/2026', false, '2026-11-29 23:00:00'],
             'ISO with T separator' => ['2026-07-15T10:00', false, '2026-07-15 08:00:00'],
+            'admin date-time picker (wall clock sent as ISO with Z)' => ['2026-11-01T00:00:00.000Z', false, '2026-10-31 23:00:00'],
+            'ISO with Z and no fraction' => ['2026-07-15T10:00:00Z', true, '2026-07-15 08:00:00'],
         ];
     }
 

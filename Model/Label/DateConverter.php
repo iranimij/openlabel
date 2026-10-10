@@ -45,6 +45,8 @@ class DateConverter
         if ($value === '') {
             return null;
         }
+        // The admin date-time picker runs with storeTimeZone UTC, so its ISO string carries the shop's wall clock.
+        $value = (string) preg_replace('/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(\.\d+)?Z$/', '$1', $value);
         $zone = new \DateTimeZone($this->timezone->getConfigTimezone());
         [$date, $hasTime] = $this->parse($value, $zone);
         if (!$hasTime) {
