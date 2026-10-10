@@ -1,0 +1,110 @@
+// Copyright © Iman Aboheydary. All rights reserved.
+// See LICENSE for license details (MIT).
+//
+// OpenLabel admin styles: design type cards, contrast badge, variable picker, grid thumbnails.
+
+.ol-admin-thumb {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.ol-type-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.ol-type-card {
+    align-items: flex-start;
+    background: #fff;
+    border: 2px solid #adadad;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    flex: 1 1 12rem;
+    flex-direction: column;
+    gap: .25rem;
+    max-width: 16rem;
+    padding: 1rem;
+    text-align: left;
+
+    &:hover,
+    &:focus {
+        border-color: #007bdb;
+    }
+}
+
+.ol-type-card--active {
+    background: #f1f8fe;
+    border-color: #007bdb;
+    box-shadow: 0 0 0 1px #007bdb;
+}
+
+.ol-type-card__title {
+    font-size: 1.5rem;
+}
+
+.ol-type-card__hint {
+    color: #666;
+    font-size: 1.2rem;
+}
+
+.ol-contrast__badge {
+    border-radius: 3px;
+    display: inline-block;
+    font-weight: 600;
+    padding: .4rem .8rem;
+}
+
+.ol-contrast--pass {
+    background: #e5f7e5;
+    color: #185b00;
+}
+
+.ol-contrast--large {
+    background: #fff4d6;
+    color: #6b4a00;
+}
+
+.ol-contrast--fail {
+    background: #fde8e8;
+    color: #8a1010;
+}
+
+.ol-contrast--unknown {
+    background: #f2f2f2;
+    color: #555;
+}
+
+.ol-text-vars__tools {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-top: .5rem;
+}
+
+.ol-text-vars__picker {
+    align-items: center;
+    display: flex;
+    gap: .5rem;
+
+    .admin__control-select {
+        max-width: 28rem;
+    }
+}
+
+.ol-text-vars__counter {
+    color: #666;
+}
+
+.ol-text-vars__counter--long {
+    color: #8a1010;
+    font-weight: 600;
+}
+
+.ol-image-preview .file-uploader-meta {
+    color: #666;
+    margin-top: .5rem;
+}

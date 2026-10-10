@@ -1,0 +1,18 @@
+<!--
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+-->
+<div class="ol-type-cards" role="radiogroup" data-bind="attr: {'aria-labelledby': uid + '-label'}">
+    <!-- ko foreach: { data: options(), as: 'option' } -->
+    <button type="button" class="ol-type-card" role="radio"
+            data-bind="click: $parent.choose.bind($parent, option),
+                       css: {'ol-type-card--active': $parent.isChosen(option)},
+                       attr: {'aria-checked': $parent.isChosen(option) ? 'true' : 'false', 'data-type': option.value}">
+        <span class="ol-type-card__icon" data-bind="attr: {'data-type': option.value}" aria-hidden="true"></span>
+        <strong class="ol-type-card__title" data-bind="text: option.label"></strong>
+        <span class="ol-type-card__hint" data-bind="i18n: $parent.hints[option.value]"></span>
+    </button>
+    <!-- /ko -->
+</div>
