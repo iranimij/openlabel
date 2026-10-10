@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600" role="img" aria-label="Sample product">
+  <rect width="600" height="600" fill="#eef1f4"/>
+  <ellipse cx="300" cy="520" rx="170" ry="22" fill="#d7dde3"/>
+  <path d="M215 170 l45-40 h80 l45 40 l70 55 l-38 62 l-42-28 v214 h-150 v-214 l-42 28 l-38-62 z" fill="#5b7186"/>
+  <path d="M260 130 q40 40 80 0" fill="none" stroke="#3f5163" stroke-width="10"/>
+</svg>

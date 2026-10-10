@@ -16,6 +16,9 @@ use Iranimij\OpenLabel\Model\Design\PickerOptions;
 use Iranimij\OpenLabel\Model\Label\DateConverter;
 use Iranimij\OpenLabel\Model\Label\FormMapper;
 use Iranimij\OpenLabel\Model\Label\QuickConditions;
+use Iranimij\OpenLabel\Model\Source\CustomerGroups;
+use Iranimij\OpenLabel\Model\Variable\Help;
+use Magento\Framework\View\Asset\Repository as AssetRepository;
 use Iranimij\OpenLabel\Model\ResourceModel\Label\CollectionFactory;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
@@ -40,6 +43,9 @@ class Form extends AbstractDataProvider
      * @param UrlInterface $urlBuilder
      * @param DataPersistorInterface $dataPersistor
      * @param QuickConditions $quickConditions
+     * @param Help $variableHelp
+     * @param CustomerGroups $customerGroups
+     * @param AssetRepository $assetRepository
      * @param array<string, mixed> $meta
      * @param array<string, mixed> $data
      */
@@ -55,6 +61,9 @@ class Form extends AbstractDataProvider
         private readonly UrlInterface $urlBuilder,
         private readonly DataPersistorInterface $dataPersistor,
         private readonly QuickConditions $quickConditions,
+        private readonly Help $variableHelp,
+        private readonly CustomerGroups $customerGroups,
+        private readonly AssetRepository $assetRepository,
         array $meta = [],
         array $data = []
     ) {
@@ -87,8 +96,19 @@ class Form extends AbstractDataProvider
     public function getMeta()
     {
         $meta = parent::getMeta();
+        $designs = $this->pickerOptions->get();
+        $samples = [];
+        foreach ($this->variableHelp->getVariables() as $code => $variable) {
+            $samples[$code] = $variable['sample'];
+        }
+        $meta['basics']['children']['live_preview']['arguments']['data']['config'] = [
+            'designs' => $designs,
+            'samples' => $samples,
+            'groups' => $this->customerGroups->toOptionArray(),
+            'sampleImage' => $this->assetRepository->getUrl('Iranimij_OpenLabel::images/sample-product.svg'),
+        ];
         $meta['basics']['children']['design_id']['arguments']['data']['config'] = [
-            'designs' => $this->pickerOptions->get(),
+            'designs' => $designs,
             'createUrl' => $this->urlBuilder->getUrl('openlabel/design/new'),
             'refreshUrl' => $this->urlBuilder->getUrl('openlabel/label/designOptions'),
         ];

@@ -216,3 +216,135 @@
         width: 1.2rem;
     }
 }
+
+// Live preview: a fixed panel so it stays in view while the merchant scrolls through the sections.
+.ol-preview {
+    background: #fff;
+    border: 1px solid #c2c2c2;
+    border-radius: 4px;
+    bottom: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, .18);
+    max-height: calc(100vh - 12rem);
+    overflow-y: auto;
+    position: fixed;
+    right: 1.5rem;
+    width: 34rem;
+    z-index: 600;
+}
+
+.ol-preview__bar {
+    align-items: center;
+    border-bottom: 1px solid #e3e3e3;
+    display: flex;
+    justify-content: space-between;
+    padding: .8rem 1.2rem;
+}
+
+.ol-preview__toggle {
+    background: none;
+    border: 0;
+    color: #007bdb;
+    cursor: pointer;
+}
+
+.ol-preview__body {
+    padding: 1.2rem;
+}
+
+.ol-preview__controls {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .8rem;
+    margin-bottom: 1.2rem;
+}
+
+.ol-preview__segmented {
+    display: inline-flex;
+
+    button {
+        background: #fff;
+        border: 1px solid #adadad;
+        cursor: pointer;
+        padding: .4rem .8rem;
+
+        &[aria-pressed='true'] {
+            background: #514943;
+            border-color: #514943;
+            color: #fff;
+        }
+    }
+}
+
+.ol-preview__group {
+    align-items: center;
+    display: flex;
+    gap: .5rem;
+}
+
+.ol-preview__stage {
+    background: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    padding: 1.2rem;
+}
+
+.ol-preview__card {
+    background: #fff;
+    container-type: inline-size;
+    width: 22rem;
+}
+
+.ol-preview__stage--product .ol-preview__card {
+    width: 30rem;
+}
+
+.ol-preview__stage--mobile .ol-preview__card {
+    width: 13rem;
+}
+
+.ol-preview__stage--mobile.ol-preview__stage--product .ol-preview__card {
+    width: 20rem;
+}
+
+.ol-preview__image {
+    display: block;
+    height: auto;
+    width: 100%;
+}
+
+.ol-preview__meta {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    padding: .8rem;
+}
+
+.ol-preview__cart {
+    background: #1979c3;
+    border-radius: 3px;
+    color: #fff;
+    margin-top: .4rem;
+    padding: .5rem;
+    text-align: center;
+}
+
+.ol-preview__note {
+    color: #6b4a00;
+    margin-top: .8rem;
+}
+
+.ol-preview__hint {
+    color: #666;
+    font-size: 1.2rem;
+    margin-top: .8rem;
+}
+
+// Keep the form readable beside the open preview panel; wide placement rows scroll sideways.
+body:has(.ol-preview:not(.ol-preview--collapsed)) #anchor-content {
+    padding-right: 36rem;
+}
+
+[data-index='placements'] .admin__control-table-wrapper {
+    overflow-x: auto;
+}

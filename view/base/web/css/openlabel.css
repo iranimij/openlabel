@@ -1,0 +1,92 @@
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ *
+ * OpenLabel structural CSS (10 · Front-end Review FE1–FE7). The admin live preview uses it as is; the per-store
+ * stylesheet generator (M3) copies it and appends one custom-property line per design. Single-class selectors,
+ * no !important, logical properties for RTL, container-query units for size.
+ */
+.ol-anchor {
+    display: block;
+    position: relative;
+}
+
+.ol-stack {
+    display: flex;
+    gap: var(--ol-gap, 4px);
+    max-inline-size: 100%;
+    pointer-events: none;
+    position: absolute;
+    z-index: var(--ol-z, 5);
+}
+
+.ol-stack--v {
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.ol-stack--h {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.ol-pos-ts { inset-block-start: var(--ol-oy, 0); inset-inline-start: var(--ol-ox, 0); }
+.ol-pos-tc { inset-block-start: var(--ol-oy, 0); inset-inline-start: 50%; transform: translateX(-50%); }
+.ol-pos-te { inset-block-start: var(--ol-oy, 0); inset-inline-end: var(--ol-ox, 0); }
+.ol-pos-ms { inset-block-start: 50%; inset-inline-start: var(--ol-ox, 0); transform: translateY(-50%); }
+.ol-pos-mc { inset-block-start: 50%; inset-inline-start: 50%; transform: translate(-50%, -50%); }
+.ol-pos-me { inset-block-start: 50%; inset-inline-end: var(--ol-ox, 0); transform: translateY(-50%); }
+.ol-pos-bs { inset-block-end: var(--ol-oy, 0); inset-inline-start: var(--ol-ox, 0); }
+.ol-pos-bc { inset-block-end: var(--ol-oy, 0); inset-inline-start: 50%; transform: translateX(-50%); }
+.ol-pos-be { inset-block-end: var(--ol-oy, 0); inset-inline-end: var(--ol-ox, 0); }
+
+.ol-label {
+    align-items: center;
+    background: var(--ol-bg, #111827);
+    border: var(--ol-bw, 0) solid var(--ol-border, transparent);
+    box-sizing: border-box;
+    color: var(--ol-fg, #fff);
+    display: inline-flex;
+    font-size: clamp(var(--ol-fs-min, 12px), var(--ol-fs-cq, 6cqw), var(--ol-fs-max, 16px));
+    font-weight: 600;
+    justify-content: center;
+    line-height: 1.15;
+    max-inline-size: 100cqw;
+    min-inline-size: var(--ol-w, 0);
+    opacity: var(--ol-op, 1);
+    overflow-wrap: anywhere;
+    padding: .3em .7em;
+    text-align: center;
+    transform: rotate(var(--ol-rot, 0deg));
+}
+
+.ol-label--image {
+    background: none;
+    border: 0;
+    padding: 0;
+}
+
+.ol-label--image img {
+    block-size: auto;
+    display: block;
+    inline-size: 100%;
+}
+
+.ol-shape-rectangle { border-radius: 3px; }
+.ol-shape-pill { border-radius: 999px; }
+.ol-shape-circle { aspect-ratio: 1; border-radius: 50%; padding: .4em; }
+.ol-shape-ribbon { border-radius: 2px 0 0 2px; padding-inline-end: 1.1em; clip-path: polygon(0 0, 100% 0, calc(100% - .6em) 50%, 100% 100%, 0 100%); }
+.ol-shape-corner { padding-inline: 1.4em; }
+
+/* Mobile minimum (08 · UX Spec §2): small screens, and narrow cards such as mobile listings and sliders. */
+@media (max-width: 767px) {
+    .ol-label {
+        --ol-fs-min: 11px;
+    }
+}
+
+@container (max-width: 220px) {
+    .ol-label {
+        --ol-fs-min: 11px;
+    }
+}

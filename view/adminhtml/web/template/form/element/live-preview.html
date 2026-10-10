@@ -1,0 +1,66 @@
+<!--
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+-->
+<aside class="ol-preview" data-role="ol-live-preview" data-bind="css: {'ol-preview--collapsed': collapsed()}, attr: {'aria-label': $t('Live preview')}">
+    <div class="ol-preview__bar">
+        <strong class="ol-preview__title" data-bind="i18n: 'Live preview'"></strong>
+        <button type="button" class="ol-preview__toggle"
+                data-bind="click: toggle, attr: {'aria-expanded': collapsed() ? 'false' : 'true'}, text: collapsed() ? $t('Show') : $t('Hide')"></button>
+    </div>
+    <div class="ol-preview__body" data-bind="visible: !collapsed()">
+        <div class="ol-preview__controls">
+            <div class="ol-preview__segmented" role="group" data-bind="attr: {'aria-label': $t('Page')}">
+                <button type="button" data-bind="click: setArea.bind($data, 'listing'), attr: {'aria-pressed': area() === 'listing' ? 'true' : 'false'}, i18n: 'Category'"></button>
+                <button type="button" data-bind="click: setArea.bind($data, 'product'), attr: {'aria-pressed': area() === 'product' ? 'true' : 'false'}, i18n: 'Product page'"></button>
+            </div>
+            <div class="ol-preview__segmented" role="group" data-bind="attr: {'aria-label': $t('Device')}">
+                <button type="button" data-bind="click: setDevice.bind($data, 'desktop'), attr: {'aria-pressed': device() === 'desktop' ? 'true' : 'false'}, i18n: 'Desktop'"></button>
+                <button type="button" data-bind="click: setDevice.bind($data, 'mobile'), attr: {'aria-pressed': device() === 'mobile' ? 'true' : 'false'}, i18n: 'Mobile'"></button>
+            </div>
+            <label class="ol-preview__group">
+                <span data-bind="i18n: 'Preview as'"></span>
+                <select class="admin__control-select" data-role="ol-preview-group" data-bind="value: previewGroup">
+                    <option value="" data-bind="i18n: 'Everyone'"></option>
+                    <!-- ko foreach: groups -->
+                    <option data-bind="value: value, text: label"></option>
+                    <!-- /ko -->
+                </select>
+            </label>
+        </div>
+        <div class="ol-preview__stage" data-bind="css: 'ol-preview__stage--' + device() + ' ol-preview__stage--' + area()">
+            <div class="ol-preview__card">
+                <span class="ol-anchor ol-preview__image-wrap">
+                    <img class="ol-preview__image" width="600" height="600" alt="" data-bind="attr: {src: sampleImage}">
+                    <!-- ko ifnot: hiddenReason() -->
+                    <!-- ko foreach: stacks() -->
+                    <span data-bind="attr: {class: stackClass}, style: stackStyle">
+                        <!-- ko foreach: labels -->
+                        <span data-role="ol-preview-label" data-bind="attr: {class: classes}, style: vars">
+                            <!-- ko if: isImage -->
+                            <img data-bind="attr: {src: imageUrl, alt: alt, width: imageWidth, height: imageHeight}">
+                            <!-- /ko -->
+                            <!-- ko ifnot: isImage -->
+                            <span class="ol-preview__text" data-bind="foreach: lines"><span data-bind="text: $data"></span><!-- ko if: $index() < $parent.lines.length - 1 --><br><!-- /ko --></span>
+                            <!-- /ko -->
+                        </span>
+                        <!-- /ko -->
+                    </span>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </span>
+                <div class="ol-preview__meta">
+                    <span class="ol-preview__name" data-bind="i18n: 'Sample product'"></span>
+                    <span class="ol-preview__price">€29.99</span>
+                    <span class="ol-preview__cart" data-role="ol-preview-cart" data-bind="i18n: 'Add to cart'"></span>
+                </div>
+            </div>
+        </div>
+        <p class="ol-preview__note" data-role="ol-preview-hidden" data-bind="visible: hiddenReason(), text: hiddenReason()"></p>
+        <p class="message message-warning ol-preview__warning" data-role="ol-preview-contrast"
+           data-bind="visible: contrastWarning(), text: contrastWarning()"></p>
+        <p class="ol-preview__hint" data-bind="i18n: 'Sample values: {SAVE_PERCENT} shows 25, {STOCK_QTY} shows 3.'"></p>
+    </div>
+</aside>

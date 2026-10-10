@@ -49,6 +49,13 @@
             <collapsible>true</collapsible>
             <opened>true</opened>
         </settings>
+        <container name="live_preview" component="Iranimij_OpenLabel/js/form/element/live-preview" sortOrder="0">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="provider" xsi:type="string">openlabel_label_form.openlabel_label_form_data_source</item>
+                </item>
+            </argument>
+        </container>
         <field name="label_id" formElement="hidden">
             <settings>
                 <dataType>text</dataType>
