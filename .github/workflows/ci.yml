@@ -89,12 +89,36 @@ jobs:
           magento_version: ${{ matrix.magento }}
           magento_pre_install_script: .github/ci/pre-install.sh
 
+  coverage:
+    name: Unit coverage (≥ 85 % on the engine namespaces)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: pcov
+          extensions: bcmath, gd, intl, soap, sodium, xsl, zip
+      - name: Install the module's Composer dependencies from the Magento mirror
+        env:
+          COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.GITHUB_TOKEN }}"}}'
+        run: |
+          composer config repositories.magento composer https://repo-magento-mirror.fooman.co.nz/
+          composer config repositories.iranimij-base vcs https://github.com/iranimij/module-base
+          composer config --no-plugins allow-plugins.magento/composer-dependency-version-audit-plugin false
+          composer require --dev --no-interaction --no-progress --no-update "phpunit/phpunit:^12.0"
+          composer update --no-interaction --no-progress --prefer-dist
+      - run: vendor/bin/phpunit -c phpunit.coverage.xml --coverage-clover clover.xml --coverage-text
+      - run: php .github/ci/coverage-gate.php clover.xml 85 Model/Variable Model/Condition Model/Resolver Model/Rule
+
   integration:
     name: Integration ${{ matrix.magento }} / PHP ${{ matrix.php }}
     needs: matrix
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # The 2,000-product reindex budget runs on main and nightly only (plan: Iman, 2026-10-09).
+      OPENLABEL_PERF: ${{ github.event_name != 'pull_request' }}
     strategy:
       fail-fast: false
       matrix:
@@ -148,7 +172,7 @@ jobs:
   ci-ok:
     name: ci-ok
     if: always()
-    needs: [phpcs, phpstan, unit, integration]
+    needs: [phpcs, phpstan, unit, integration, coverage]
     runs-on: ubuntu-latest
     steps:
       - name: Fail if any job failed or was skipped

@@ -21,6 +21,10 @@ OpenLabel adds rule-based product labels ("Sale -25%", "New", "Only 3 left") to 
 |---|---|---|
 | 2.4.7, 2.4.8, 2.4.9 | 8.2, 8.3, 8.4 | 1.3.x, 1.4.x |
 
+MSI is optional: stock conditions use the website's MSI stock when the inventory modules are enabled and the
+legacy stock status otherwise. The indexer runs after the price and stock indexers; on multi-source MSI shops,
+source-item changes that bypass the legacy stock item reach the index on the next product save or reindex.
+
 ## Installation (from 1.0.0)
 
 ```bash

@@ -27,8 +27,8 @@ use PHPUnit\Framework\TestCase;
 #[DbIsolation(true)]
 class DesignRepositoryTest extends TestCase
 {
-    private DesignRepositoryInterface $repository;
-    private DesignInterfaceFactory $factory;
+    private ?DesignRepositoryInterface $repository = null;
+    private ?DesignInterfaceFactory $factory = null;
 
     protected function setUp(): void
     {

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job name="openlabel_hourly_transitions" instance="Iranimij\OpenLabel\Cron\HourlyTransitions" method="execute">
+            <schedule>7 * * * *</schedule>
+        </job>
+        <job name="openlabel_daily_is_new" instance="Iranimij\OpenLabel\Cron\DailyIsNew" method="execute">
+            <schedule>23 2 * * *</schedule>
+        </job>
+    </group>
+</config>

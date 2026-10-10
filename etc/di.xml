@@ -14,4 +14,65 @@
     <preference for="Iranimij\OpenLabel\Api\Data\DesignSearchResultsInterface" type="Iranimij\OpenLabel\Model\DesignSearchResults"/>
     <preference for="Iranimij\OpenLabel\Api\LabelRepositoryInterface" type="Iranimij\OpenLabel\Model\LabelRepository"/>
     <preference for="Iranimij\OpenLabel\Api\DesignRepositoryInterface" type="Iranimij\OpenLabel\Model\DesignRepository"/>
+    <preference for="Iranimij\OpenLabel\Api\Data\ResolvedLabelInterface" type="Iranimij\OpenLabel\Model\Resolver\ResolvedLabel"/>
+    <preference for="Iranimij\OpenLabel\Api\LabelResolverInterface" type="Iranimij\OpenLabel\Model\Resolver\LabelResolver"/>
+    <type name="Iranimij\OpenLabel\Model\Condition\ConditionPool">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="on_sale" xsi:type="string">Iranimij\OpenLabel\Model\Condition\OnSale</item>
+                <item name="is_new" xsi:type="string">Iranimij\OpenLabel\Model\Condition\IsNew</item>
+                <item name="stock" xsi:type="string">Iranimij\OpenLabel\Model\Condition\Stock</item>
+                <item name="price_range" xsi:type="string">Iranimij\OpenLabel\Model\Condition\PriceRange</item>
+                <item name="rating" xsi:type="string">Iranimij\OpenLabel\Model\Condition\Rating</item>
+                <item name="review_count" xsi:type="string">Iranimij\OpenLabel\Model\Condition\ReviewCount</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Iranimij\OpenLabel\Api\LabelRepositoryInterface">
+        <plugin name="openlabel_reindex_label_on_save" type="Iranimij\OpenLabel\Plugin\LabelRepositoryPlugin"/>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Price\Action\Rows">
+        <plugin name="openlabel_schedule_after_price_rows" type="Iranimij\OpenLabel\Plugin\Indexer\PriceRows"/>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Price\Action\Full">
+        <plugin name="openlabel_invalidate_after_price_full" type="Iranimij\OpenLabel\Plugin\Indexer\PriceFull"/>
+    </type>
+    <type name="Magento\CatalogInventory\Model\Indexer\Stock\Action\Rows">
+        <plugin name="openlabel_schedule_after_stock_rows" type="Iranimij\OpenLabel\Plugin\Indexer\StockRows"/>
+    </type>
+    <type name="Magento\CatalogInventory\Model\Indexer\Stock\Action\Full">
+        <plugin name="openlabel_invalidate_after_stock_full" type="Iranimij\OpenLabel\Plugin\Indexer\StockFull"/>
+    </type>
+    <type name="Magento\Review\Model\ResourceModel\Review">
+        <plugin name="openlabel_schedule_after_review_aggregate" type="Iranimij\OpenLabel\Plugin\Indexer\ReviewAggregate"/>
+    </type>
+    <type name="Iranimij\OpenLabel\Model\Variable\Pool">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="SavePercent" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\SavePercent</item>
+                <item name="SaveAmount" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\SaveAmount</item>
+                <item name="Price" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\Price</item>
+                <item name="SpecialPrice" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\SpecialPrice</item>
+                <item name="FinalPrice" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\FinalPrice</item>
+                <item name="StockQty" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\StockQty</item>
+                <item name="NewFor" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\NewFor</item>
+                <item name="Sku" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\Sku</item>
+                <item name="Attr" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\Attr</item>
+                <item name="Br" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\Br</item>
+                <item name="SpecialEndsIn" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\SpecialEndsIn</item>
+                <item name="SpecialEndDate" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\SpecialEndDate</item>
+                <item name="Rating" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\Rating</item>
+                <item name="ReviewCount" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\ReviewCount</item>
+                <item name="SoldLast30d" xsi:type="object">Iranimij\OpenLabel\Model\Variable\Processor\SoldLast30d</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="openlabel_reindex" xsi:type="object">Iranimij\OpenLabel\Console\Reindex</item>
+                <item name="openlabel_preview" xsi:type="object">Iranimij\OpenLabel\Console\Preview</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
