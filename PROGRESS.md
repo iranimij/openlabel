@@ -4,7 +4,24 @@ Fine-grained checkpoint for the OpenLabel build. Updated with every merged PR. T
 
 ## Current milestone
 
-M1 · Engine: **done** (2026-10-10, merged as b6efd54; full matrix green on run 38031715575). M0 · Foundation done 2026-10-09. Next: M2 · Admin, in a new session.
+M2 · Admin: **in progress** (started 2026-10-10). M1 · Engine done 2026-10-10 (b6efd54, run 38031715575). M0 · Foundation done 2026-10-09.
+
+## M2 slices
+
+Plan: S1 waits for Iman's review (first PR of the milestone); S2–S10 are stacked, each PR based on the previous slice branch.
+
+| # | Slice | State |
+|---|---|---|
+| S1 | 15 system designs (data patch) + WCAG contrast | PR open, awaiting Iman |
+| S2 | Admin menu, routes, label and design grids (inline edit, mass actions, matched count) | todo |
+| S3 | Design form (type cards, colours + contrast badge, per-store text, image upload + SVG sanitizer, custom CSS behind ACL) | todo |
+| S4 | Label form: basics, who-and-when, save bar, duplicate | todo |
+| S5 | Show when: quick toggles + rule tree | todo |
+| S6 | Show where: placements + 3×3 position picker | todo |
+| S7 | Live preview (sticky, desktop/mobile, contrast warning) | todo |
+| S8 | Matched products tab + reindex button | todo |
+| S9 | Empty-state starters | todo |
+| S10 | System config additions + close-out | todo |
 
 ## M1 slices
 
@@ -36,7 +53,7 @@ M1 · Engine: **done** (2026-10-10, merged as b6efd54; full matrix green on run 
 
 ## Exact next step
 
-M2 · Admin in a new session (kickoff prompt from 07 · Build Brief §6b): grid with inline edit and mass actions, label and design forms, live preview, placements, matched-products tab, 15 built-in designs, empty-state starters. Start from `main`.
+M2 S2: admin menu, routes and the two grids, branched from `feat/m2-s1-system-designs`. Ledger: `openlabel-dev-env/modules/M2-ledger.md`.
 
 ## M1 decisions (also in the Notion build log at close-out)
 
