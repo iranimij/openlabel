@@ -4,7 +4,23 @@ Fine-grained checkpoint for the OpenLabel build. Updated with every merged PR. T
 
 ## Current milestone
 
-M2 · Admin: **done, pending Iman** (2026-10-10): code, tests, docs and CI complete; waiting for the S1 review and the recorded real-person ≤ 3 min test. M1 · Engine done 2026-10-10 (b6efd54, run 38031715575). M0 · Foundation done 2026-10-09.
+M3 · Hyvä render: **in progress** (started 2026-10-11, stacked on the M2 S10 branch until Iman merges M2). M2 · Admin: **done, pending Iman** (2026-10-10): code, tests, docs and CI complete; waiting for the S1 review and the recorded real-person ≤ 3 min test. M1 · Engine done 2026-10-10 (b6efd54, run 38031715575). M0 · Foundation done 2026-10-09.
+
+## M3 slices
+
+Plan approved 2026-10-11 (plan file in the session; summary here). Stacked PRs: S1 is based on `feat/m2-s10-closeout`, every next slice on the previous one. Hyvä slices live in `openlabel-hyva`, storefront specs in `openlabel-dev-env`.
+
+| # | Slice | State |
+|---|---|---|
+| S1 | Stylesheet generator (`Model/Css/{DesignRules,StylesheetGenerator,Storage,Regenerator}`, CLI `openlabel:css:regenerate`, settings button, regenerate on save) | in progress |
+| S2 | Label markup partial + `Block\Css` `<link>` + `ViewModel\LabelRenderer` + cache identities | todo |
+| S3 | Hyvä listing slot (Product\Image plugin, collection preload, list-item cache tags) | todo |
+| S4 | Hyvä gallery slot (child block + Gallery plugin) | todo |
+| S5 | Customer groups × Varnish storefront specs | todo |
+| S6 | Tailwind source, CSP, no-rebuild, pointer events, RTL specs | todo |
+| S7 | axe-core + Lighthouse gates | todo |
+| S8 | CI Playwright job (Varnish, Hyvä 1.4 + 1.3) | todo, needs Iman's answer on Hyvä packages in CI |
+| S9 | Custom-theme fallback, docs, close-out | todo |
 
 ## M2 slices
 
@@ -53,7 +69,7 @@ Plan: S1 waits for Iman's review (first PR of the milestone); S2–S10 are stack
 
 ## Exact next step
 
-M3 · Hyvä render, in a new session. Before that: Iman reviews PR #12 (S1); then retarget the S10 PR to `main` and close #13–#20 as in M1, and Iman runs the recorded ≤ 3 min custom-label test. Ledger: `openlabel-dev-env/modules/M2-ledger.md`.
+M3 S1: open the PR, then S2 (label markup partial and `<link>` block). Earlier note kept for M2: M3 · Hyvä render, in a new session. Before that: Iman reviews PR #12 (S1); then retarget the S10 PR to `main` and close #13–#20 as in M1, and Iman runs the recorded ≤ 3 min custom-label test. Ledger: `openlabel-dev-env/modules/M2-ledger.md`.
 
 ## M1 decisions (also in the Notion build log at close-out)
 
