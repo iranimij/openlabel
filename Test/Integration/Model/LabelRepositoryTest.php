@@ -29,9 +29,9 @@ use PHPUnit\Framework\TestCase;
 #[DbIsolation(true)]
 class LabelRepositoryTest extends TestCase
 {
-    private LabelRepositoryInterface $repository;
-    private LabelInterfaceFactory $labelFactory;
-    private PlacementInterfaceFactory $placementFactory;
+    private ?LabelRepositoryInterface $repository = null;
+    private ?LabelInterfaceFactory $labelFactory = null;
+    private ?PlacementInterfaceFactory $placementFactory = null;
 
     protected function setUp(): void
     {

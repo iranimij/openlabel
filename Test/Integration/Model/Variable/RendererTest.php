@@ -45,8 +45,8 @@ use PHPUnit\Framework\TestCase;
 #[DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order')]
 class RendererTest extends TestCase
 {
-    private Renderer $renderer;
-    private ProductRepositoryInterface $products;
+    private ?Renderer $renderer = null;
+    private ?ProductRepositoryInterface $products = null;
 
     protected function setUp(): void
     {

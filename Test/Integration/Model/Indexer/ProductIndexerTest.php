@@ -59,9 +59,9 @@ class ProductIndexerTest extends TestCase
 {
     private const GROUPS = [0, 1, 2, 3];
 
-    private ProductIndexer $indexer;
-    private LabelRepositoryInterface $labels;
-    private ResourceConnection $resource;
+    private ?ProductIndexer $indexer = null;
+    private ?LabelRepositoryInterface $labels = null;
+    private ?ResourceConnection $resource = null;
 
     protected function setUp(): void
     {

@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SchemaTest extends TestCase
 {
-    private ResourceConnection $resource;
+    private ?ResourceConnection $resource = null;
 
     protected function setUp(): void
     {

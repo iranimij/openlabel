@@ -40,9 +40,9 @@ class LabelResolverTest extends TestCase
     private const SKU_PREFIX = 'ol-listing-';
     private const LISTING_SIZE = 36;
 
-    private LabelResolverInterface $resolver;
-    private LabelRepositoryInterface $labels;
-    private QueryCounter $counter;
+    private ?LabelResolverInterface $resolver = null;
+    private ?LabelRepositoryInterface $labels = null;
+    private ?QueryCounter $counter = null;
     /** @var int[] */
     private array $productIds = [];
     /** @var LabelInterface[] */
