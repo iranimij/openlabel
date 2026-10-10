@@ -45,13 +45,13 @@ class Delete extends Action implements HttpPostActionInterface
             $design = $this->designRepository->getById($id);
             if ($design->isSystem()) {
                 $this->messageManager->addErrorMessage(
-                    __('Built-in designs cannot be deleted. Duplicate one to make your own version.')
+                    (string) __('Built-in designs cannot be deleted. Duplicate one to make your own version.')
                 );
 
                 return $redirect->setPath('*/*/edit', ['id' => $id]);
             }
             $this->designRepository->delete($design);
-            $this->messageManager->addSuccessMessage(__('The design was deleted.'));
+            $this->messageManager->addSuccessMessage((string) __('The design was deleted.'));
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
 

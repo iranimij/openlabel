@@ -49,7 +49,7 @@ class Duplicate extends Action implements HttpGetActionInterface, HttpPostAction
             $copy = $this->duplicator->duplicate(
                 $this->designRepository->getById((int) $this->getRequest()->getParam('id'))
             );
-            $this->messageManager->addSuccessMessage(__('Your copy is ready to edit.'));
+            $this->messageManager->addSuccessMessage((string) __('Your copy is ready to edit.'));
 
             return $redirect->setPath('*/*/edit', ['id' => $copy->getDesignId()]);
         } catch (LocalizedException $e) {

@@ -70,7 +70,7 @@ class Save extends Action implements HttpPostActionInterface
             $design = $id > 0 ? $this->designRepository->getById($id) : $this->designFactory->create();
             if ($design->isSystem()) {
                 $this->messageManager->addErrorMessage(
-                    __('Built-in designs are locked. Use “Duplicate to edit” to make your own version.')
+                    (string) __('Built-in designs are locked. Use “Duplicate to edit” to make your own version.')
                 );
 
                 return $redirect->setPath('*/*/edit', ['id' => $id]);
@@ -78,7 +78,7 @@ class Save extends Action implements HttpPostActionInterface
             $this->apply($design, $data);
             $this->designRepository->save($design);
             $this->dataPersistor->clear(self::PERSISTOR_KEY);
-            $this->messageManager->addSuccessMessage(__('The design was saved.'));
+            $this->messageManager->addSuccessMessage((string) __('The design was saved.'));
         } catch (ValidationException $e) {
             foreach ($e->getErrors() ?: [$e] as $error) {
                 $this->messageManager->addErrorMessage($error->getMessage());

@@ -48,7 +48,7 @@ class Edit extends Action implements HttpGetActionInterface
             try {
                 $title = $this->designRepository->getById($id)->getName();
             } catch (NoSuchEntityException $e) {
-                $this->messageManager->addErrorMessage(__('This design no longer exists.'));
+                $this->messageManager->addErrorMessage((string) __('This design no longer exists.'));
                 /** @var Redirect $redirect */
                 $redirect = $this->resultRedirectFactory->create();
 
