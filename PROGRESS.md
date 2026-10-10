@@ -19,7 +19,7 @@ Plan: S1 waits for Iman's review (first PR of the milestone); S2–S10 are stack
 | S5 | Show when: quick toggles + rule tree | PR open (stacked on S4) |
 | S6 | Show where: placements + 3×3 position picker | PR open (stacked on S5) |
 | S7 | Live preview (sticky, desktop/mobile, contrast warning) | PR open (stacked on S6) |
-| S8 | Matched products tab + reindex button | todo |
+| S8 | Matched products tab + reindex button | PR open (stacked on S7) |
 | S9 | Empty-state starters | todo |
 | S10 | System config additions + close-out | todo |
 
@@ -53,7 +53,7 @@ Plan: S1 waits for Iman's review (first PR of the milestone); S2–S10 are stack
 
 ## Exact next step
 
-M2 S8: matched products section + "Reindex now", branched from `feat/m2-s7-live-preview`. Ledger: `openlabel-dev-env/modules/M2-ledger.md`.
+M2 S9: empty-state starters, branched from `feat/m2-s8-matched-products`. Ledger: `openlabel-dev-env/modules/M2-ledger.md`.
 
 ## M1 decisions (also in the Notion build log at close-out)
 

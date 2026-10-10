@@ -612,4 +612,14 @@
             </settings>
         </field>
     </fieldset>
+    <fieldset name="matched_products" sortOrder="50">
+        <settings>
+            <label translate="true">Matched products</label>
+            <collapsible>true</collapsible>
+            <opened>false</opened>
+        </settings>
+        <htmlContent name="matched_products_list">
+            <block class="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\MatchedProducts" name="openlabel_label_matched_products"/>
+        </htmlContent>
+    </fieldset>
 </form>

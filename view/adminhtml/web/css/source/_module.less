@@ -348,3 +348,37 @@ body:has(.ol-preview:not(.ol-preview--collapsed)) #anchor-content {
 [data-index='placements'] .admin__control-table-wrapper {
     overflow-x: auto;
 }
+
+.ol-matched__head {
+    align-items: center;
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.ol-matched__list {
+    display: grid;
+    gap: .8rem;
+    grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.ol-matched__item a {
+    align-items: center;
+    display: grid;
+    gap: 0 .8rem;
+    grid-template-columns: 4.8rem 1fr;
+    grid-template-rows: auto auto;
+
+    img {
+        grid-row: span 2;
+    }
+}
+
+.ol-matched__sku {
+    color: #666;
+    font-size: 1.2rem;
+}

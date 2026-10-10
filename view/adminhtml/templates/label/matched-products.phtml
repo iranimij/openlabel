@@ -1,0 +1,50 @@
+<?php
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+
+/** @var \Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\MatchedProducts $block */
+/** @var \Magento\Framework\Escaper $escaper */
+$labelId = $block->getLabelId();
+?>
+<div class="ol-matched" data-role="ol-matched-products">
+    <?php if ($labelId === 0): ?>
+        <p class="ol-matched__empty"><?= $escaper->escapeHtml(__('Save the label to see which products match.')) ?></p>
+    <?php else: ?>
+        <?php $count = $block->getCount(); ?>
+        <div class="ol-matched__head">
+            <strong class="ol-matched__count" data-role="ol-matched-count">
+                <?= $escaper->escapeHtml(__('%1 products match in the default store view.', number_format($count))) ?>
+            </strong>
+            <form method="post" action="<?= $escaper->escapeUrl($block->getReindexUrl()) ?>" class="ol-matched__reindex">
+                <input type="hidden" name="form_key" value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>">
+                <input type="hidden" name="id" value="<?= (int) $labelId ?>">
+                <button type="submit" class="action-secondary" data-role="ol-reindex-now">
+                    <span><?= $escaper->escapeHtml(__('Reindex now')) ?></span>
+                </button>
+            </form>
+        </div>
+        <?php if ($count === 0): ?>
+            <div class="message message-notice ol-matched__empty">
+                <?= $escaper->escapeHtml(__('No products match yet.')) ?>
+                <?= $escaper->escapeHtml(__('Check that the label is switched on for this store view, that its dates have started, and that attributes used in the conditions have "Use for Promo Rule Conditions" set to Yes. After changing products, press "Reindex now".')) ?>
+            </div>
+        <?php else: ?>
+            <p class="ol-matched__note">
+                <?= $escaper->escapeHtml(__('First %1 products:', min($count, $block::LIMIT))) ?>
+            </p>
+            <ul class="ol-matched__list">
+                <?php foreach ($block->getProducts() as $product): ?>
+                    <li class="ol-matched__item">
+                        <a href="<?= $escaper->escapeUrl($product['url']) ?>" target="_blank" rel="noopener">
+                            <img src="<?= $escaper->escapeUrl($product['image']) ?>" alt="" width="48" height="48" loading="lazy">
+                            <span class="ol-matched__name"><?= $escaper->escapeHtml($product['name']) ?></span>
+                            <span class="ol-matched__sku"><?= $escaper->escapeHtml($product['sku']) ?></span>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+    <?php endif; ?>
+</div>
