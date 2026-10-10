@@ -4,7 +4,7 @@ Fine-grained checkpoint for the OpenLabel build. Updated with every merged PR. T
 
 ## Current milestone
 
-M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Foundation done 2026-10-09.
+M1 · Engine: **done** (2026-10-10, merged as b6efd54; full matrix green on run 38031715575). M0 · Foundation done 2026-10-09. Next: M2 · Admin, in a new session.
 
 ## M1 slices
 
@@ -36,7 +36,7 @@ M1 · Engine: **in progress** (started 2026-10-09, target 2026-11-09). M0 · Fou
 
 ## Exact next step
 
-M1 code is complete and **PR #10 (`feat/m1-s7-closeout`, run 37997573763) is green on every job** including the new coverage gate. It contains all M1 commits (S1–S7) in order. Recommended merge path: Iman approves PR #4 (schema contract); once it merges, retarget #10 to `main` (`gh pr edit 10 --base main`) and close #5–#9 as superseded (their heads predate the CI fixes and were hit by the Docker Hub pull-rate limit). When `main` is green on the full matrix, M1 is done; M2 (admin) starts in a new session with the kickoff prompt.
+M2 · Admin in a new session (kickoff prompt from 07 · Build Brief §6b): grid with inline edit and mass actions, label and design forms, live preview, placements, matched-products tab, 15 built-in designs, empty-state starters. Start from `main`.
 
 ## M1 decisions (also in the Notion build log at close-out)
 
@@ -54,6 +54,7 @@ M1 code is complete and **PR #10 (`feat/m1-s7-closeout`, run 37997573763) is gre
 - The integration test framework replaces the lock manager with a dummy, so lock refusal is unit-tested; the integration database carries the sample catalog, so tests filter their own SKUs.
 - Variables: processors return typed `Value`s (text, html, number, currency, date); the `Renderer` formats for the locale, escapes values, keeps `{BR}`, applies the allow-list and leaves unknown variables literal. A zero number renders as "0" and is reported as empty (hiding is the 1.1 flag). `{SPECIAL_ENDS_IN}` treats `special_to_date` as valid through that day (UTC). `{STOCK_QTY}` is the salable quantity (orders reduce it).
 - Resolver: a stack (area + position) is limited by the `max_labels` of its highest-priority label; `hide_lower_priority` suppresses higher priority numbers across all areas of that product; the design inside a `ResolvedLabel` carries the store-resolved text in its default slot. The `Labels` view model memoizes per request and returns nothing (no query) when the module is disabled for the store.
+- Matrix lessons (2.4.7/2.4.8): from 2.4.8 the core Sql Builder wraps numeric fields in IFNULL(field, 0) (composites need a never-matching sentinel); 2.4.8 keeps out-of-stock products in the price index; CI's Elasticsearch 8 rejects 2.4.7 search writes (tests schedule the search indexer); the 2.4.7 test framework nulls test-case properties (declare them nullable). Run the full matrix on the branch (`gh workflow run CI --ref <branch>`) before merging anything that touches SQL.
 - Local PHPStan runs with `modules/phpstan-local.neon` (level 6, generated factories scanned); CI uses `bitexpert/phpstan-magento`. After `setup:di:compile` on the fixture, delete `generated/metadata` or the integration sandbox install fails on the disabled 2FA module.
 
 ## Test inventory
@@ -67,14 +68,12 @@ M1 code is complete and **PR #10 (`feat/m1-s7-closeout`, run 37997573763) is gre
 
 ## Open questions for Iman
 
-- Docker Hub pull-rate limit on GitHub runners (ExtDN container actions): wait and rerun, or add Docker Hub credentials as secrets so the jobs can run as authenticated job containers?
 - Packagist: register `iranimij/module-base` after the `v1.0.0` tag (CI pre-install scripts fall back to a VCS repository until then) and mark the two old packages abandoned (composer.json already carries the field).
 - Hyvä portal keys (optional): the fixture and CI use the OSL packages from your copy; with keys the fixture can switch to the portal repository.
 
 ## Known failing or skipped tests
 
-- `Test/Integration/Performance/FullReindexTest` is skipped unless `OPENLABEL_PERF=true` (CI sets it on `main` and nightly, not on pull requests; agreed 2026-10-09).
-- CI reruns on PRs #5–#9 fail on Docker Hub `toomanyrequests` while pulling the ExtDN action images (infrastructure, not code); PR #4 and PR #10 (all code) are green. (Playwright `configurable-selection-changed` test skips only if the sample-data configurable product `radiant-tee` is missing.)
+- `Test/Integration/Performance/FullReindexTest` is skipped unless `OPENLABEL_PERF=true` (CI sets it on `main` and nightly, not on pull requests; agreed 2026-10-09). (Playwright `configurable-selection-changed` test skips only if the sample-data configurable product `radiant-tee` is missing.)
 
 ## Fixture gotchas (see openlabel-dev-env README)
 
