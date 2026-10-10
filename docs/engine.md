@@ -41,8 +41,8 @@ on every condition for previews and tests. Custom conditions: extend
 
 Two consequences worth knowing:
 
-- Price-based conditions read the price index, which omits out-of-stock products unless
-  *Display Out of Stock Products* is on. Such products cannot get price labels, matching what the storefront lists.
+- Price-based conditions read the price index. Depending on the Magento version and *Display Out of Stock
+  Products*, the price index may omit out-of-stock products; those then get no price labels.
 - Disabled products never match. Children of configurable, grouped and bundle products do, which is what
   `apply_to_parent` builds on.
 

@@ -28,9 +28,11 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use Iranimij\OpenLabel\Test\Fixture\ScheduledSearchIndex;
 use PHPUnit\Framework\TestCase;
 
 #[DbIsolation(false)]
+#[DataFixture(ScheduledSearchIndex::class)]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-var', 'price' => 100, 'special_price' => 80], 'var')]
 #[DataFixture(AttributeFixture::class, as: 'attr')]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-var-a', 'price' => 50, 'special_price' => 40, '$attr.attribute_code$' => '$attr.option_1$'], 'var_a')]

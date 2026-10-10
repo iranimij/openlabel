@@ -37,6 +37,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use Iranimij\OpenLabel\Test\Fixture\ScheduledSearchIndex;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -44,6 +45,7 @@ use PHPUnit\Framework\TestCase;
  * bundle products, price labels per customer group and store-scoped conditions per store (M1 "done when").
  */
 #[DbIsolation(false)]
+#[DataFixture(ScheduledSearchIndex::class)]
 #[DataFixture(StoreFixture::class, ['code' => 'ol_de'], 'store_de')]
 #[DataFixture(AttributeFixture::class, as: 'attr')]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-full', 'price' => 100, 'name' => 'Full price'], 'full')]

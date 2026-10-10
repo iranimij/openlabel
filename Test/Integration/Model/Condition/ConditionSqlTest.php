@@ -29,6 +29,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use Iranimij\OpenLabel\Test\Fixture\ScheduledSearchIndex;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,6 +37,7 @@ use PHPUnit\Framework\TestCase;
  * because the indexer never evaluates rules in PHP (06 · F4).
  */
 #[DbIsolation(false)]
+#[DataFixture(ScheduledSearchIndex::class)]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-full', 'price' => 100, 'name' => 'Full price jacket'], 'full')]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-sale20', 'price' => 100, 'special_price' => 80, 'name' => 'Sale jacket'], 'sale20')]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-sale5', 'price' => 100, 'special_price' => 95], 'sale5')]
@@ -98,9 +100,9 @@ class ConditionSqlTest extends TestCase
     {
         $condition = $this->builtIn(PriceRange::class, 'final_price', '<', '85');
 
-        // The price index omits out-of-stock products unless "Display Out of Stock Products" is on, so ol-out is absent.
-        self::assertSame(['ol-sale20', 'ol-low', 'ol-old', 'ol-new'], $this->match($condition, group: 0));
-        self::assertSame(['ol-sale20', 'ol-rule30', 'ol-low', 'ol-old', 'ol-new'], $this->match($condition, group: 2));
+        // Whether the price index keeps out-of-stock products differs between Magento versions: ignore ol-out.
+        self::assertSame(['ol-sale20', 'ol-low', 'ol-old', 'ol-new'], $this->withoutOut($this->match($condition, group: 0)));
+        self::assertSame(['ol-sale20', 'ol-rule30', 'ol-low', 'ol-old', 'ol-new'], $this->withoutOut($this->match($condition, group: 2)));
     }
 
     public function testStockConditionsUseSalableQuantity(): void
@@ -136,7 +138,7 @@ class ConditionSqlTest extends TestCase
         $cheap = $this->builtIn(PriceRange::class, 'final_price', '<', '50');
 
         self::assertSame([], $this->match([$onSale, $cheap], aggregator: 'all', group: 0));
-        self::assertSame(['ol-sale20', 'ol-sale5', 'ol-low', 'ol-old', 'ol-new'], $this->match([$onSale, $cheap], aggregator: 'any', group: 0));
+        self::assertSame(['ol-sale20', 'ol-sale5', 'ol-low', 'ol-old', 'ol-new'], $this->withoutOut($this->match([$onSale, $cheap], aggregator: 'any', group: 0)));
     }
 
     public function testRuleKnowsWhenItNeedsCustomerGroupRows(): void
@@ -146,6 +148,15 @@ class ConditionSqlTest extends TestCase
 
         $rule = $this->rule([$this->builtIn(OnSale::class, 'on_sale', '==', '1')]);
         self::assertTrue($rule->requiresCustomerGroup());
+    }
+
+    /**
+     * @param string[] $skus
+     * @return string[]
+     */
+    private function withoutOut(array $skus): array
+    {
+        return array_values(array_diff($skus, ['ol-out']));
     }
 
     /**

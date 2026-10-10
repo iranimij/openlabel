@@ -119,7 +119,6 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # The 2,000-product reindex budget runs on main and nightly only (plan: Iman, 2026-10-09).
       OPENLABEL_PERF: ${{ github.event_name != 'pull_request' }}
-      OPENLABEL_DEBUG_SQL: '1'
     strategy:
       fail-fast: false
       matrix:

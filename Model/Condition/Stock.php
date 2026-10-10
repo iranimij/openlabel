@@ -86,7 +86,33 @@ class Stock extends AbstractBuiltIn
         }
         $types = "'" . implode("','", self::QUANTITY_TYPES) . "'";
 
-        return new \Zend_Db_Expr(sprintf('IF(e.type_id IN (%s), %s.%s, NULL)', $types, self::ALIAS, $stock->getQtyColumn()));
+        return new \Zend_Db_Expr(sprintf(
+            'IF(e.type_id IN (%s), %s.%s, %s)',
+            $types,
+            self::ALIAS,
+            $stock->getQtyColumn(),
+            $this->compositeSentinel()
+        ));
+    }
+
+    /**
+     * A value for composite products that never satisfies the comparison. NULL is not enough: from 2.4.8 the core
+     * Sql Builder wraps numeric fields in IFNULL(field, 0), which would turn composites into "quantity 0".
+     *
+     * @return string
+     */
+    private function compositeSentinel(): string
+    {
+        $operator = (string) $this->getOperator();
+        if (in_array($operator, ['<', '<='], true)) {
+            return '1000000000000';
+        }
+        $value = $this->getValue();
+        if (in_array($operator, ['!=', '!()'], true) && is_numeric($value)) {
+            return (string) (float) $value;
+        }
+
+        return '-1';
     }
 
     /**

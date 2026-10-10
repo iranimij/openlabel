@@ -26,11 +26,13 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use Iranimij\OpenLabel\Test\Fixture\ScheduledSearchIndex;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 #[DbIsolation(false)]
+#[DataFixture(ScheduledSearchIndex::class)]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-cli-sale', 'price' => 100, 'special_price' => 80], 'sale')]
 #[DataFixture(ProductFixture::class, ['sku' => 'ol-cli-full', 'price' => 100], 'full')]
 #[DataFixture(DesignFixture::class, [], 'design')]

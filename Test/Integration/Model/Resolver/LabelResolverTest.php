@@ -26,6 +26,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use Iranimij\OpenLabel\Test\Fixture\ScheduledSearchIndex;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -33,6 +34,7 @@ use PHPUnit\Framework\TestCase;
  * Creates its own 36-product "listing" once per class; labels without conditions match every product.
  */
 #[DbIsolation(false)]
+#[DataFixture(ScheduledSearchIndex::class)]
 #[DataFixture(StoreFixture::class, ['code' => 'ol_de'], 'store_de')]
 #[DataFixture(DesignFixture::class, ['store_texts' => [0 => ['text' => 'Sale'], 1 => ['text' => 'Angebot']]], 'design')]
 class LabelResolverTest extends TestCase

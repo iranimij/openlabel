@@ -50,7 +50,9 @@ class StockTest extends ConditionTestCase
         $joins = $condition->getTablesToJoin();
         self::assertSame('inventory_stock_7', $joins['ol_stock']['name']);
         self::assertSame('ol_stock.sku = e.sku', $joins['ol_stock']['condition']);
-        self::assertSame("IF(e.type_id IN ('simple','virtual','downloadable'), ol_stock.quantity, NULL)", (string) $condition->getMappedSqlField());
+        self::assertSame("IF(e.type_id IN ('simple','virtual','downloadable'), ol_stock.quantity, 1000000000000)", (string) $condition->getMappedSqlField());
+        self::assertStringEndsWith(', -1)', (string) $this->stock('salable_qty', '>=', '5', $stock)->getMappedSqlField());
+        self::assertStringEndsWith(', 5)', (string) $this->stock('salable_qty', '!=', '5', $stock)->getMappedSqlField());
         self::assertSame('ol_stock.is_salable', (string) $this->stock('is_salable', '==', '1', $stock)->getMappedSqlField());
         self::assertFalse($condition->requiresCustomerGroup());
     }
