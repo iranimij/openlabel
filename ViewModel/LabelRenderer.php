@@ -19,6 +19,7 @@ use Iranimij\OpenLabel\Model\Label;
 use Iranimij\OpenLabel\Model\Variable\Context;
 use Iranimij\OpenLabel\Model\Variable\Renderer;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\LayoutInterface;
@@ -30,7 +31,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * 10 · Front-end Review FE7) and remembers which labels and designs were rendered for the page cache tags.
  * Theme integrations call getStacksHtml() inside a positioned image wrapper.
  */
-class LabelRenderer implements ArgumentInterface
+class LabelRenderer implements ArgumentInterface, ResetAfterRequestInterface
 {
     public const TEMPLATE = 'Iranimij_OpenLabel::base/stacks.phtml';
     public const CONFIG_DEBUG = 'openlabel/general/debug';
@@ -269,5 +270,17 @@ class LabelRenderer implements ArgumentInterface
             $store instanceof Store ? (int) $store->getWebsiteId() : 0,
             $this->labels->getCustomerGroupId()
         );
+    }
+
+    /**
+     * Per-request memory is dropped between requests (application server, integration tests).
+     *
+     * @return void
+     */
+    public function _resetState(): void
+    {
+        $this->identities = [];
+        $this->preloaded = [];
+        $this->block = null;
     }
 }

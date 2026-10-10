@@ -14,6 +14,7 @@ use Iranimij\Base\Model\Config\TypedReader;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -21,7 +22,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * Template-facing access to resolved labels, memoized per request: the listing calls getForProducts() once with
  * every product id of the page, the item templates then read from memory (02 · Architecture §4, §12).
  */
-class Labels implements ArgumentInterface
+class Labels implements ArgumentInterface, ResetAfterRequestInterface
 {
     public const CONFIG_ENABLED = 'openlabel/general/enabled';
 
@@ -183,5 +184,17 @@ class Labels implements ArgumentInterface
     private function customerGroupId(): int
     {
         return (int) $this->httpContext->getValue(CustomerContext::CONTEXT_GROUP);
+    }
+
+    /**
+     * Per-request memory is dropped between requests (application server, integration tests).
+     *
+     * @return void
+     */
+    public function _resetState(): void
+    {
+        $this->resolved = [];
+        $this->products = [];
+        $this->pending = [];
     }
 }
