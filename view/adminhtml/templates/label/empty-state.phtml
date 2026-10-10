@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+
+/** @var \Iranimij\OpenLabel\Block\Adminhtml\Label\EmptyState $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<section class="ol-empty" data-role="ol-empty-state" aria-labelledby="ol-empty-title">
+    <h2 id="ol-empty-title" class="ol-empty__title"><?= $escaper->escapeHtml(__('Create your first label in one click')) ?></h2>
+    <p class="ol-empty__intro">
+        <?= $escaper->escapeHtml(__('Pick a starter. It goes live right away with a built-in design; you can change everything afterwards.')) ?>
+    </p>
+    <div class="ol-empty__starters">
+        <?php foreach ($block->getStarters() as $key => $starter): ?>
+            <form method="post" action="<?= $escaper->escapeUrl($block->getCreateUrl()) ?>" class="ol-empty__starter">
+                <input type="hidden" name="form_key" value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>">
+                <input type="hidden" name="starter" value="<?= $escaper->escapeHtmlAttr($key) ?>">
+                <button type="submit" class="ol-starter" data-role="ol-starter" data-starter="<?= $escaper->escapeHtmlAttr($key) ?>">
+                    <span class="ol-starter__thumb"><?= /* @noEscape */ $starter['thumb'] ?></span>
+                    <strong class="ol-starter__title"><?= $escaper->escapeHtml($starter['title']) ?></strong>
+                    <span class="ol-starter__hint"><?= $escaper->escapeHtml($starter['hint']) ?></span>
+                </button>
+            </form>
+        <?php endforeach; ?>
+    </div>
+    <p class="ol-empty__feedback">
+        <?= $escaper->escapeHtml(__('Missing a label you need?')) ?>
+        <a href="<?= $escaper->escapeUrl($block::FEEDBACK_URL) ?>" target="_blank" rel="noopener">
+            <?= $escaper->escapeHtml(__('Tell us what you wanted to build')) ?>
+        </a>
+    </p>
+</section>

@@ -382,3 +382,60 @@ body:has(.ol-preview:not(.ol-preview--collapsed)) #anchor-content {
     color: #666;
     font-size: 1.2rem;
 }
+
+.ol-empty {
+    background: #f8f8f8;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    margin-bottom: 3rem;
+    padding: 2.5rem;
+}
+
+.ol-empty__title {
+    font-size: 2.2rem;
+    margin: 0 0 .5rem;
+}
+
+.ol-empty__intro {
+    color: #555;
+    margin-bottom: 2rem;
+}
+
+.ol-empty__starters {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+}
+
+.ol-starter {
+    align-items: flex-start;
+    background: #fff;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    height: 100%;
+    padding: 1.5rem;
+    text-align: left;
+    width: 100%;
+
+    &:hover,
+    &:focus {
+        border-color: #007bdb;
+    }
+}
+
+.ol-starter__title {
+    font-size: 1.6rem;
+}
+
+.ol-starter__hint {
+    color: #666;
+}
+
+.ol-empty__feedback {
+    color: #555;
+    margin: 2rem 0 0;
+}

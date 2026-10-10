@@ -10,6 +10,7 @@
     <update handle="styles"/>
     <body>
         <referenceContainer name="content">
+            <block class="Iranimij\OpenLabel\Block\Adminhtml\Label\EmptyState" name="openlabel.label.empty_state" before="-"/>
             <uiComponent name="openlabel_label_listing"/>
         </referenceContainer>
     </body>
