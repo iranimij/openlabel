@@ -15,12 +15,17 @@ use Iranimij\OpenLabel\Model\Label\FormMapper;
 use Iranimij\OpenLabel\Model\Placement;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Iranimij\OpenLabel\Model\Label\QuickConditions;
+use Iranimij\OpenLabel\Model\Label\RuleTree;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class FormMapperTest extends TestCase
 {
     private ObjectManager $objectManager;
+    private RuleTree&MockObject $ruleTree;
 
     protected function setUp(): void
     {
@@ -36,7 +41,9 @@ class FormMapperTest extends TestCase
         $placements = $this->createMock(PlacementInterfaceFactory::class);
         $placements->method('create')->willReturnCallback(fn () => $this->objectManager->getObject(Placement::class));
 
-        return new FormMapper(new DateConverter($tz, $locale), $placements);
+        $this->ruleTree = $this->createMock(RuleTree::class);
+
+        return new FormMapper(new DateConverter($tz, $locale), $placements, new QuickConditions(new Json()), $this->ruleTree);
     }
 
     private function label(): Label
@@ -111,5 +118,44 @@ class FormMapperTest extends TestCase
         $this->mapper()->apply($label, ['name' => 'inline']);
 
         self::assertCount(1, $label->getPlacements());
+    }
+
+    public function testTogglesAndRulePostAreComposedIntoTheConditions(): void
+    {
+        $label = $this->label();
+        $mapper = $this->mapper();
+        $advanced = ['type' => 'combine', 'aggregator' => 'all', 'value' => '1', 'conditions' => [['attribute' => 'sku']]];
+        $this->ruleTree->expects(self::once())->method('fromPost')->with(['conditions' => ['1' => []]])->willReturn($advanced);
+
+        $mapper->apply($label, ['name' => 'x', 'quick' => ['out_of_stock' => '1'], 'rule' => ['conditions' => ['1' => []]]]);
+
+        $tree = json_decode((string) $label->getConditionsSerialized(), true);
+        self::assertSame('is_salable', $tree['conditions'][0]['attribute']);
+        self::assertSame('sku', $tree['conditions'][1]['conditions'][0]['attribute']);
+    }
+
+    public function testWithoutShowWhenDataTheConditionsAreLeftAlone(): void
+    {
+        $label = $this->label();
+        $label->setConditionsSerialized('{"keep":true}');
+
+        $this->mapper()->apply($label, ['name' => 'inline grid edit']);
+
+        self::assertSame('{"keep":true}', $label->getConditionsSerialized());
+    }
+
+    public function testTogglesAloneKeepTheStoredAdvancedTree(): void
+    {
+        $label = $this->label();
+        $mapper = $this->mapper();
+        $quick = new QuickConditions(new Json());
+        $label->setConditionsSerialized($quick->compose(['is_new' => '1', 'new_days' => '7'], ['type' => 'c', 'conditions' => [['attribute' => 'color']]]));
+        $this->ruleTree->expects(self::never())->method('fromPost');
+
+        $mapper->apply($label, ['name' => 'starter', 'quick' => ['rating' => '1', 'rating_min' => '4']]);
+
+        [$values, $advanced] = $quick->decompose($label->getConditionsSerialized());
+        self::assertSame(['0', '1'], [$values['is_new'], $values['rating']]);
+        self::assertSame('color', $advanced['conditions'][0]['attribute']);
     }
 }

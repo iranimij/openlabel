@@ -25,10 +25,14 @@ class FormMapper
     /**
      * @param DateConverter $dateConverter
      * @param PlacementInterfaceFactory $placementFactory
+     * @param QuickConditions $quickConditions
+     * @param RuleTree $ruleTree
      */
     public function __construct(
         private readonly DateConverter $dateConverter,
-        private readonly PlacementInterfaceFactory $placementFactory
+        private readonly PlacementInterfaceFactory $placementFactory,
+        private readonly QuickConditions $quickConditions,
+        private readonly RuleTree $ruleTree
     ) {
     }
 
@@ -60,6 +64,28 @@ class FormMapper
         if (array_key_exists(LabelInterface::PLACEMENTS, $data)) {
             $label->setPlacements($this->placements($data[LabelInterface::PLACEMENTS]));
         }
+        $this->applyConditions($label, $data);
+    }
+
+    /**
+     * "Show when": quick toggles and the advanced tree. Data without either (grid inline edit) leaves the stored
+     * conditions alone; toggles without a tree keep the stored advanced tree.
+     *
+     * @param LabelInterface $label
+     * @param array<string, mixed> $data
+     * @return void
+     */
+    private function applyConditions(LabelInterface $label, array $data): void
+    {
+        $hasQuick = is_array($data['quick'] ?? null);
+        $hasRule = is_array($data['rule'] ?? null);
+        if (!$hasQuick && !$hasRule) {
+            return;
+        }
+        [$storedQuick, $storedAdvanced] = $this->quickConditions->decompose($label->getConditionsSerialized());
+        $quick = $hasQuick ? $data['quick'] : $storedQuick;
+        $advanced = $hasRule ? $this->ruleTree->fromPost($data['rule']) : $storedAdvanced;
+        $label->setConditionsSerialized($this->quickConditions->compose($quick, $advanced));
     }
 
     /**

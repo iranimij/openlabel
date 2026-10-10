@@ -146,6 +146,203 @@
             </formElements>
         </field>
     </fieldset>
+    <fieldset name="show_when" sortOrder="20">
+        <settings>
+            <label translate="true">Show when</label>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+        </settings>
+        <container name="show_when_intro" component="Magento_Ui/js/form/components/html" sortOrder="1">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="additionalClasses" xsi:type="string">ol-show-when-intro</item>
+                    <item name="content" xsi:type="string" translate="true">Switch on what a product needs for this label. Nothing switched on and no advanced conditions means every product gets the label.</item>
+                </item>
+            </argument>
+        </container>
+        <container name="on_sale_group" component="Magento_Ui/js/form/components/group" sortOrder="10">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">On sale</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="additionalClasses" xsi:type="string">ol-quick-toggle</item>
+                </item>
+            </argument>
+            <field name="on_sale" formElement="checkbox" sortOrder="10">
+                <settings>
+                    <label translate="true">On sale</label>
+                    <dataType>boolean</dataType>
+                    <dataScope>quick.on_sale</dataScope>
+                </settings>
+                <formElements>
+                    <checkbox>
+                        <settings>
+                            <prefer>toggle</prefer>
+                            <valueMap>
+                                <map name="false" xsi:type="string">0</map>
+                                <map name="true" xsi:type="string">1</map>
+                            </valueMap>
+                        </settings>
+                    </checkbox>
+                </formElements>
+            </field>
+            <field name="on_sale_min" formElement="input" sortOrder="20">
+                <settings>
+                    <label translate="true">Minimum discount (%)</label>
+                    <notice translate="true">Leave empty for any discount. The shopper sees the rounded percentage.</notice>
+                    <dataType>number</dataType>
+                    <dataScope>quick.on_sale_min</dataScope>
+                    <validation>
+                        <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+            </field>
+        </container>
+        <container name="is_new_group" component="Magento_Ui/js/form/components/group" sortOrder="20">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">New</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="additionalClasses" xsi:type="string">ol-quick-toggle</item>
+                </item>
+            </argument>
+            <field name="is_new" formElement="checkbox" sortOrder="10">
+                <settings>
+                    <label translate="true">New</label>
+                    <dataType>boolean</dataType>
+                    <dataScope>quick.is_new</dataScope>
+                </settings>
+                <formElements>
+                    <checkbox>
+                        <settings>
+                            <prefer>toggle</prefer>
+                            <valueMap>
+                                <map name="false" xsi:type="string">0</map>
+                                <map name="true" xsi:type="string">1</map>
+                            </valueMap>
+                        </settings>
+                    </checkbox>
+                </formElements>
+            </field>
+            <field name="new_days" formElement="input" sortOrder="20">
+                <settings>
+                    <label translate="true">Added in the last (days)</label>
+                    <notice translate="true">Counted from the day the product was created.</notice>
+                    <dataType>number</dataType>
+                    <dataScope>quick.new_days</dataScope>
+                    <validation>
+                        <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+            </field>
+        </container>
+        <container name="low_stock_group" component="Magento_Ui/js/form/components/group" sortOrder="30">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Low stock</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="additionalClasses" xsi:type="string">ol-quick-toggle</item>
+                </item>
+            </argument>
+            <field name="low_stock" formElement="checkbox" sortOrder="10">
+                <settings>
+                    <label translate="true">Low stock</label>
+                    <dataType>boolean</dataType>
+                    <dataScope>quick.low_stock</dataScope>
+                </settings>
+                <formElements>
+                    <checkbox>
+                        <settings>
+                            <prefer>toggle</prefer>
+                            <valueMap>
+                                <map name="false" xsi:type="string">0</map>
+                                <map name="true" xsi:type="string">1</map>
+                            </valueMap>
+                        </settings>
+                    </checkbox>
+                </formElements>
+            </field>
+            <field name="low_stock_qty" formElement="input" sortOrder="20">
+                <settings>
+                    <label translate="true">At most (pieces left)</label>
+                    <notice translate="true">Uses the salable quantity, so orders count straight away.</notice>
+                    <dataType>number</dataType>
+                    <dataScope>quick.low_stock_qty</dataScope>
+                    <validation>
+                        <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+            </field>
+        </container>
+        <container name="out_of_stock_group" component="Magento_Ui/js/form/components/group" sortOrder="40">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Out of stock</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="additionalClasses" xsi:type="string">ol-quick-toggle</item>
+                </item>
+            </argument>
+            <field name="out_of_stock" formElement="checkbox" sortOrder="10">
+                <settings>
+                    <label translate="true">Out of stock</label>
+                    <dataType>boolean</dataType>
+                    <dataScope>quick.out_of_stock</dataScope>
+                </settings>
+                <formElements>
+                    <checkbox>
+                        <settings>
+                            <prefer>toggle</prefer>
+                            <valueMap>
+                                <map name="false" xsi:type="string">0</map>
+                                <map name="true" xsi:type="string">1</map>
+                            </valueMap>
+                        </settings>
+                    </checkbox>
+                </formElements>
+            </field>
+        </container>
+        <container name="rating_group" component="Magento_Ui/js/form/components/group" sortOrder="50">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Well rated</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="additionalClasses" xsi:type="string">ol-quick-toggle</item>
+                </item>
+            </argument>
+            <field name="rating" formElement="checkbox" sortOrder="10">
+                <settings>
+                    <label translate="true">Well rated</label>
+                    <dataType>boolean</dataType>
+                    <dataScope>quick.rating</dataScope>
+                </settings>
+                <formElements>
+                    <checkbox>
+                        <settings>
+                            <prefer>toggle</prefer>
+                            <valueMap>
+                                <map name="false" xsi:type="string">0</map>
+                                <map name="true" xsi:type="string">1</map>
+                            </valueMap>
+                        </settings>
+                    </checkbox>
+                </formElements>
+            </field>
+            <field name="rating_min" formElement="input" sortOrder="20">
+                <settings>
+                    <label translate="true">At least (stars, 1–5)</label>
+                    <notice translate="true">Average of approved reviews; products without reviews never match.</notice>
+                    <dataType>number</dataType>
+                    <dataScope>quick.rating_min</dataScope>
+                    <validation>
+                        <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+            </field>
+        </container>
+        <htmlContent name="advanced_conditions" sortOrder="100">
+            <block class="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\Conditions" name="openlabel_label_conditions"/>
+        </htmlContent>
+    </fieldset>
     <fieldset name="show_where" sortOrder="30">
         <settings>
             <label translate="true">Show where</label>

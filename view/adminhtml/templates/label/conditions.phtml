@@ -1,0 +1,32 @@
+<?php
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+
+/** @var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+$element = $block->getElement();
+$id = (string) $element->getHtmlId();
+?>
+<div class="rule-tree ol-rule-tree">
+    <fieldset id="<?= $escaper->escapeHtmlAttr($id) ?>" class="fieldset">
+        <legend class="legend"><span><?= $escaper->escapeHtml($element->getLegend()) ?></span></legend>
+        <p class="note ol-rule-tree__note">
+            <?= $escaper->escapeHtml(__('For anything the switches above do not cover: any product attribute, category, SKU, attribute set or product type. A product must match the switches and these conditions.')) ?>
+        </p>
+        <div class="rule-tree-wrapper">
+            <?= $element->getChildrenHtml() ?>
+        </div>
+    </fieldset>
+</div>
+<?php
+$script = sprintf(
+    "require(['Magento_Rule/rules', 'prototype'], function (VarienRulesForm) {window[%s] = new VarienRulesForm(%s, %s);});",
+    json_encode($id),
+    json_encode($id),
+    json_encode((string) $block->getData('new_child_url'))
+);
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $script, false) ?>

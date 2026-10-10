@@ -15,6 +15,7 @@ use Iranimij\OpenLabel\Controller\Adminhtml\Label\Save;
 use Iranimij\OpenLabel\Model\Design\PickerOptions;
 use Iranimij\OpenLabel\Model\Label\DateConverter;
 use Iranimij\OpenLabel\Model\Label\FormMapper;
+use Iranimij\OpenLabel\Model\Label\QuickConditions;
 use Iranimij\OpenLabel\Model\ResourceModel\Label\CollectionFactory;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
@@ -38,6 +39,7 @@ class Form extends AbstractDataProvider
      * @param TimezoneInterface $timezone
      * @param UrlInterface $urlBuilder
      * @param DataPersistorInterface $dataPersistor
+     * @param QuickConditions $quickConditions
      * @param array<string, mixed> $meta
      * @param array<string, mixed> $data
      */
@@ -52,6 +54,7 @@ class Form extends AbstractDataProvider
         private readonly TimezoneInterface $timezone,
         private readonly UrlInterface $urlBuilder,
         private readonly DataPersistorInterface $dataPersistor,
+        private readonly QuickConditions $quickConditions,
         array $meta = [],
         array $data = []
     ) {
@@ -114,6 +117,7 @@ class Form extends AbstractDataProvider
             LabelInterface::CUSTOMER_GROUP_IDS => [],
             LabelInterface::APPLY_TO_PARENT => '1',
             LabelInterface::HIDE_LOWER_PRIORITY => '0',
+            'quick' => $this->quickConditions->decompose(null)[0],
             LabelInterface::PLACEMENTS => [[
                 PlacementInterface::AREA => PlacementInterface::AREA_LISTING,
                 PlacementInterface::POSITION => 'tl',
@@ -162,7 +166,7 @@ class Form extends AbstractDataProvider
             LabelInterface::CUSTOMER_GROUP_IDS => array_map('strval', $label->getCustomerGroupIds()),
             LabelInterface::VALID_FROM => $this->dateConverter->toLocal($label->getValidFrom()),
             LabelInterface::VALID_TO => $this->dateConverter->toLocal($label->getValidTo()),
-            LabelInterface::CONDITIONS_SERIALIZED => $label->getConditionsSerialized(),
+            'quick' => $this->quickConditions->decompose($label->getConditionsSerialized())[0],
             LabelInterface::PLACEMENTS => $placements,
         ];
     }
