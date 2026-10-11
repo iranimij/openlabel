@@ -34,6 +34,7 @@
     </type>
     <type name="Iranimij\OpenLabel\Api\DesignRepositoryInterface">
         <plugin name="openlabel_regenerate_css" type="Iranimij\OpenLabel\Plugin\RegenerateCssPlugin"/>
+        <plugin name="openlabel_clean_design_cache" type="Iranimij\OpenLabel\Plugin\DesignCachePlugin"/>
     </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Price\Action\Rows">
         <plugin name="openlabel_schedule_after_price_rows" type="Iranimij\OpenLabel\Plugin\Indexer\PriceRows"/>
