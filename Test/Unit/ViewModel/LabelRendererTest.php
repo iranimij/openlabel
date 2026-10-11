@@ -137,7 +137,10 @@ class LabelRendererTest extends TestCase
 
         $renderer->getStacks($this->product(), 'listing');
 
-        self::assertSame(['openlabel_1', 'openlabel_design_10', 'openlabel_4', 'openlabel_design_40'], $renderer->getIdentities());
+        self::assertSame(
+            ['cat_p_100', 'openlabel_1', 'openlabel_design_10', 'openlabel_4', 'openlabel_design_40'],
+            $renderer->getIdentities()
+        );
     }
 
     public function testIdentitiesCanBeCollectedWithoutRendering(): void
@@ -148,7 +151,17 @@ class LabelRendererTest extends TestCase
         $tags = $renderer->collectIdentities(100);
 
         self::assertSame(['openlabel_1', 'openlabel_design_10', 'openlabel_2', 'openlabel_design_20'], $tags);
-        self::assertSame($tags, $renderer->getIdentities(), 'the page is tagged too');
+        self::assertSame(array_merge(['cat_p_100'], $tags), $renderer->getIdentities(), 'the page is tagged too');
+    }
+
+    public function testProductsWithoutLabelsStillTagThePage(): void
+    {
+        $renderer = $this->renderer();
+
+        $renderer->observeProduct(55);
+        $renderer->getStacks($this->product(), 'listing');
+
+        self::assertSame(['cat_p_55', 'cat_p_100'], $renderer->getIdentities());
     }
 
     public function testVariablesArePreloadedOnceForAllRememberedProducts(): void

@@ -19,6 +19,7 @@ use Iranimij\OpenLabel\Model\Label;
 use Iranimij\OpenLabel\Model\Variable\Context;
 use Iranimij\OpenLabel\Model\Variable\Renderer;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\View\Element\Template;
@@ -103,6 +104,7 @@ class LabelRenderer implements ArgumentInterface, ResetAfterRequestInterface
      */
     public function getStacks(ProductInterface $product, string $area, string $loading = 'lazy'): array
     {
+        $this->observeProduct((int) $product->getId());
         $stacks = [];
         foreach ($this->labels->getForProduct((int) $product->getId()) as $label) {
             if ($label->getPlacement()->getArea() === $area) {
@@ -129,11 +131,26 @@ class LabelRenderer implements ArgumentInterface, ResetAfterRequestInterface
     }
 
     /**
-     * @return string[] `openlabel_<label_id>` and `openlabel_design_<design_id>` of every label rendered so far
+     * @return string[] `openlabel_<label_id>`, `openlabel_design_<design_id>` of every label rendered so far and
+     *                  `cat_p_<id>` of every product looked at
      */
     public function getIdentities(): array
     {
         return array_keys($this->identities);
+    }
+
+    /**
+     * Tags the page with the product (`cat_p_<id>`): a label that starts matching it later purges this page even
+     * where the theme does not tag the page with its products (core product widgets on CMS pages).
+     *
+     * @param int $productId
+     * @return void
+     */
+    public function observeProduct(int $productId): void
+    {
+        if ($productId > 0) {
+            $this->identities[Product::CACHE_TAG . '_' . $productId] = true;
+        }
     }
 
     /**
@@ -145,6 +162,7 @@ class LabelRenderer implements ArgumentInterface, ResetAfterRequestInterface
      */
     public function collectIdentities(int $productId): array
     {
+        $this->observeProduct($productId);
         $tags = [];
         foreach ($this->labels->getForProduct($productId) as $label) {
             $tags[] = Label::CACHE_TAG_PREFIX . $label->getLabelId();
