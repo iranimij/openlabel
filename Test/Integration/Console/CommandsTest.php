@@ -10,6 +10,7 @@ namespace Iranimij\OpenLabel\Test\Integration\Console;
 
 use Iranimij\OpenLabel\Api\Data\LabelInterface;
 use Iranimij\OpenLabel\Api\LabelRepositoryInterface;
+use Iranimij\OpenLabel\Console\CssRegenerate;
 use Iranimij\OpenLabel\Console\Preview;
 use Iranimij\OpenLabel\Console\Reindex;
 use Iranimij\OpenLabel\Model\Condition\OnSale;
@@ -102,5 +103,15 @@ class CommandsTest extends TestCase
         self::assertSame(Command::SUCCESS, $exit);
         self::assertStringContainsString('Full reindex done', $tester->getDisplay());
         self::assertTrue(Bootstrap::getObjectManager()->get(IndexerRegistry::class)->get('openlabel_product')->isValid());
+    }
+
+    public function testCssRegenerateWritesOneFilePerStoreView(): void
+    {
+        $tester = new CommandTester(Bootstrap::getObjectManager()->get(CssRegenerate::class));
+
+        $exit = $tester->execute([]);
+
+        self::assertSame(Command::SUCCESS, $exit);
+        self::assertMatchesRegularExpression('#Store 1: pub/media/openlabel/1/openlabel\.[0-9a-f]{12}\.css#', $tester->getDisplay());
     }
 }

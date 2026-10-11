@@ -28,6 +28,11 @@
                     <label>Label indexer</label>
                     <frontend_model>Iranimij\OpenLabel\Block\Adminhtml\System\Config\IndexMode</frontend_model>
                 </field>
+                <field id="css_regenerate" translate="label comment" type="button" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Label stylesheet</label>
+                    <comment>Rebuilt automatically after every design or label save. Use this after copying the database or media folder from another environment.</comment>
+                    <frontend_model>Iranimij\OpenLabel\Block\Adminhtml\System\Config\RegenerateCss</frontend_model>
+                </field>
                 <field id="debug" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Debug mode</label>
                     <comment>Adds data-ol-label attributes with label IDs to the shop's markup, to help with support. Keep off in production.</comment>

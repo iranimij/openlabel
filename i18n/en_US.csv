@@ -285,3 +285,8 @@
 "Recommended. Labels follow product, price and stock changes within a minute through cron.","Recommended. Labels follow product, price and stock changes within a minute through cron."
 "Switch to ""Update by Schedule"" in System › Index Management so product saves stay fast; labels then follow changes within a minute through cron.","Switch to ""Update by Schedule"" in System › Index Management so product saves stay fast; labels then follow changes within a minute through cron."
 "Currently: %1","Currently: %1"
+"Regenerate CSS","Regenerate CSS"
+"Label stylesheet","Label stylesheet"
+"Rebuilt automatically after every design or label save. Use this after copying the database or media folder from another environment.","Rebuilt automatically after every design or label save. Use this after copying the database or media folder from another environment."
+"The OpenLabel stylesheet was rebuilt for %1 store view(s).","The OpenLabel stylesheet was rebuilt for %1 store view(s)."
+"The stylesheet could not be written: %1","The stylesheet could not be written: %1"

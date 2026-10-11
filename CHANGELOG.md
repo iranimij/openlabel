@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ## [Unreleased]
 
 ### Added
+- M3 S1 · Generated stylesheet: one file per store view at `pub/media/openlabel/<store_id>/openlabel.<hash>.css` with the structural `ol-*` CSS, one custom-property line per design (`.ol-d-<id>`), one per placement with offsets or gap (`.ol-p-<id>`) and the sanitized custom CSS; rebuilt after every design and label save, by `bin/magento openlabel:css:regenerate` and by the new "Regenerate CSS" button in the settings; generated on first use after a fresh install; previous files are kept two days for pages still in the page cache.
 - M2 S1 · 15 built-in designs (idempotent data patch; existing system designs are never overwritten, missing ones restored) and `Model\Design\Contrast` (WCAG ratio and level).
 - M2 S2 · Admin menu Catalog › OpenLabel › Labels / Designs; labels grid (design preview, placements summary, matched product count, active-now filter, store views) with inline edit of name, status, priority and dates (shop timezone ↔ UTC) and mass enable/disable/delete; designs grid with mass delete that keeps built-in and in-use designs. New core dependency `magento/module-ui`.
 - M2 S3 · Design form: Text/Image/Shape cards, colour pickers with a live contrast badge, variable picker and 24-character counter, per-store-view text, image upload with content-type check, size limits, SVG sanitizing and stored dimensions, custom CSS sanitizer behind `Iranimij_OpenLabel::custom_css`; built-in designs locked with "Duplicate to edit".
