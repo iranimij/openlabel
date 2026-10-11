@@ -88,8 +88,8 @@ class LabelRenderer implements ArgumentInterface, ResetAfterRequestInterface
         }
         if ($this->block === null) {
             /** @var Template $block */
-            $block = $this->layout->createBlock(Template::class);
-            $this->block = $block->setTemplate(self::TEMPLATE);
+            $block = $this->layout->createBlock(Template::class, '', ['data' => ['template' => self::TEMPLATE]]);
+            $this->block = $block;
         }
 
         return (string) $this->block->setData('stacks', $stacks)->toHtml();

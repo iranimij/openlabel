@@ -72,6 +72,30 @@ class RendererTest extends TestCase
         self::assertSame(['ATTR:size'], $rendered->getEmptyVariables());
     }
 
+    public function testPreloadForOnlyLoadsTheProcessorsTheTextsUse(): void
+    {
+        $used = $this->createMock(PreloadingProcessorInterface::class);
+        $used->method('getCode')->willReturn('RATING');
+        $used->expects(self::once())->method('preload');
+        $unused = $this->createMock(PreloadingProcessorInterface::class);
+        $unused->method('getCode')->willReturn('SOLD');
+        $unused->expects(self::never())->method('preload');
+        $renderer = new Renderer(
+            new Pool(['RATING' => $used, 'SOLD' => $unused, 'PCT' => $this->processor('PCT', static fn () => Value::number(1))]),
+            new AllowList(new Escaper()),
+            new Escaper(),
+            $this->createStub(PriceCurrencyInterface::class),
+            $this->createStub(TimezoneInterface::class),
+            $this->createStub(ResolverInterface::class)
+        );
+
+        $renderer->preloadFor(
+            [$this->createStub(ProductInterface::class)],
+            new Context(1, 1, 0),
+            ['{RATING} stars', 'Top {RATING}', '-{PCT}%', '{UNKNOWN}']
+        );
+    }
+
     private function renderer(string $locale): Renderer
     {
         $pool = new Pool([
