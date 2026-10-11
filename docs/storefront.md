@@ -61,7 +61,7 @@ Positions mirror automatically when the page direction is right-to-left. Magento
 
 ## Custom themes
 
-The Hyvä package finds its slots automatically on Hyvä 1.3 and 1.4. A theme that changes the product image template of listings or the gallery container renders the labels itself:
+The Hyvä package finds its slots automatically on Hyvä 1.4 (verified on 1.4.2; the 1.3 run is part of the end-to-end CI job). A theme that changes the product image template of listings or the gallery container renders the labels itself:
 
 **Product page.** Inside your gallery container (it must be `position: relative`):
 
