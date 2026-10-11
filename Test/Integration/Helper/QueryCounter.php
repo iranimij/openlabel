@@ -23,6 +23,9 @@ class QueryCounter
     {
     }
 
+    /** @var string[] SQL of the last counted callback, for assertion messages */
+    public array $last = [];
+
     /**
      * @param callable $callback
      * @return int number of queries the callback issued
@@ -37,6 +40,10 @@ class QueryCounter
         $profiler->clear();
         try {
             $callback();
+            $this->last = array_map(
+                static fn ($query): string => (string) $query->getQuery(),
+                $profiler->getQueryProfiles() ?: []
+            );
 
             return (int) $profiler->getTotalNumQueries();
         } finally {
