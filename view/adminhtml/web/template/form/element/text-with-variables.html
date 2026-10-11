@@ -1,0 +1,27 @@
+<!--
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+-->
+<div class="ol-text-vars">
+    <input class="admin__control-text" type="text"
+           data-bind="
+               textInput: value,
+               hasFocus: focused,
+               attr: {name: inputName, id: uid, placeholder: placeholder, 'aria-describedby': noticeId}">
+    <div class="ol-text-vars__tools">
+        <label class="ol-text-vars__picker">
+            <span class="admin__field-label-text" data-bind="i18n: 'Insert a variable'"></span>
+            <select class="admin__control-select" data-role="ol-variable-picker"
+                    data-bind="value: selectedVariable">
+                <option value="" data-bind="i18n: 'Choose…'"></option>
+                <!-- ko foreach: variables -->
+                <option data-bind="value: token, text: token + ' · ' + description"></option>
+                <!-- /ko -->
+            </select>
+        </label>
+        <span class="ol-text-vars__counter" data-role="ol-char-counter"
+              data-bind="text: counterText(), css: {'ol-text-vars__counter--long': isLong()}"></span>
+    </div>
+</div>

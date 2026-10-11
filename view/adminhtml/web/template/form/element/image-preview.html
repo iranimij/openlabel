@@ -1,0 +1,29 @@
+<!--
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+-->
+<div class="file-uploader-summary ol-image-preview">
+    <div class="file-uploader-preview">
+        <a class="preview-link" data-bind="attr: {href: $parent.getFilePreview($file)}" target="_blank">
+            <img class="preview-image" data-bind="attr: {src: $parent.getFilePreview($file), alt: $file.name}"/>
+        </a>
+        <div class="actions">
+            <button type="button" class="action-remove" data-role="delete-button"
+                    data-bind="attr: {title: $t('Delete image')}, click: $parent.removeFile.bind($parent, $file)">
+                <span data-bind="i18n: 'Delete image'"></span>
+            </button>
+        </div>
+    </div>
+    <div class="file-uploader-filename" data-bind="text: $file.name"></div>
+    <div class="file-uploader-meta" data-role="ol-image-meta">
+        <!-- ko if: $file.width -->
+        <span data-bind="text: $file.width + ' × ' + $file.height + ' px'"></span>,
+        <!-- /ko -->
+        <span data-bind="text: $parent.formatSize($file.size)"></span>
+        <!-- ko foreach: $file.warnings || [] -->
+        <p class="message message-warning" data-bind="text: $data"></p>
+        <!-- /ko -->
+    </div>
+</div>

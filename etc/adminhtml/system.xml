@@ -19,6 +19,20 @@
                     <comment>Turns label rendering on for this scope. Labels are still indexed while disabled.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="default_max_labels" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Default max labels per position</label>
+                    <comment>Used for new placements. Labels beyond this number in one corner are hidden by priority. 1 to 10.</comment>
+                    <validate>validate-digits validate-digits-range digits-range-1-10</validate>
+                </field>
+                <field id="index_mode" translate="label" type="label" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Label indexer</label>
+                    <frontend_model>Iranimij\OpenLabel\Block\Adminhtml\System\Config\IndexMode</frontend_model>
+                </field>
+                <field id="debug" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Debug mode</label>
+                    <comment>Adds data-ol-label attributes with label IDs to the shop's markup, to help with support. Keep off in production.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
         </section>
     </system>

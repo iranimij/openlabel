@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
+    <head>
+        <css src="Iranimij_OpenLabel::css/openlabel.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <uiComponent name="openlabel_label_form"/>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,625 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">openlabel_label_form.openlabel_label_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Label</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back" class="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\BackButton"/>
+            <button name="delete" class="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\DeleteButton"/>
+            <button name="save" class="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\SaveButton"/>
+        </buttons>
+        <namespace>openlabel_label_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>openlabel_label_form.openlabel_label_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="openlabel_label_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <validateUrl path="openlabel/label/validate"/>
+            <submitUrl path="openlabel/label/save"/>
+        </settings>
+        <dataProvider class="Iranimij\OpenLabel\Ui\DataProvider\Label\Form" name="openlabel_label_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>label_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="basics" sortOrder="10">
+        <settings>
+            <label translate="true">Basics</label>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+        </settings>
+        <container name="live_preview" component="Iranimij_OpenLabel/js/form/element/live-preview" sortOrder="0">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="provider" xsi:type="string">openlabel_label_form.openlabel_label_form_data_source</item>
+                </item>
+            </argument>
+        </container>
+        <field name="label_id" formElement="hidden">
+            <settings>
+                <dataType>text</dataType>
+                <dataScope>label_id</dataScope>
+            </settings>
+        </field>
+        <field name="name" formElement="input" sortOrder="10">
+            <settings>
+                <label translate="true">Name</label>
+                <notice translate="true">Only you see this, e.g. "Black Friday 2026".</notice>
+                <dataType>text</dataType>
+                <dataScope>name</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="status" formElement="checkbox" sortOrder="20">
+            <settings>
+                <label translate="true">Show in the shop</label>
+                <notice translate="true">Switch off to pause the label without deleting it.</notice>
+                <dataType>boolean</dataType>
+                <dataScope>status</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <prefer>toggle</prefer>
+                        <valueMap>
+                            <map name="false" xsi:type="string">0</map>
+                            <map name="true" xsi:type="string">1</map>
+                        </valueMap>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="design_id" formElement="input" component="Iranimij_OpenLabel/js/form/element/design-picker" sortOrder="30">
+            <settings>
+                <label translate="true">Design</label>
+                <notice translate="true">How the label looks. Pick one, or create your own and press "Refresh designs".</notice>
+                <dataType>text</dataType>
+                <dataScope>design_id</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="priority" formElement="input" sortOrder="40">
+            <settings>
+                <label translate="true">Priority</label>
+                <notice translate="true">Lower number wins when labels overlap. 0 is the highest priority.</notice>
+                <dataType>number</dataType>
+                <dataScope>priority</dataScope>
+                <validation>
+                    <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="hide_lower_priority" formElement="checkbox" sortOrder="50">
+            <settings>
+                <label translate="true">Hide other labels</label>
+                <notice translate="true">When this label shows on a product, labels with a higher priority number are hidden there.</notice>
+                <dataType>boolean</dataType>
+                <dataScope>hide_lower_priority</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <prefer>toggle</prefer>
+                        <valueMap>
+                            <map name="false" xsi:type="string">0</map>
+                            <map name="true" xsi:type="string">1</map>
+                        </valueMap>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="apply_to_parent" formElement="checkbox" sortOrder="60">
+            <settings>
+                <label translate="true">Show on configurable, grouped and bundle products</label>
+                <notice translate="true">The parent product shows the label when any of its variants matches.</notice>
+                <dataType>boolean</dataType>
+                <dataScope>apply_to_parent</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <prefer>toggle</prefer>
+                        <valueMap>
+                            <map name="false" xsi:type="string">0</map>
+                            <map name="true" xsi:type="string">1</map>
+                        </valueMap>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+    </fieldset>
+    <fieldset name="show_when" sortOrder="20">
+        <settings>
+            <label translate="true">Show when</label>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+        </settings>
+        <container name="show_when_intro" component="Magento_Ui/js/form/components/html" sortOrder="1">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="additionalClasses" xsi:type="string">ol-show-when-intro</item>
+                    <item name="content" xsi:type="string" translate="true">Switch on what a product needs for this label. Nothing switched on and no advanced conditions means every product gets the label.</item>
+                </item>
+            </argument>
+        </container>
+        <container name="on_sale_group" component="Magento_Ui/js/form/components/group" sortOrder="10">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">On sale</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="additionalClasses" xsi:type="string">ol-quick-toggle</item>
+                </item>
+            </argument>
+            <field name="on_sale" formElement="checkbox" sortOrder="10">
+                <settings>
+                    <label translate="true">On sale</label>
+                    <dataType>boolean</dataType>
+                    <dataScope>quick.on_sale</dataScope>
+                </settings>
+                <formElements>
+                    <checkbox>
+                        <settings>
+                            <prefer>toggle</prefer>
+                            <valueMap>
+                                <map name="false" xsi:type="string">0</map>
+                                <map name="true" xsi:type="string">1</map>
+                            </valueMap>
+                        </settings>
+                    </checkbox>
+                </formElements>
+            </field>
+            <field name="on_sale_min" formElement="input" sortOrder="20">
+                <settings>
+                    <label translate="true">Minimum discount (%)</label>
+                    <notice translate="true">Leave empty for any discount. The shopper sees the rounded percentage.</notice>
+                    <dataType>number</dataType>
+                    <dataScope>quick.on_sale_min</dataScope>
+                    <validation>
+                        <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+            </field>
+        </container>
+        <container name="is_new_group" component="Magento_Ui/js/form/components/group" sortOrder="20">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">New</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="additionalClasses" xsi:type="string">ol-quick-toggle</item>
+                </item>
+            </argument>
+            <field name="is_new" formElement="checkbox" sortOrder="10">
+                <settings>
+                    <label translate="true">New</label>
+                    <dataType>boolean</dataType>
+                    <dataScope>quick.is_new</dataScope>
+                </settings>
+                <formElements>
+                    <checkbox>
+                        <settings>
+                            <prefer>toggle</prefer>
+                            <valueMap>
+                                <map name="false" xsi:type="string">0</map>
+                                <map name="true" xsi:type="string">1</map>
+                            </valueMap>
+                        </settings>
+                    </checkbox>
+                </formElements>
+            </field>
+            <field name="new_days" formElement="input" sortOrder="20">
+                <settings>
+                    <label translate="true">Added in the last (days)</label>
+                    <notice translate="true">Counted from the day the product was created.</notice>
+                    <dataType>number</dataType>
+                    <dataScope>quick.new_days</dataScope>
+                    <validation>
+                        <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+            </field>
+        </container>
+        <container name="low_stock_group" component="Magento_Ui/js/form/components/group" sortOrder="30">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Low stock</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="additionalClasses" xsi:type="string">ol-quick-toggle</item>
+                </item>
+            </argument>
+            <field name="low_stock" formElement="checkbox" sortOrder="10">
+                <settings>
+                    <label translate="true">Low stock</label>
+                    <dataType>boolean</dataType>
+                    <dataScope>quick.low_stock</dataScope>
+                </settings>
+                <formElements>
+                    <checkbox>
+                        <settings>
+                            <prefer>toggle</prefer>
+                            <valueMap>
+                                <map name="false" xsi:type="string">0</map>
+                                <map name="true" xsi:type="string">1</map>
+                            </valueMap>
+                        </settings>
+                    </checkbox>
+                </formElements>
+            </field>
+            <field name="low_stock_qty" formElement="input" sortOrder="20">
+                <settings>
+                    <label translate="true">At most (pieces left)</label>
+                    <notice translate="true">Uses the salable quantity, so orders count straight away.</notice>
+                    <dataType>number</dataType>
+                    <dataScope>quick.low_stock_qty</dataScope>
+                    <validation>
+                        <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+            </field>
+        </container>
+        <container name="out_of_stock_group" component="Magento_Ui/js/form/components/group" sortOrder="40">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Out of stock</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="additionalClasses" xsi:type="string">ol-quick-toggle</item>
+                </item>
+            </argument>
+            <field name="out_of_stock" formElement="checkbox" sortOrder="10">
+                <settings>
+                    <label translate="true">Out of stock</label>
+                    <dataType>boolean</dataType>
+                    <dataScope>quick.out_of_stock</dataScope>
+                </settings>
+                <formElements>
+                    <checkbox>
+                        <settings>
+                            <prefer>toggle</prefer>
+                            <valueMap>
+                                <map name="false" xsi:type="string">0</map>
+                                <map name="true" xsi:type="string">1</map>
+                            </valueMap>
+                        </settings>
+                    </checkbox>
+                </formElements>
+            </field>
+        </container>
+        <container name="rating_group" component="Magento_Ui/js/form/components/group" sortOrder="50">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Well rated</item>
+                    <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="additionalClasses" xsi:type="string">ol-quick-toggle</item>
+                </item>
+            </argument>
+            <field name="rating" formElement="checkbox" sortOrder="10">
+                <settings>
+                    <label translate="true">Well rated</label>
+                    <dataType>boolean</dataType>
+                    <dataScope>quick.rating</dataScope>
+                </settings>
+                <formElements>
+                    <checkbox>
+                        <settings>
+                            <prefer>toggle</prefer>
+                            <valueMap>
+                                <map name="false" xsi:type="string">0</map>
+                                <map name="true" xsi:type="string">1</map>
+                            </valueMap>
+                        </settings>
+                    </checkbox>
+                </formElements>
+            </field>
+            <field name="rating_min" formElement="input" sortOrder="20">
+                <settings>
+                    <label translate="true">At least (stars, 1–5)</label>
+                    <notice translate="true">Average of approved reviews; products without reviews never match.</notice>
+                    <dataType>number</dataType>
+                    <dataScope>quick.rating_min</dataScope>
+                    <validation>
+                        <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                    </validation>
+                </settings>
+            </field>
+        </container>
+        <htmlContent name="advanced_conditions" sortOrder="100">
+            <block class="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\Conditions" name="openlabel_label_conditions"/>
+        </htmlContent>
+    </fieldset>
+    <fieldset name="show_where" sortOrder="30">
+        <settings>
+            <label translate="true">Show where</label>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+        </settings>
+        <dynamicRows name="placements" sortOrder="10">
+            <settings>
+                <addButtonLabel translate="true">Add a placement</addButtonLabel>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                </additionalClasses>
+                <componentType>dynamicRows</componentType>
+                <dndConfig>
+                    <param name="enabled" xsi:type="boolean">false</param>
+                </dndConfig>
+            </settings>
+            <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                        <!-- Row order lives in "row_order": the default "position" is our placement field. -->
+                        <item name="positionProvider" xsi:type="string">row_order</item>
+                    </item>
+                </argument>
+                <field name="area" formElement="select" sortOrder="10">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="string">listing</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Page</label>
+                        <dataType>text</dataType>
+                        <dataScope>area</dataScope>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="Iranimij\OpenLabel\Model\Source\Area"/>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
+                <field name="position" formElement="select" component="Iranimij_OpenLabel/js/form/element/position-picker" sortOrder="20">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="string">tl</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Position on the image</label>
+                        <dataType>text</dataType>
+                        <dataScope>position</dataScope>
+                        <elementTmpl>Iranimij_OpenLabel/form/element/position-picker</elementTmpl>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="Iranimij\OpenLabel\Model\Source\Position"/>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
+                <field name="design_id" formElement="select" sortOrder="25">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="string"></item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Use a different design here</label>
+                        <dataType>text</dataType>
+                        <dataScope>design_id</dataScope>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="Iranimij\OpenLabel\Model\Source\DesignOverride"/>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
+                <field name="max_labels" formElement="input" sortOrder="30">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="string">3</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Max labels here</label>
+                        <dataType>number</dataType>
+                        <dataScope>max_labels</dataScope>
+                        <validation>
+                            <rule name="validate-digits-range" xsi:type="string">1-10</rule>
+                        </validation>
+                    </settings>
+                </field>
+                <field name="stacking" formElement="select" sortOrder="40">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="string">vertical</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Stacking</label>
+                        <dataType>text</dataType>
+                        <dataScope>stacking</dataScope>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="Iranimij\OpenLabel\Model\Source\Stacking"/>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
+                <field name="gap" formElement="input" sortOrder="50">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="string">4</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Gap (px)</label>
+                        <dataType>text</dataType>
+                        <dataScope>gap</dataScope>
+                        <validation>
+                            <rule name="validate-number-range" xsi:type="string">0-64</rule>
+                        </validation>
+                    </settings>
+                </field>
+                <field name="offset_x" formElement="input" sortOrder="60">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="string">0</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Offset → (px)</label>
+                        <dataType>text</dataType>
+                        <dataScope>offset_x</dataScope>
+                        <validation>
+                            <rule name="validate-number-range" xsi:type="string">-200-200</rule>
+                        </validation>
+                    </settings>
+                </field>
+                <field name="offset_y" formElement="input" sortOrder="70">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="string">0</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label translate="true">Offset ↓ (px)</label>
+                        <dataType>text</dataType>
+                        <dataScope>offset_y</dataScope>
+                        <validation>
+                            <rule name="validate-number-range" xsi:type="string">-200-200</rule>
+                        </validation>
+                    </settings>
+                </field>
+                <field name="pin_physical_side" formElement="checkbox" sortOrder="80">
+                    <settings>
+                        <label translate="true">Keep left/right in RTL</label>
+                        <dataType>boolean</dataType>
+                        <dataScope>pin_physical_side</dataScope>
+                    </settings>
+                    <formElements>
+                        <checkbox>
+                            <settings>
+                                <prefer>toggle</prefer>
+                                <valueMap>
+                                    <map name="false" xsi:type="string">0</map>
+                                    <map name="true" xsi:type="string">1</map>
+                                </valueMap>
+                            </settings>
+                        </checkbox>
+                    </formElements>
+                </field>
+                <actionDelete name="delete" sortOrder="100">
+                    <settings>
+                        <dataType>text</dataType>
+                        <label></label>
+                    </settings>
+                </actionDelete>
+            </container>
+        </dynamicRows>
+    </fieldset>
+    <fieldset name="who_when" sortOrder="40">
+        <settings>
+            <label translate="true">Who and when</label>
+            <collapsible>true</collapsible>
+            <opened>false</opened>
+        </settings>
+        <field name="store_ids" formElement="multiselect" sortOrder="10">
+            <settings>
+                <label translate="true">Store views</label>
+                <notice translate="true">"All Store Views" shows the label everywhere.</notice>
+                <dataType>text</dataType>
+                <dataScope>store_ids</dataScope>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Iranimij\OpenLabel\Model\Source\StoreViews"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+        <field name="customer_group_ids" formElement="multiselect" sortOrder="20">
+            <settings>
+                <label translate="true">Customer groups</label>
+                <notice translate="true">Leave empty to show the label to everyone.</notice>
+                <dataType>text</dataType>
+                <dataScope>customer_group_ids</dataScope>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Iranimij\OpenLabel\Model\Source\CustomerGroups"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
+        <field name="valid_from" formElement="date" sortOrder="30">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="options" xsi:type="array">
+                        <item name="showsTime" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="storeTimeZone" xsi:type="string">UTC</item>
+                    <item name="outputDateTimeToISO" xsi:type="boolean">false</item>
+                    <item name="outputDateFormat" xsi:type="string">y-MM-dd HH:mm:ss</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Show from</label>
+                <dataType>text</dataType>
+                <dataScope>valid_from</dataScope>
+            </settings>
+        </field>
+        <field name="valid_to" formElement="date" sortOrder="40">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="options" xsi:type="array">
+                        <item name="showsTime" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="storeTimeZone" xsi:type="string">UTC</item>
+                    <item name="outputDateTimeToISO" xsi:type="boolean">false</item>
+                    <item name="outputDateFormat" xsi:type="string">y-MM-dd HH:mm:ss</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Show until</label>
+                <dataType>text</dataType>
+                <dataScope>valid_to</dataScope>
+            </settings>
+        </field>
+    </fieldset>
+    <fieldset name="matched_products" sortOrder="50">
+        <settings>
+            <label translate="true">Matched products</label>
+            <collapsible>true</collapsible>
+            <opened>false</opened>
+        </settings>
+        <htmlContent name="matched_products_list">
+            <block class="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\MatchedProducts" name="openlabel_label_matched_products"/>
+        </htmlContent>
+    </fieldset>
+</form>

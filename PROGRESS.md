@@ -4,7 +4,7 @@ Fine-grained checkpoint for the OpenLabel build. Updated with every merged PR. T
 
 ## Current milestone
 
-M2 · Admin: **in progress** (started 2026-10-10). M1 · Engine done 2026-10-10 (b6efd54, run 38031715575). M0 · Foundation done 2026-10-09.
+M2 · Admin: **done, pending Iman** (2026-10-10): code, tests, docs and CI complete; waiting for the S1 review and the recorded real-person ≤ 3 min test. M1 · Engine done 2026-10-10 (b6efd54, run 38031715575). M0 · Foundation done 2026-10-09.
 
 ## M2 slices
 
@@ -13,15 +13,15 @@ Plan: S1 waits for Iman's review (first PR of the milestone); S2–S10 are stack
 | # | Slice | State |
 |---|---|---|
 | S1 | 15 system designs (data patch) + WCAG contrast | PR open, awaiting Iman |
-| S2 | Admin menu, routes, label and design grids (inline edit, mass actions, matched count) | todo |
-| S3 | Design form (type cards, colours + contrast badge, per-store text, image upload + SVG sanitizer, custom CSS behind ACL) | todo |
-| S4 | Label form: basics, who-and-when, save bar, duplicate | todo |
-| S5 | Show when: quick toggles + rule tree | todo |
-| S6 | Show where: placements + 3×3 position picker | todo |
-| S7 | Live preview (sticky, desktop/mobile, contrast warning) | todo |
-| S8 | Matched products tab + reindex button | todo |
-| S9 | Empty-state starters | todo |
-| S10 | System config additions + close-out | todo |
+| S2 | Admin menu, routes, label and design grids (inline edit, mass actions, matched count) | PR open (stacked on S1) |
+| S3 | Design form (type cards, colours + contrast badge, per-store text, image upload + SVG sanitizer, custom CSS behind ACL) | PR open (stacked on S2) |
+| S4 | Label form: basics, who-and-when, save bar, duplicate | PR open (stacked on S3) |
+| S5 | Show when: quick toggles + rule tree | PR open (stacked on S4) |
+| S6 | Show where: placements + 3×3 position picker | PR open (stacked on S5) |
+| S7 | Live preview (sticky, desktop/mobile, contrast warning) | PR open (stacked on S6) |
+| S8 | Matched products tab + reindex button | PR open (stacked on S7) |
+| S9 | Empty-state starters | PR open (stacked on S8) |
+| S10 | System config additions + close-out (settings, docs, CHANGELOG, final review fixes) | PR open (stacked on S9) |
 
 ## M1 slices
 
@@ -53,7 +53,7 @@ Plan: S1 waits for Iman's review (first PR of the milestone); S2–S10 are stack
 
 ## Exact next step
 
-M2 S2: admin menu, routes and the two grids, branched from `feat/m2-s1-system-designs`. Ledger: `openlabel-dev-env/modules/M2-ledger.md`.
+M3 · Hyvä render, in a new session. Before that: Iman reviews PR #12 (S1); then retarget the S10 PR to `main` and close #13–#20 as in M1, and Iman runs the recorded ≤ 3 min custom-label test. Ledger: `openlabel-dev-env/modules/M2-ledger.md`.
 
 ## M1 decisions (also in the Notion build log at close-out)
 
@@ -80,8 +80,9 @@ M2 S2: admin menu, routes and the two grids, branched from `feat/m2-s1-system-de
 |---|---|---|---|
 | module-base | 19 tests / 48 assertions | 6 tests / 12 assertions | PHPCS clean, PHPStan 6 clean, LOC guard (408 / 1000 lines) |
 | openlabel (after M1 S7) | 117 / 340 | 59 / 238 (+ perf budget on main/nightly) | PHPCS zero errors, PHPStan 6 clean, coverage gate ≥ 85 % (Variable 96.7, Condition 97.7, Resolver 100, Rule 98.3) |
+| openlabel (after M2) | 203 | 153 (1 skipped: perf) | PHPCS zero errors, PHPStan 6 clean, coverage gate ≥ 85 % now also over `Model/Css` and `Model/Image` |
 | openlabel-hyva | 4 / 13 | 1 | PHPCS clean, PHPStan 6 clean |
-| openlabel-dev-env | — | — | Playwright 20 / 20 (desktop + mobile Chromium) |
+| openlabel-dev-env | — | — | Playwright 43 / 43 (20 storefront desktop + mobile, 23 admin incl. login setup) |
 
 ## Open questions for Iman
 

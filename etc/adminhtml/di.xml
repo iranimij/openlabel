@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Iman Aboheydary. All rights reserved.
+ * See LICENSE for license details (MIT).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\BackButton" type="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\Buttons">
+        <arguments>
+            <argument name="kind" xsi:type="string">back</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\DeleteButton" type="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\Buttons">
+        <arguments>
+            <argument name="kind" xsi:type="string">delete</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\SaveButton" type="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\Buttons">
+        <arguments>
+            <argument name="kind" xsi:type="string">save</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\ConditionsFieldset" type="Magento\Backend\Block\Widget\Form\Renderer\Fieldset">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="template" xsi:type="string">Iranimij_OpenLabel::label/conditions.phtml</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\Conditions">
+        <arguments>
+            <argument name="fieldsetRenderer" xsi:type="object">Iranimij\OpenLabel\Block\Adminhtml\Label\Edit\ConditionsFieldset</argument>
+        </arguments>
+    </type>
+</config>

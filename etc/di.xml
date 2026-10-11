@@ -75,4 +75,24 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="openlabel_label_listing_data_source" xsi:type="string">Iranimij\OpenLabel\Model\ResourceModel\Label\Grid\Collection</item>
+                <item name="openlabel_design_listing_data_source" xsi:type="string">Iranimij\OpenLabel\Model\ResourceModel\Design\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Iranimij\OpenLabel\Model\ResourceModel\Label\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">openlabel_label</argument>
+            <argument name="resourceModel" xsi:type="string">Iranimij\OpenLabel\Model\ResourceModel\Label</argument>
+        </arguments>
+    </type>
+    <type name="Iranimij\OpenLabel\Model\ResourceModel\Design\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">openlabel_design</argument>
+            <argument name="resourceModel" xsi:type="string">Iranimij\OpenLabel\Model\ResourceModel\Design</argument>
+        </arguments>
+    </type>
 </config>
