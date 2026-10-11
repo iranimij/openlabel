@@ -11,8 +11,10 @@ namespace Iranimij\OpenLabel\ViewModel;
 use Iranimij\OpenLabel\Api\Data\ResolvedLabelInterface;
 use Iranimij\OpenLabel\Api\LabelResolverInterface;
 use Iranimij\Base\Model\Config\TypedReader;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -20,12 +22,18 @@ use Magento\Store\Model\StoreManagerInterface;
  * Template-facing access to resolved labels, memoized per request: the listing calls getForProducts() once with
  * every product id of the page, the item templates then read from memory (02 · Architecture §4, §12).
  */
-class Labels implements ArgumentInterface
+class Labels implements ArgumentInterface, ResetAfterRequestInterface
 {
     public const CONFIG_ENABLED = 'openlabel/general/enabled';
 
     /** @var array<int, ResolvedLabelInterface[]> */
     private array $resolved = [];
+
+    /** @var array<int, ProductInterface> products of the page's collections, by id */
+    private array $products = [];
+
+    /** @var array<int, true> remembered ids not resolved yet */
+    private array $pending = [];
 
     /**
      * @param LabelResolverInterface $resolver
@@ -61,7 +69,9 @@ class Labels implements ArgumentInterface
             return [];
         }
         $productIds = array_values(array_unique(array_map('intval', $productIds)));
-        $missing = array_values(array_filter($productIds, fn (int $id): bool => !array_key_exists($id, $this->resolved)));
+        $wanted = array_values(array_unique(array_merge($productIds, array_keys($this->pending))));
+        $this->pending = [];
+        $missing = array_values(array_filter($wanted, fn (int $id): bool => !array_key_exists($id, $this->resolved)));
         if ($missing !== []) {
             $fresh = $this->resolver->getForProducts($missing, $this->storeId(), $this->customerGroupId());
             foreach ($missing as $id) {
@@ -76,6 +86,44 @@ class Labels implements ArgumentInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Remember the products of a loaded collection: they are resolved together with the first product a template
+     * asks for (one query for the page), and their loaded prices feed the label variables.
+     *
+     * @param ProductInterface[] $products
+     * @return void
+     */
+    public function remember(array $products): void
+    {
+        foreach ($products as $product) {
+            $id = (int) $product->getId();
+            if ($id === 0) {
+                continue;
+            }
+            $this->products[$id] = $product;
+            if (!array_key_exists($id, $this->resolved)) {
+                $this->pending[$id] = true;
+            }
+        }
+    }
+
+    /**
+     * @param int $productId
+     * @return ProductInterface|null
+     */
+    public function getRememberedProduct(int $productId): ?ProductInterface
+    {
+        return $this->products[$productId] ?? null;
+    }
+
+    /**
+     * @return array<int, ProductInterface>
+     */
+    public function getRememberedProducts(): array
+    {
+        return $this->products;
     }
 
     /**
@@ -136,5 +184,17 @@ class Labels implements ArgumentInterface
     private function customerGroupId(): int
     {
         return (int) $this->httpContext->getValue(CustomerContext::CONTEXT_GROUP);
+    }
+
+    /**
+     * Per-request memory is dropped between requests (application server, integration tests).
+     *
+     * @return void
+     */
+    public function _resetState(): void
+    {
+        $this->resolved = [];
+        $this->products = [];
+        $this->pending = [];
     }
 }
