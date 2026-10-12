@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://iranimij.github.io/openlabel/rest-api/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>REST API - OpenLabel</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "REST API";
+        var mkdocs_page_input_path = "rest-api.md";
+        var mkdocs_page_url = "/openlabel/rest-api/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> OpenLabel
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../install/">Install and upgrade</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../admin/">Admin</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../storefront/">Storefront</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../cli/">CLI</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../graphql/">GraphQL</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">REST API</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#access">Access</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#routes">Routes</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#a-label">A label</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#a-design">A design</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#errors">Errors</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../import-export/">Export and import</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Developers</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../engine/">The engine</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../hyva-integration/">Hyvä integration</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">OpenLabel</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">REST API</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/iranimij/openlabel/edit/main/docs/rest-api.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="rest-api">REST API<a class="headerlink" href="#rest-api" title="Permanent link">&para;</a></h1>
+<p>From 1.1, labels and designs can be created, read, changed and deleted over Magento's REST API, for example by a PIM
+or ERP that adds a "Clearance" label during its product import. The storefront needs none of this: product labels for
+headless storefronts come from <a href="../graphql/">GraphQL</a>.</p>
+<h2 id="access">Access<a class="headerlink" href="#access" title="Permanent link">&para;</a></h2>
+<p>Every call needs a token of an admin user or an integration. The role decides what the token may do:</p>
+<table>
+<thead>
+<tr>
+<th>Routes</th>
+<th>Permission (System › Permissions › User Roles › Role Resources)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/V1/openlabel/labels…</code></td>
+<td>Catalog › OpenLabel › Labels (<code>Iranimij_OpenLabel::labels</code>)</td>
+</tr>
+<tr>
+<td><code>/V1/openlabel/designs…</code></td>
+<td>Catalog › OpenLabel › Designs (<code>Iranimij_OpenLabel::designs</code>)</td>
+</tr>
+<tr>
+<td>custom CSS of a design</td>
+<td>also Edit custom CSS of designs (<code>Iranimij_OpenLabel::custom_css</code>)</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash">TOKEN=$(curl -s -X POST https://shop.example/rest/V1/integration/admin/token \
+  -H 'Content-Type: application/json' -d '{&quot;username&quot;:&quot;api-user&quot;,&quot;password&quot;:&quot;…&quot;}' | tr -d '&quot;')
+curl -s https://shop.example/rest/V1/openlabel/labels/12 -H &quot;Authorization: Bearer $TOKEN&quot;
+</code></pre>
+<p>Without a token, or with a role that lacks the permission, the answer is <code>401</code>.</p>
+<h2 id="routes">Routes<a class="headerlink" href="#routes" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Method and path</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /V1/openlabel/labels/:labelId</code></td>
+<td>One label with its placements</td>
+</tr>
+<tr>
+<td><code>GET /V1/openlabel/labels?searchCriteria…</code></td>
+<td>Labels matching Magento search criteria (filters, sort, pages)</td>
+</tr>
+<tr>
+<td><code>POST /V1/openlabel/labels</code></td>
+<td>Creates a label: body <code>{"label": {…}}</code></td>
+</tr>
+<tr>
+<td><code>PUT /V1/openlabel/labels/:labelId</code></td>
+<td>Replaces the label: body <code>{"label": {…}}</code></td>
+</tr>
+<tr>
+<td><code>DELETE /V1/openlabel/labels/:labelId</code></td>
+<td>Deletes the label</td>
+</tr>
+<tr>
+<td><code>GET /V1/openlabel/designs/:designId</code></td>
+<td>One design</td>
+</tr>
+<tr>
+<td><code>GET /V1/openlabel/designs?searchCriteria…</code></td>
+<td>Designs matching search criteria</td>
+</tr>
+<tr>
+<td><code>POST /V1/openlabel/designs</code></td>
+<td>Creates a design: body <code>{"design": {…}}</code></td>
+</tr>
+<tr>
+<td><code>PUT /V1/openlabel/designs/:designId</code></td>
+<td>Replaces the design: body <code>{"design": {…}}</code></td>
+</tr>
+<tr>
+<td><code>DELETE /V1/openlabel/designs/:designId</code></td>
+<td>Deletes the design (refused while labels use it)</td>
+</tr>
+</tbody>
+</table>
+<p><code>PUT</code> replaces the whole entity: send every field, as <code>GET</code> returned it, with your changes. Fields left out take their
+defaults. <code>created_at</code> and <code>updated_at</code> may be sent back; they are ignored.</p>
+<p>A saved label is matched to its products at once, and the pages that show it are cleaned from the cache, exactly as
+when it is saved in the admin. A saved design rebuilds the label stylesheet.</p>
+<h2 id="a-label">A label<a class="headerlink" href="#a-label" title="Permanent link">&para;</a></h2>
+<pre><code class="language-json">{
+  &quot;label&quot;: {
+    &quot;name&quot;: &quot;Clearance&quot;,
+    &quot;status&quot;: 1,
+    &quot;priority&quot;: 5,
+    &quot;design_id&quot;: 2,
+    &quot;store_ids&quot;: [],
+    &quot;customer_group_ids&quot;: [],
+    &quot;valid_from&quot;: null,
+    &quot;valid_to&quot;: &quot;2026-12-31 23:59:59&quot;,
+    &quot;conditions_serialized&quot;: &quot;{\&quot;type\&quot;:\&quot;Iranimij\\\\OpenLabel\\\\Model\\\\Rule\\\\Condition\\\\Combine\&quot;,\&quot;aggregator\&quot;:\&quot;all\&quot;,\&quot;value\&quot;:\&quot;1\&quot;,\&quot;conditions\&quot;:[{\&quot;type\&quot;:\&quot;Iranimij\\\\OpenLabel\\\\Model\\\\Rule\\\\Condition\\\\Product\&quot;,\&quot;attribute\&quot;:\&quot;sku\&quot;,\&quot;operator\&quot;:\&quot;()\&quot;,\&quot;value\&quot;:\&quot;24-MB01, 24-MB04\&quot;}]}&quot;,
+    &quot;apply_to_parent&quot;: true,
+    &quot;hide_lower_priority&quot;: false,
+    &quot;hide_on_zero_variable&quot;: false,
+    &quot;click_url&quot;: &quot;/sale.html&quot;,
+    &quot;click_nofollow&quot;: false,
+    &quot;placements&quot;: [
+      { &quot;area&quot;: &quot;listing&quot;, &quot;position&quot;: &quot;tr&quot; },
+      { &quot;area&quot;: &quot;product&quot;, &quot;position&quot;: &quot;tl&quot;, &quot;max_labels&quot;: 2 }
+    ]
+  }
+}
+</code></pre>
+<ul>
+<li><code>status</code>: <code>1</code> enabled, <code>0</code> disabled. <code>priority</code>: <code>0</code> is the highest.</li>
+<li><code>store_ids</code>, <code>customer_group_ids</code>: empty means all.</li>
+<li><code>valid_from</code>, <code>valid_to</code>: UTC, or <code>null</code>.</li>
+<li><code>conditions_serialized</code>: the conditions as JSON text in Magento's rule format, the same as in an
+  <a href="../import-export/">export file</a>. The easiest way to get it right is to build the conditions in the admin once and
+  read the label with <code>GET</code>. Empty or <code>null</code> matches every product.</li>
+<li>Placements: <code>area</code> is <code>listing</code>, <code>product</code>, <code>cart</code>, <code>minicart</code>, <code>wishlist</code>, <code>compare</code> or <code>email</code>; <code>position</code> as in
+  <a href="../graphql/">GraphQL</a>. The other placement fields (<code>offset_x</code>, <code>offset_y</code>, <code>max_labels</code>, <code>stacking</code>, <code>gap</code>,
+  <code>pin_physical_side</code>, <code>sort_order</code>) are optional.</li>
+</ul>
+<p>Products assigned by hand on the product edit page are not part of the label in the API.</p>
+<h2 id="a-design">A design<a class="headerlink" href="#a-design" title="Permanent link">&para;</a></h2>
+<pre><code class="language-json">{
+  &quot;design&quot;: {
+    &quot;name&quot;: &quot;Clearance (orange)&quot;,
+    &quot;type&quot;: &quot;shape&quot;,
+    &quot;shape&quot;: &quot;pill&quot;,
+    &quot;bg_color&quot;: &quot;#c2410c&quot;,
+    &quot;text_color&quot;: &quot;#ffffff&quot;,
+    &quot;size_mode&quot;: &quot;percent&quot;,
+    &quot;width&quot;: 24,
+    &quot;font_size&quot;: 14,
+    &quot;animation&quot;: &quot;none&quot;,
+    &quot;hover_effect&quot;: &quot;grow&quot;,
+    &quot;sizes&quot;: { &quot;sm&quot;: { &quot;width&quot;: 40 } },
+    &quot;store_texts&quot;: {
+      &quot;0&quot;: { &quot;text&quot;: &quot;Clearance -{SAVE_PERCENT}%&quot;, &quot;tooltip&quot;: &quot;Only while stock lasts&quot; },
+      &quot;2&quot;: { &quot;text&quot;: &quot;Abverkauf -{SAVE_PERCENT}%&quot; }
+    }
+  }
+}
+</code></pre>
+<ul>
+<li><code>store_texts</code> maps a store view ID to its <code>text</code>, <code>alt_text</code> and <code>tooltip</code>; <code>0</code> is the default for all store views.
+  In answers it is a JSON object, or a list when the IDs are 0, 1, 2…, where the position is the store ID. Both forms
+  can be sent back.</li>
+<li><code>sizes</code> holds overrides for phones (<code>sm</code>), tablets (<code>md</code>) and desktops (<code>lg</code>): <code>width</code> and <code>font_size</code>.</li>
+<li>Image designs (<code>"type": "image"</code>): upload the image in the admin first, then use its <code>image_path</code> (e.g.
+  <code>designs/clearance.png</code>). Paths of files that were not uploaded there are refused.</li>
+<li><code>custom_css</code> is saved only when the token's role has "Edit custom CSS of designs"; otherwise the design keeps the
+  CSS it had. It is sanitized like in the admin.</li>
+<li>The built-in designs (<code>"system": true</code>) cannot be changed or deleted, and a new design cannot be marked as built in.</li>
+</ul>
+<h2 id="errors">Errors<a class="headerlink" href="#errors" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>400</code></td>
+<td>The entity breaks a rule, e.g. no placement, an unknown position, a link starting with <code>javascript:</code>. The answer lists every problem under <code>errors</code>. Also for built-in designs and images that were not uploaded.</td>
+</tr>
+<tr>
+<td><code>401</code></td>
+<td>No token, or the role lacks the permission</td>
+</tr>
+<tr>
+<td><code>404</code></td>
+<td>No label or design with that ID</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../graphql/" class="btn btn-neutral float-left" title="GraphQL"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../import-export/" class="btn btn-neutral float-right" title="Export and import">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/iranimij/openlabel" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../graphql/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../import-export/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -70,6 +70,10 @@
                 </li>
               </ul>
               <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../rest-api/">REST API</a>
+                </li>
+              </ul>
+              <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../import-export/">Export and import</a>
                 </li>
               </ul>
@@ -143,11 +147,11 @@
 </tr>
 <tr>
 <td><code>position</code></td>
-<td><code>tl tc tr ml mc mr bl bc br</code></td>
+<td>on the image <code>tl tc tr ml mc mr bl bc br</code>; around it <code>above_l above_c above_r below_l below_c below_r left_t left_m left_b right_t right_m right_b</code>; in the product text <code>near_price near_cart under_name</code></td>
 </tr>
 <tr>
 <td><code>area</code></td>
-<td><code>listing</code> or <code>product</code></td>
+<td><code>listing</code>, <code>product</code>, <code>cart</code>, <code>minicart</code>, <code>wishlist</code>, <code>compare</code> or <code>email</code></td>
 </tr>
 <tr>
 <td><code>css_class</code></td>
@@ -160,6 +164,14 @@
 <tr>
 <td><code>priority</code></td>
 <td>0 is the highest</td>
+</tr>
+<tr>
+<td><code>tooltip</code></td>
+<td>Tooltip for the store view with variables filled in, plain text; <code>null</code> without one (1.1)</td>
+</tr>
+<tr>
+<td><code>click_url</code>, <code>click_nofollow</code></td>
+<td>Click-through link (<code>https://</code>, <code>http://</code> or a shop path starting with <code>/</code>) and whether it should carry <code>rel="nofollow"</code> (1.1)</td>
 </tr>
 </tbody>
 </table>
@@ -186,7 +198,7 @@ logged-in customers from the cache too.</p>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
         <a href="../cli/" class="btn btn-neutral float-left" title="CLI"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../import-export/" class="btn btn-neutral float-right" title="Export and import">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../rest-api/" class="btn btn-neutral float-right" title="REST API">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -216,7 +228,7 @@ logged-in customers from the cache too.</p>
       <span><a href="../cli/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../import-export/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../rest-api/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

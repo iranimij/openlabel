@@ -64,6 +64,10 @@
                 </li>
               </ul>
               <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../rest-api/">REST API</a>
+                </li>
+              </ul>
+              <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../import-export/">Export and import</a>
                 </li>
               </ul>
@@ -143,6 +147,10 @@ admin (M2), Hyvä rendering (M3) and GraphQL / import (M4) build on it.</p>
 <td>one <em>where</em> per label: area (<code>listing</code>, <code>product</code>), position (<code>tl … br</code>), optional design override, offsets, <code>max_labels</code>, stacking, gap</td>
 </tr>
 <tr>
+<td><code>openlabel_label_product</code></td>
+<td>products assigned to a label by hand on the product edit page (1.1); the indexer adds them to the label's matches, still within its status, store views, customer groups and dates, and only when the product is enabled in that store</td>
+</tr>
+<tr>
 <td><code>openlabel_index</code></td>
 <td>the result: (<code>label_id</code>, <code>product_id</code>, <code>store_id</code>, <code>customer_group_id</code>) with the label's priority and window copied in; <code>customer_group_id = -1</code> means every group</td>
 </tr>
@@ -194,6 +202,21 @@ category, SKU, attribute set; store-scoped attributes are evaluated per store vi
 <td><code>review_count</code></td>
 <td>review summary of the store view</td>
 </tr>
+<tr>
+<td>Bestseller (1.1)</td>
+<td><code>sold_last_7d</code>, <code>sold_last_30d</code>, <code>sold_last_90d</code> (units), <code>sales_rank_30d</code> (1 = best)</td>
+<td>order items of the website's store views; canceled and refunded quantities do not count; a configurable sale counts for the configurable</td>
+</tr>
+<tr>
+<td>Most viewed (1.1)</td>
+<td><code>views_last_7d</code>, <code>views_last_30d</code>, <code>view_rank_30d</code></td>
+<td>product view events of Magento's reports (<code>report_event</code>; keep product view reports enabled)</td>
+</tr>
+<tr>
+<td>Ships free (1.1)</td>
+<td><code>free_shipping</code> (yes/no)</td>
+<td>an active cart rule without coupon and without conditions that gives free shipping to the website and group, or the product's final price (price index) reaching the free shipping method's minimum order amount</td>
+</tr>
 </tbody>
 </table>
 <p><strong>Operators.</strong> Numeric built-ins offer <em>is</em>, <em>is not</em>, <em>equals or greater than</em>, <em>greater than</em>, <em>equals or less
@@ -205,13 +228,18 @@ condition is tested with every operator it offers (<code>Test/Integration/Model/
 for price conditions, without a rating for <code>rating</code>, without a stock row (and composites) for <code>salable_qty</code>, and a
 product without a value for a product attribute condition (e.g. "news from date on or before 2020-01-01" does not
 pick up products without that date). A product without reviews has <code>review_count</code> 0, so "review count is 0" finds
-products nobody reviewed yet. This holds on every supported Magento version: 2.4.7 and 2.4.8 would otherwise
+products nobody reviewed yet. Likewise products without sales or views count 0 units / 0 views but have <strong>no
+rank</strong>, so "bestseller rank at most 10" only picks products that sold. This holds on every supported Magento version: 2.4.7 and 2.4.8 would otherwise
 treat missing values as 0.</p>
+<p><strong>Daily refresh.</strong> Bestseller, most viewed, ships free and the "days since" conditions change with time, not with
+product saves: labels using them are reindexed by the daily cron (<code>openlabel_daily_is_new</code>, despite its name it covers every time-dependent condition), so a new
+bestseller appears within a day. Run <code>bin/magento openlabel:reindex &lt;label_id&gt;</code> to refresh one sooner.</p>
 <p>Matching happens in SQL: the tree is attached to a product collection with <code>Iranimij\OpenLabel\Model\Rule\SqlBuilder</code>,
-the core rule builder with two changes. It keeps the joins of every condition when it recurses into nested groups
+the core rule builder with three changes. It keeps the joins of every condition when it recurses into nested groups
 (the core one drops those collected before a nested group, which broke quick switches combined with advanced
 conditions). And it writes the SQL of every condition itself (the core operators, without the <code>IFNULL(field, 0)</code> of 2.4.7 and
-2.4.8), so the rules above hold on every Magento version. PHP <code>validate()</code> exists
+2.4.8), so the rules above hold on every Magento version. And a condition may join a bounded subquery instead of
+a table (the 7/30/90-day sales and view counts with their <code>RANK()</code>). PHP <code>validate()</code> exists
 on every condition for previews and tests. Custom conditions: extend
 <code>Iranimij\OpenLabel\Model\Condition\AbstractBuiltIn</code> and register the class in the
 <code>Iranimij\OpenLabel\Model\Condition\ConditionPool</code> <code>types</code> argument.</p>
@@ -254,13 +282,26 @@ on every condition for previews and tests. Custom conditions: extend
 <p>Label text may contain variables, substituted at render time from the already loaded product (no extra
 queries for prices and stock):</p>
 <p><code>{SAVE_PERCENT}</code> <code>{SAVE_AMOUNT}</code> <code>{PRICE}</code> <code>{SPECIAL_PRICE}</code> <code>{FINAL_PRICE}</code> <code>{STOCK_QTY}</code> <code>{NEW_FOR}</code> <code>{SKU}</code>
-<code>{ATTR:code}</code> <code>{BR}</code> <code>{SPECIAL_ENDS_IN}</code> <code>{SPECIAL_END_DATE}</code> <code>{RATING}</code> <code>{REVIEW_COUNT}</code> <code>{SOLD_LAST_30D}</code></p>
+<code>{ATTR:code}</code> <code>{BR}</code> <code>{SPECIAL_ENDS_IN}</code> <code>{SPECIAL_END_DATE}</code> <code>{RATING}</code> <code>{REVIEW_COUNT}</code> <code>{SOLD_LAST_30D}</code>
+<code>{CATEGORY_NAME}</code> <code>{BRAND}</code> <code>{COUNTDOWN}</code></p>
 <p>Numbers, currency amounts and dates are formatted for the store's locale. Values are escaped; the text itself
 may use <code>b strong i em br span small sup sub</code> (attributes other than <code>class</code>, <code>id</code>, <code>title</code>, <code>style</code> are
 removed). Unknown variables stay literal so typos are visible. A zero number renders as "0" and is reported as
-empty, which the 1.1 "hide label when a variable is zero/empty" flag will use. <code>{RATING}</code>, <code>{REVIEW_COUNT}</code> and
-<code>{SOLD_LAST_30D}</code> load their data once per listing through <code>VariablePreloadInterface</code>; <code>{SPECIAL_ENDS_IN}</code>
-treats <code>special_to_date</code> as valid through that day. Custom variables implement
+empty: a label with <strong>Hide when a variable is zero</strong> on is left out on such products (storefront and GraphQL).
+The label is dropped after the priority rules, so it does not free its place in a full stack, and its
+"hide other labels" still applies. <code>{RATING}</code>, <code>{REVIEW_COUNT}</code>, <code>{SOLD_LAST_30D}</code> and <code>{CATEGORY_NAME}</code> load
+their data once per listing through <code>VariablePreloadInterface</code>; <code>{SPECIAL_ENDS_IN}</code> treats <code>special_to_date</code> as
+valid through that day.</p>
+<p><code>{COUNTDOWN}</code> is the time left until the special price ends ("2d 04:12:09", the end of its last day like
+<code>{SPECIAL_ENDS_IN}</code>), ticked every second by the theme script; screen readers read the end date instead.
+Markup produced by variables (<code>{BR}</code>, <code>{COUNTDOWN}</code>) keeps its attributes; the allow-list cleans the
+merchant's text only.</p>
+<p><code>{CATEGORY_NAME}</code> is the category being browsed on a category page. Everywhere else (product page, search,
+widgets, GraphQL) it is the product's deepest active category in the store's tree, never the category the
+shopper came from, so cached pages stay correct. Renaming a category updates labels on that category's pages
+at once and elsewhere when the product's page cache is next cleaned. <code>{BRAND}</code> shows the attribute set under
+<strong>Stores › Configuration › Iranimij › OpenLabel › Label text variables</strong> (default <code>manufacturer</code>), like
+<code>{ATTR:code}</code>; on listings the attribute needs "Used in Product Listing". Custom variables implement
 <code>Iranimij\OpenLabel\Api\VariableProcessorInterface</code> and are registered in the
 <code>Iranimij\OpenLabel\Model\Variable\Pool</code> <code>processors</code> argument.</p>
 <h2 id="resolver">Resolver<a class="headerlink" href="#resolver" title="Permanent link">&para;</a></h2>

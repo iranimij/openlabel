@@ -64,6 +64,10 @@
                 </li>
               </ul>
               <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../rest-api/">REST API</a>
+                </li>
+              </ul>
+              <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../import-export/">Export and import</a>
                 </li>
               </ul>
@@ -82,6 +86,12 @@
     <li class="toctree-l2"><a class="reference internal" href="#4-container-queries-fe3">4. Container queries (FE3)</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#5-custom-theme-fallback">5. Custom theme fallback</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#6-labels-in-the-product-text-11">6. Labels in the product text (1.1)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#7-variants-and-countdown-11">7. Variants and countdown (1.1)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#8-item-lists-11">8. Item lists (1.1)</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#hyva-15-verified-on-default-theme-152-2026-10-11">Hyvä 1.5 (verified on default theme 1.5.2, 2026-10-11)</a>
     </li>
@@ -245,6 +255,38 @@
 <p>Absolutely positioned elements on the card (FE5): only the swatch radio inputs (<code>input.absolute.product-option-value-input</code>, visually under the swatch buttons, below the image) and <code>sr-only</code> helpers. Nothing overlaps the image area, so all four corners are free for labels.</p>
 <h2 id="5-custom-theme-fallback">5. Custom theme fallback<a class="headerlink" href="#5-custom-theme-fallback" title="Permanent link">&para;</a></h2>
 <p>Themes that override <code>product/list/image.phtml</code> with another template name or rename <code>#gallery-main</code> render the labels themselves: one <code>getChildHtml('openlabel.product.labels')</code> call in the gallery, one <code>LabelRenderer::getStacksHtml()</code> call in the listing image. Exact snippets: <a href="../storefront/#custom-themes">storefront.md</a>. The plugins detect the <code>ol-stack</code> marker and never render twice.</p>
+<h2 id="6-labels-in-the-product-text-11">6. Labels in the product text (1.1)<a class="headerlink" href="#6-labels-in-the-product-text-11" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Listing, next to the price:</strong> <code>Plugin\PriceBoxPlugin</code> appends the stack to <code>Magento\Catalog\Pricing\Render\FinalPriceBox</code>
+  in the <code>item_list</code> zone (every product card, widget and slider).</li>
+<li><strong>Listing, under the name and next to Add to Cart:</strong> the card has no child block there, so
+  <code>Plugin\ListItemPlugin</code> inserts the stacks right after <code>a.product-item-link</code> and <code>[data-addto="cart"]</code> of the
+  rendered <code>Magento_Catalog::product/list/item.phtml</code>. Cards without those elements keep their markup.</li>
+<li><strong>Product page:</strong> <code>Plugin\InlineSlotPlugin</code> appends the stacks after the layout elements <code>product.info.title</code>,
+  <code>product.info.price</code> and <code>product.info.addtocart</code>. A theme that renames them adds its names to the
+  <code>productPageSlots</code> argument of the plugin in <code>etc/frontend/di.xml</code>.</li>
+<li>All three render inside the cached card or page, tagged like the image labels; no JavaScript.</li>
+</ul>
+<h2 id="7-variants-and-countdown-11">7. Variants and countdown (1.1)<a class="headerlink" href="#7-variants-and-countdown-11" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>Block\ProductLabels</code> renders <code>LabelRenderer::getProductPageStacksHtml()</code>: for a configurable product the
+  stacks also hold each variant's labels (the product's own labels plus the variant's, arranged by priority),
+  hidden with <code>ol-label--hidden</code> and tagged <code>data-ol-variant</code>. Parent and variants are resolved with one query.</li>
+<li><code>Block\Script</code> (<code>openlabel.script</code> in <code>before.body.end</code>, template <code>js/labels.phtml</code>) is rendered only when the
+  page needs it (<code>LabelRenderer::isScriptNeeded()</code>, also set by product cards served from the block cache). It
+  listens to <code>configurable-selection-changed</code> and ticks <code>.ol-countdown[data-ol-end]</code>; the inline script is
+  registered with <code>$hyvaCsp-&gt;registerInlineScript()</code>.</li>
+</ul>
+<h2 id="8-item-lists-11">8. Item lists (1.1)<a class="headerlink" href="#8-item-lists-11" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Cart page:</strong> <code>Plugin\Items\CartItemPlugin</code> inserts the item's labels after <code>h3.product-item-name</code> of
+  <code>php-cart/item/default.phtml</code>.</li>
+<li><strong>Mini cart:</strong> Hyvä renders each item's <code>product_price</code> from the cart section as HTML, so
+  <code>Plugin\Items\MiniCartItemPlugin</code> appends the labels there (<code>AbstractItem::getItemData</code>). No JavaScript; the
+  labels update when the cart section reloads.</li>
+<li><strong>Wish list:</strong> <code>Plugin\Items\WishlistItemPlugin</code> after the name column (<code>Item\Column\Info</code>).</li>
+<li><strong>Compare page:</strong> <code>Plugin\Items\CompareListPlugin</code> after each product's name link, found by its URL.</li>
+</ul>
 <h2 id="hyva-15-verified-on-default-theme-152-2026-10-11">Hyvä 1.5 (verified on default theme 1.5.2, 2026-10-11)<a class="headerlink" href="#hyva-15-verified-on-default-theme-152-2026-10-11" title="Permanent link">&para;</a></h2>
 <p>Hyvä 1.5 rebuilt the product gallery as a snap slider:</p>
 <ul>

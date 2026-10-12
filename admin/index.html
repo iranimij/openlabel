@@ -56,6 +56,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#label-form">Label form</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#on-the-product-page-11">On the product page (1.1)</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#designs">Designs</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#settings">Settings</a>
@@ -75,6 +77,10 @@
               </ul>
               <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../graphql/">GraphQL</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../rest-api/">REST API</a>
                 </li>
               </ul>
               <ul>
@@ -156,15 +162,15 @@
 <tbody>
 <tr>
 <td>Basics</td>
-<td>Name (admin only), switch it on or off, pick a design from thumbnails (or create one in a new tab and press "Refresh designs"), priority (lower number wins), "hide other labels", "show on configurable, grouped and bundle products".</td>
+<td>Name (admin only), switch it on or off, pick a design from thumbnails (or create one in a new tab and press "Refresh designs"), priority (lower number wins), "hide other labels", "hide when a variable is zero" (e.g. leave "Only {STOCK_QTY} left" out when the quantity is 0), a link (a page of this shop such as <code>/sale.html</code>, or <code>https://…</code>; <code>javascript:</code> and other schemes are refused) with "ask search engines not to follow the link", "show on configurable, grouped and bundle products".</td>
 </tr>
 <tr>
 <td>Show when</td>
-<td>Switches for the common cases — On sale (minimum discount %), New (days), Low stock (pieces left), Out of stock, Well rated (stars) — and the advanced rule tree for anything else (any product attribute, category, SKU, attribute set, type). A product must match the switches <strong>and</strong> the tree. Nothing switched on means every product.</td>
+<td>Switches for the common cases — On sale (minimum discount %), New (days), Low stock (pieces left), Out of stock, Well rated (stars), Bestseller (among the top N by units sold in the last 30 days) — and the advanced rule tree for anything else (any product attribute, category, SKU, attribute set, type). A product must match the switches <strong>and</strong> the tree. Nothing switched on means every product.</td>
 </tr>
 <tr>
 <td>Show where</td>
-<td>One row per placement: page (category/search/widgets or product page), position with the 3×3 picker (arrow keys work), a different design for this page, max labels in that corner, stacking, gap, offsets and "keep left/right in RTL".</td>
+<td>One row per placement: page (category/search/widgets, product page, and since 1.1 the shopping cart, mini cart, wish list, compare page and order emails, where labels show as text next to the item), position with the picker (arrow keys work): the 3×3 grid on the image, the dashed band around it (above, below, left, right), or in the product text next to the price, next to Add to Cart or under the name, a different design for this page, max labels in that corner, stacking, gap, offsets and "keep left/right in RTL".</td>
 </tr>
 <tr>
 <td>Who and when</td>
@@ -178,16 +184,27 @@
 </table>
 <p>The <strong>live preview</strong> panel (bottom right, can be hidden) renders the chosen design on a sample product with the same structural CSS as the shop: every placement of the selected page, variables filled with sample values ({SAVE_PERCENT} → 25), desktop and mobile widths, a warning when text contrast is below 4.5:1, and "Preview as" a customer group.</p>
 <p>Save, Save &amp; Continue and Save &amp; Duplicate (creates a disabled copy). Problems are listed above the form without a page reload, each saying what to do, for example "Pick at least one placement so the label appears somewhere."</p>
+<h2 id="on-the-product-page-11">On the product page (1.1)<a class="headerlink" href="#on-the-product-page-11" title="Permanent link">&para;</a></h2>
+<p>Catalog › Products › edit a product › <strong>OpenLabel</strong> (needs the Labels permission):</p>
+<ul>
+<li><strong>Labels this product shows now</strong>, from the index (any store view and customer group), each linking to its
+  label; "(by hand)" marks the ones assigned here.</li>
+<li><strong>Always show these labels</strong>: the product shows them whatever their conditions, within their store views,
+  customer groups and dates. Saving the product reindexes the labels you add or remove.</li>
+</ul>
+<p>Assignments are not part of the export file yet; they go with their label or product when either is deleted.</p>
 <h2 id="designs">Designs<a class="headerlink" href="#designs" title="Permanent link">&para;</a></h2>
 <p>Choose <strong>Text</strong>, <strong>Image</strong> or <strong>Shape</strong>; the form shows only what that type needs.</p>
 <ul>
 <li><strong>Text and shape:</strong> label text with a variable picker and a 24-character counter, colours with a live contrast badge (green ≥ 4.5:1, amber ≥ 3:1, red below), border, shape (rectangle, pill, circle, ribbon, corner) and rotation presets.</li>
-<li><strong>Image:</strong> PNG, JPG, GIF, WebP or SVG up to 1 MB (a warning above 50 KB). The real content type is checked; SVGs are cleaned (no scripts, event handlers, external references or entities). Width and height are stored so images never shift the layout. Alternative text is required.</li>
-<li><strong>Size:</strong> percent of the product image width (default) or pixels.</li>
+<li><strong>Image:</strong> PNG, JPG, GIF, WebP, AVIF or SVG up to 1 MB (the limit is a setting; a warning above 50 KB). The real content type is checked; SVGs are cleaned (no scripts, event handlers, external references or entities). Width and height are stored so images never shift the layout. Alternative text is required.</li>
+<li><strong>Size:</strong> percent of the product image width (default) or pixels. Optional overrides of the width and the largest font size for phones (up to 639 px wide), tablets (640–1023 px) and desktops (1024 px and up).</li>
+<li><strong>Motion:</strong> an entry animation (fade in, pop in) that plays once, and a hover effect (grow, lift) while the shopper points at the product. CSS only; not on touch screens for hover, and never for shoppers who ask their device for reduced motion.</li>
+<li><strong>Tooltip:</strong> optional, per store view, variables allowed (e.g. "Offer ends {SPECIAL_END_DATE}"). Shown when the shopper points at the label or moves to it with the keyboard.</li>
 <li><strong>Text per store view:</strong> each store view uses the default text unless you untick "Use the default text".</li>
 <li><strong>Custom CSS:</strong> only for users with the "Edit custom CSS of designs" permission; <code>@media</code>, <code>@supports</code> and <code>@container</code> blocks are kept; other at-rules (such as <code>@import</code>), expressions, script URLs and escapes are removed before it is saved.</li>
 </ul>
-<p>The 15 built-in designs are locked: open one and press <strong>Duplicate to edit</strong>. They pass WCAG AA contrast. Designs used by labels and built-in designs cannot be deleted.</p>
+<p>The 31 built-in designs are locked: open one and press <strong>Duplicate to edit</strong>. Their texts follow the store view's language (<a href="../storefront/#languages-label-packs-11">label packs</a>); a copy keeps the English text until you enter your own per store view. They pass WCAG AA contrast. Designs used by labels and built-in designs cannot be deleted.</p>
 <h2 id="settings">Settings<a class="headerlink" href="#settings" title="Permanent link">&para;</a></h2>
 <p>Stores › Configuration › Iranimij › OpenLabel:</p>
 <table>
@@ -219,8 +236,29 @@
 <td>No</td>
 <td>Adds <code>data-ol-label</code> attributes to the shop markup (render package, M3).</td>
 </tr>
+<tr>
+<td>Hide labels on these pages</td>
+<td>none</td>
+<td>Page types without labels (home, category, search, product, other content pages, cart, wish list, compare); no query is made there. Flush the page cache after a change.</td>
+</tr>
+<tr>
+<td>Hide labels on these other pages</td>
+<td>empty</td>
+<td>More pages by full action name, one per line (e.g. <code>brand_index_view</code>).</td>
+</tr>
+<tr>
+<td>Brand attribute (Label text variables)</td>
+<td><code>manufacturer</code></td>
+<td>The attribute <code>{BRAND}</code> shows.</td>
+</tr>
+<tr>
+<td>Largest image upload (Images)</td>
+<td>1024 KB</td>
+<td>50 to 5120 KB.</td>
+</tr>
 </tbody>
 </table>
+<p><strong>Global CSS</strong> has its own section (Stores › Configuration › Iranimij › OpenLabel custom CSS) and permission: CSS added after all designs in the label stylesheet of every store, cleaned like the custom CSS of designs. Saving it rebuilds the stylesheet.</p>
 <h2 id="permissions">Permissions<a class="headerlink" href="#permissions" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -241,6 +279,10 @@
 <tr>
 <td><code>Iranimij_OpenLabel::custom_css</code></td>
 <td>Editing custom CSS of designs</td>
+</tr>
+<tr>
+<td><code>Iranimij_OpenLabel::global_css</code></td>
+<td>The global CSS settings section</td>
 </tr>
 <tr>
 <td><code>Iranimij_OpenLabel::config</code></td>

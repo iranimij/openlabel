@@ -58,6 +58,10 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#markup-contract-stable-from-10">Markup contract (stable from 1.0)</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#order-emails-11">Order emails (1.1)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#languages-label-packs-11">Languages: label packs (1.1)</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#right-to-left-stores">Right-to-left stores</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#caching">Caching</a>
@@ -73,6 +77,10 @@
               </ul>
               <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../graphql/">GraphQL</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../rest-api/">REST API</a>
                 </li>
               </ul>
               <ul>
@@ -114,8 +122,8 @@
 <p>How labels reach the shop (milestone M3). Theme specifics for Hyvä are in <a href="../hyva-integration/">hyva-integration.md</a>.</p>
 <h2 id="what-the-shoppers-browser-gets">What the shopper's browser gets<a class="headerlink" href="#what-the-shoppers-browser-gets" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>HTML only.</strong> Labels are rendered on the server inside the cached page. OpenLabel adds no JavaScript and no inline styles, so a strict Content Security Policy needs no exception.</li>
-<li><strong>One stylesheet per store view</strong>, <code>pub/media/openlabel/&lt;store_id&gt;/openlabel.&lt;hash&gt;.css</code> (about 4 KB for the 15 built-in designs; ≤ 20 KB for 100 designs). It holds the structural <code>ol-*</code> rules, one custom-property line per design and per placement with offsets, and the sanitized custom CSS. The file name changes with its content, so the web server can cache it for a year (Magento's sample nginx and Apache configs already do for <code>pub/media</code>).</li>
+<li><strong>HTML first.</strong> Labels are rendered on the server inside the cached page, with no inline styles. Tooltips, links, animations and hover effects are CSS only. JavaScript is added only where a page needs it: the live countdown and labels that follow the chosen variant. The script is small and registered with Hyvä's CSP helper, so a strict Content Security Policy needs no exception.</li>
+<li><strong>One stylesheet per store view</strong>, <code>pub/media/openlabel/&lt;store_id&gt;/openlabel.&lt;hash&gt;.css</code> (about 8 KB, 2 KB compressed, for the 31 built-in designs; ≤ 20 KB for 100 designs). It holds the structural <code>ol-*</code> rules, one custom-property line per design and per placement with offsets, and the sanitized custom CSS. The file name changes with its content, so the web server can cache it for a year (Magento's sample nginx and Apache configs already do for <code>pub/media</code>).</li>
 <li><strong>No theme build needed.</strong> Nothing depends on Tailwind: labels are positioned and styled by that stylesheet, also on a theme that was never rebuilt after installing OpenLabel. <code>bin/magento hyva:config:generate</code> still lists the module for theme builds that want to scan it.</li>
 </ul>
 <p>The stylesheet is rebuilt after every design or label save, by <strong>Stores › Configuration › Iranimij › OpenLabel › Regenerate CSS</strong>, and by:</p>
@@ -151,6 +159,38 @@
 <td>placements set to "keep left/right in RTL"</td>
 </tr>
 <tr>
+<td><code>ol-pos-ots otc ote obs obc obe ost osm osb oet oem oeb</code></td>
+<td>the bands just outside the image (1.1): o(utside) + t(op), b(ottom), s(tart side), e(nd side) + the place along it; over the space around the image</td>
+</tr>
+<tr>
+<td><code>ol-pos-otl otr obl obr olt olm olb ort orm orb</code></td>
+<td>the bands with "keep left/right in RTL"</td>
+</tr>
+<tr>
+<td><code>ol-label--link</code></td>
+<td>the label is an <code>&lt;a href&gt;</code> (click-through, 1.1); never inside the product card's image link, where labels stay <code>&lt;span&gt;</code></td>
+</tr>
+<tr>
+<td><code>ol-has-tip</code> + <code>ol-tip</code></td>
+<td>a label with a tooltip: the next sibling <code>&lt;span class="ol-tip" role="tooltip"&gt;</code> is shown on hover and focus and referenced by <code>aria-describedby</code>; outside links the label is focusable (<code>tabindex="0"</code>)</td>
+</tr>
+<tr>
+<td><code>ol-label--hidden</code>, <code>data-ol-variant="&lt;id&gt;"</code></td>
+<td>product page of a configurable product (1.1): every variant's labels are in the page; <code>0</code> is the product as it opens, the others stay hidden until that variant is chosen</td>
+</tr>
+<tr>
+<td><code>ol-countdown</code> (<code>data-ol-end</code>, an <code>aria-hidden</code> ticking part, an <code>ol-sr</code> end date)</td>
+<td>the <code>{COUNTDOWN}</code> variable (1.1)</td>
+</tr>
+<tr>
+<td><code>ol-inline--cart</code> / <code>--minicart</code> / <code>--wishlist</code> / <code>--compare</code></td>
+<td>the row of labels of an item list (1.1): after the item name on the cart, wish list and compare pages, next to the item price in the mini cart</td>
+</tr>
+<tr>
+<td><code>ol-inline</code>, <code>ol-inline--near-price</code> / <code>--near-cart</code> / <code>--under-name</code></td>
+<td>labels in the product text (1.1): part of the text flow, always side by side, sized by the design's font size</td>
+</tr>
+<tr>
 <td><code>ol-p-&lt;placement_id&gt;</code></td>
 <td>offsets and gap of that placement (custom properties)</td>
 </tr>
@@ -165,7 +205,28 @@
 </tbody>
 </table>
 <p>Custom properties: <code>--ol-bg --ol-fg --ol-border --ol-bw --ol-w --ol-rot --ol-op --ol-fs-min --ol-fs-cq --ol-fs-max --ol-gap --ol-ox --ol-oy --ol-z</code>. All rules use a single class, without <code>!important</code>, so a theme overrides them with two classes, for example <code>.product-item .ol-stack { --ol-z: 20; }</code>.</p>
-<p>Labels have <code>pointer-events: none</code>: clicks, hover image swaps and swatches work through them. Text sizes use container queries on the product card and the gallery, with an 11 px floor on small cards and phones.</p>
+<p>JavaScript: none for display. Only pages with a <code>{COUNTDOWN}</code> or variant labels get one small inline script (openlabel-hyva, under 1 KB gzipped, registered for the CSP): one timer for all countdowns, paused in background tabs, and the switch between variant labels on Hyvä's <code>configurable-selection-changed</code> event (the labels of a variant show when exactly one variant matches the choice).</p>
+<p>Labels have <code>pointer-events: none</code>: clicks, hover image swaps and swatches work through them. Labels with a tooltip or a link (1.1) take the pointer; inside a product card a click on them still opens the product. Text sizes use container queries on the product card and the gallery, with an 11 px floor on small cards and phones.</p>
+<h2 id="order-emails-11">Order emails (1.1)<a class="headerlink" href="#order-emails-11" title="Permanent link">&para;</a></h2>
+<p>Labels of the "Order emails" area appear under the item name in order, invoice, shipment and credit memo emails
+(<code>&lt;p class="openlabel-email"&gt;</code> after <code>&lt;p class="product-name"&gt;</code> of the core item templates). Email clients ignore
+stylesheets, so each label is a <code>&lt;span&gt;</code> with inline styles built from the design's colours and shape; image
+designs are left out (many clients block images). Labels are resolved for the order's store view and customer
+group when the email is sent; price variables show the current price, so emails are best with plain text.</p>
+<h2 id="languages-label-packs-11">Languages: label packs (1.1)<a class="headerlink" href="#languages-label-packs-11" title="Permanent link">&para;</a></h2>
+<p>The built-in designs show their text in the store view's language (Stores › Configuration › General › Locale
+Options): English, German, French, Spanish, Dutch and Italian are included, also in GraphQL and order emails. For
+example "Sale -25%" becomes "Promo -25 %" in a French store view. The same files translate the texts shoppers see
+from variables ("3 days", "Ends 12/31/26").</p>
+<ul>
+<li>Your own designs keep the texts you enter, per store view. <strong>Duplicate to edit</strong> copies a built-in design with its
+  English text: enter the texts per store view in the copy.</li>
+<li>The phrases are in <code>i18n/&lt;locale&gt;.csv</code> of the module, prefixed with <code>Label text:</code> (e.g.
+  <code>"Label text: New","Nouveau"</code>) so they never change other modules' texts. To change one, or to add a language or a
+  regional variant (<code>de_AT</code>, <code>fr_BE</code>, …), put the same lines in your theme's <code>i18n/&lt;locale&gt;.csv</code> or a language pack.</li>
+<li>The French, Spanish, Dutch and Italian texts were written without a native-speaker review yet: corrections are
+  welcome as pull requests.</li>
+</ul>
 <h2 id="right-to-left-stores">Right-to-left stores<a class="headerlink" href="#right-to-left-stores" title="Permanent link">&para;</a></h2>
 <p>Positions mirror automatically when the page direction is right-to-left. Magento and Hyvä do not set it by themselves; RTL themes declare it in their layout, for example <code>app/design/frontend/&lt;Vendor&gt;/&lt;theme&gt;/Magento_Theme/layout/default.xml</code>:</p>
 <pre><code class="language-xml">&lt;page xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:noNamespaceSchemaLocation=&quot;urn:magento:framework:View/Layout/etc/page_configuration.xsd&quot;&gt;
