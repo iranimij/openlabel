@@ -299,6 +299,10 @@
 <li><strong>Container-query root:</strong> <code>#gallery</code> (only when it holds labels, <code>:has</code>). Containment must not go on the track
   or the wrapper: the wrapper is a shrink-to-fit flex item on desktop, and inline-size containment collapses the
   whole gallery to zero width (found by the 1.5 end-to-end leg). On 1.3/1.4 the root stays <code>#gallery-main</code>.</li>
+<li><strong>Previous/next buttons:</strong> they sit in a bottom corner of the image (<code>bottom-2 end-2</code>, or the start corner with
+  the theme's "start" setting) above the track. Labels placed in that corner move up 3.25 rem, above the buttons,
+  or they would be covered and not clickable (found by the 1.1 end-to-end leg). The rule is keyed on the buttons
+  being in the markup, so nothing moves after Alpine starts.</li>
 <li>Listings are unchanged in 1.5: the image link of the product card is the slot, the card is the root.</li>
 <li>Swatch selection still dispatches <code>configurable-selection-changed</code>; the swatches are a <code>&lt;fieldset&gt;</code> with a
   legend instead of a <code>radiogroup</code>.</li>
