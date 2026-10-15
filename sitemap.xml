@@ -2,42 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://iranimij.github.io/openlabel/</loc>
-         <lastmod>2026-10-12</lastmod>
+         <lastmod>2026-10-15</lastmod>
     </url>
     <url>
          <loc>https://iranimij.github.io/openlabel/admin/</loc>
-         <lastmod>2026-10-12</lastmod>
+         <lastmod>2026-10-15</lastmod>
     </url>
     <url>
          <loc>https://iranimij.github.io/openlabel/cli/</loc>
-         <lastmod>2026-10-12</lastmod>
+         <lastmod>2026-10-15</lastmod>
     </url>
     <url>
          <loc>https://iranimij.github.io/openlabel/engine/</loc>
-         <lastmod>2026-10-12</lastmod>
+         <lastmod>2026-10-15</lastmod>
     </url>
     <url>
          <loc>https://iranimij.github.io/openlabel/graphql/</loc>
-         <lastmod>2026-10-12</lastmod>
+         <lastmod>2026-10-15</lastmod>
     </url>
     <url>
          <loc>https://iranimij.github.io/openlabel/hyva-integration/</loc>
-         <lastmod>2026-10-12</lastmod>
+         <lastmod>2026-10-15</lastmod>
     </url>
     <url>
          <loc>https://iranimij.github.io/openlabel/import-export/</loc>
-         <lastmod>2026-10-12</lastmod>
+         <lastmod>2026-10-15</lastmod>
     </url>
     <url>
          <loc>https://iranimij.github.io/openlabel/install/</loc>
-         <lastmod>2026-10-12</lastmod>
+         <lastmod>2026-10-15</lastmod>
     </url>
     <url>
          <loc>https://iranimij.github.io/openlabel/rest-api/</loc>
-         <lastmod>2026-10-12</lastmod>
+         <lastmod>2026-10-15</lastmod>
     </url>
     <url>
          <loc>https://iranimij.github.io/openlabel/storefront/</loc>
-         <lastmod>2026-10-12</lastmod>
+         <lastmod>2026-10-15</lastmod>
     </url>
 </urlset>
