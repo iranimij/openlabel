@@ -6,6 +6,8 @@ Fine-grained checkpoint for the OpenLabel build. Updated with every merged PR. T
 
 **M5 · Release 1.1 · Superset: done** (2026-10-12, released as `v1.1.0` on openlabel, openlabel-hyva and openlabel-hyva-bundle) (started 2026-10-12; plan approved by Iman, recommendations Q1–Q7 applied). Previous: M4 · API, import/export, release: **done** (2026-10-11), released as `v1.0.0` on openlabel, openlabel-hyva and openlabel-hyva-bundle. Recorded real-person tests waived by Iman for now ("no need for human test for now"). M3 · Hyvä render done 2026-10-11 (Hyvä 1.3 leg: best effort, see decisions). M2 done 2026-10-11, M1 2026-10-10, M0 2026-10-09.
 
+After 1.1.0: `v1.1.1` (2026-10-15, openlabel only, docs): animated tour at the top of the README (`docs/assets/labels-showcase.gif`, recorded by `playwright/tests/screenshots/readme-gif.spec.ts` in openlabel-dev-env, `OL_SCREENSHOTS=1`).
+
 ## M5 slices
 
 Merged by me when CI is green. Slices were built stacked branch on branch (S3 on S2, S4 on S3, ...) and committed locally while Iman did not want GitHub activity in working hours; on 2026-10-12 evening Iman allowed pushing at any time again, so the whole stack was pushed as stacked PRs (each PR's base is the slice below), CI ran on all of them at once, and the full matrix ran once on the top of the stack. They are merged in order, each PR retargeted to `main` before the one below it is merged. Order and scope from the approved plan; Hyvä Checkout skipped (no licence, Iman 2026-10-12).

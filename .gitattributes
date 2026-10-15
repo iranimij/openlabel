@@ -1,0 +1,2 @@
+# Images for the README stay on GitHub; the Composer package does not need them.
+/docs/assets export-ignore
