@@ -2,11 +2,14 @@
 
 **Labels that just work on Hyvä, free, with zero slowdown.**
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/iranimij/openlabel/main/docs/assets/labels-showcase.gif" width="800"
+       alt="OpenLabel on a Hyvä store: twenty labels in twenty built-in designs on a category page (corner, ribbon, circle, pill and outline shapes, on the image and next to the price), a tooltip on hover, and the same labels on the product page">
+</p>
+
 "Sale -25%", "New", "Only 3 left": rule-based product labels on listings, product pages, the cart, wish list,
 compare list and order emails. One query per page, zero layout shift, correct under Varnish for every customer group,
 no Tailwind rebuild. MIT.
-
-<!-- A short screen recording of the quick start goes here (docs/assets/quick-start.gif). -->
 
 ## Install
 
